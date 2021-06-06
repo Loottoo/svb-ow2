@@ -1,31 +1,31 @@
 #!mainFile "../../main.opy"
 
-globalvar SnowballFlySpeed 21
-globalvar SnowballGravityStrength 22
-globalvar SnowballDamage 24
-globalvar SnowballEnabled 51
-globalvar SnowballDelay 52
-globalvar SnowballDamageAoE 53
-globalvar SnowballAoERadius 54
+globalvar SnowballFlySpeed
+globalvar SnowballGravityStrength
+globalvar SnowballDamage
+globalvar SnowballEnabled
+globalvar SnowballDelay
+globalvar SnowballDamageAoE
+globalvar SnowballAoERadius
 
 
-playervar SnowballRaycastFire 28
-playervar SnowballShootLoop 29
-playervar SnowballCurrentCheckPosition 30
-playervar SnowballsFlying 31
-playervar SnowballRaycastDistance 33
-playervar SnowballPreviousPosition 34
-playervar SnowballFacingDirection 35
-playervar SnowballEyeLocationWhenFired 36
-playervar SnowballFinalPosition 37
-playervar SnowballEffects 48
-playervar SnowballLoop 49
+playervar SnowballRaycastFire
+playervar SnowballShootLoop
+playervar SnowballCurrentCheckPosition
+playervar SnowballsFlying
+playervar SnowballRaycastDistance
+playervar SnowballPreviousPosition
+playervar SnowballFacingDirection
+playervar SnowballEyeLocationWhenFired
+playervar SnowballFinalPosition
+playervar SnowballEffects
+playervar SnowballLoop
 
 
-subroutine CreateSnowballEffects 9
-subroutine DestroyCurrentSnowball 10
-subroutine AddSnowball 11
-subroutine SnowballDamage 12
+subroutine CreateSnowballEffects
+subroutine DestroyCurrentSnowball
+subroutine AddSnowball
+subroutine SnowballDamage
 
 
 rule "Initialise":

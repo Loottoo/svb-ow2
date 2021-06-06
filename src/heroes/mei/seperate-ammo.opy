@@ -1,7 +1,6 @@
 #!mainFile "../../main.opy"
 
 
-globalvar SeparateAmmoEnabled
 globalvar MaxAmmoPrimary
 globalvar MaxAmmoSecondary
 globalvar SeparateAmmoAutoReload
@@ -21,7 +20,6 @@ rule "Initialise":
 rule "HUD":
   @Condition SeparateAmmoEnabled == true
   
-  #hudText([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
   hudText([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
   hudHeader([player for player in getAllPlayers() if localPlayer.getCurrentHero() == Hero.MEI], "{0} {2} {1}".format("{0}/{1}".format(localPlayer.CurrentAmmoPrimary, MaxAmmoPrimary), "{0}/{1}".format(ceil(localPlayer.CurrentAmmoSecondary), MaxAmmoSecondary), abilityIconString(Hero.MEI, Button.PRIMARY_FIRE)), HudPosition.RIGHT, 100, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
@@ -43,7 +41,6 @@ rule "Is firing secondary - Subtract ammo with chase":
   @Condition SeparateAmmoEnabled == true
   @Condition eventPlayer.isFiringSecondaryFire() == true
   
-  #eventPlayer.CurrentAmmoSecondary -= 10
   chase(eventPlayer.CurrentAmmoSecondary, eventPlayer.CurrentAmmoSecondary - 10, duration=0.2, ChaseReeval.NONE)
 
 

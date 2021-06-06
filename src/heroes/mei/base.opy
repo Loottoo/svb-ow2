@@ -2,6 +2,7 @@
 
 
 globalvar OverwriteButtonArray
+globalvar SeparateAmmoEnabled
 
 
 rule "Initial":

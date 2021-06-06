@@ -2,7 +2,7 @@
 
 settings {
     "main": {
-        "description": "***Experimental changes***                       By Lotto"
+        "description": "SVB Creator Pugs in collab with Elo Hell Workshops Discord"
     },
     "gamemodes": {
         "assault": {
