@@ -1,8 +1,26 @@
+# JMZNN by Lotto
 playervar HeroActive
+
+# 4M6QT by CaptCaptain
+globalvar _extendedGlobalCollection
+globalvar _classIndexes
+globalvar _objectVariable_0
+globalvar _objectVariable_1
+globalvar _objectVariable_2
+globalvar _objectVariable_3
+globalvar _objectVariable_4
+globalvar ActiveModifications
+
+playervar _extendedPlayerCollection
+
 
 #!include "settings.opy"
 
 #!include "dev.opy"
+
+#!include "heroes/tanks.opy"
+#!include "heroes/healers.opy"
+#!include "heroes/damage.opy"
 
 #!include "heroes/mercy/primary-secondary.opy"
 

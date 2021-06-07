@@ -1,6 +1,5 @@
 #!mainFile "../../main.opy"
 
-#Player variables
 
 playervar Index
 playervar index2
@@ -12,8 +11,6 @@ playervar mercyBeamTarget
 playervar mercyBeaming
 playervar mercyHealingMods
 
-
-#Subroutine names
 
 subroutine GetMercyBeamTarget
 subroutine BeamTargetFound
