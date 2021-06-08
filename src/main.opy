@@ -70,6 +70,11 @@
 #!include "heroes/zarya/base.opy"
 #!include "heroes/zarya/bubbles.opy"
 
+#!include "heroes/doomfist/base.opy"
+#!include "heroes/doomfist/primary.opy"
+#!include "heroes/doomfist/rocket-punch.opy"
+#!include "heroes/doomfist/ultimate.opy"
+
 rule "[shared.workshop] Disable Inspector Recording":
     @Condition devMode != true
 
