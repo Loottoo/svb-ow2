@@ -36,33 +36,33 @@ subroutine IcingFreezeAndDamageOnImpact
 
 rule "Initialise Icing":
   #Workshop setting that determines what button icing will use, opening this action might be laggy.
-  IcingOverwritesButton = createWorkshopSetting(enum["None", "Primary Fire", "Secondary Fire", "Ability 1 (Cryofreeze)", "Ability 2 (Ice Wall)"], "Icing ability", "What button should Icing overwrite?", 0, -10)
+  IcingOverwritesButton = createWorkshopSetting(enum["None", "Primary Fire", "Secondary Fire", "Ability 1 (Cryofreeze)", "Ability 2 (Ice Wall)"], "Mei - Icing ability", "What button should Icing overwrite?", 0, -10)
   #Set the variable from the combo index to the actual button
   IcingOverwritesButton = OverwriteButtonArray[IcingOverwritesButton]
   #Max range
-  IcingMaxRange = createWorkshopSetting(float[5:50], "Icing ability", "Icing max range", 20, 3)
+  IcingMaxRange = createWorkshopSetting(float[5:50], "Mei - Icing ability", "Icing max range", 20, 3)
   #Icing steps (more = more accurate, but more effects used)
-  IcingSteps = createWorkshopSetting(int[5:50], "Icing ability", "Steps (Higher = more circles on the ground)", 20, 5)
+  IcingSteps = createWorkshopSetting(int[5:50], "Mei - Icing ability", "Steps (Higher = more circles on the ground)", 20, 5)
   #Width of icing
-  IcingRadius = createWorkshopSetting(float[0.5:5], "Icing ability", "Icing radius (width)", 1.5, 4)
+  IcingRadius = createWorkshopSetting(float[0.5:5], "Mei - Icing ability", "Icing radius (width)", 1.5, 4)
   #Duration of icing
-  IcingDuration = createWorkshopSetting(float[0:20], "Icing ability", "Icing Duration", 8, 2)
+  IcingDuration = createWorkshopSetting(float[0:20], "Mei - Icing ability", "Icing Duration", 8, 2)
   #Cooldown of icing
-  IcingCooldown = createWorkshopSetting(float[0:100], "Icing ability", "Icing Cooldown", 10, 1)
+  IcingCooldown = createWorkshopSetting(float[0:100], "Mei - Icing ability", "Icing Cooldown", 10, 1)
   #Icing min player speed
-  IcingMinSpeed = createWorkshopSetting(int[100:400], "Icing ability", "Minimum speed when standing on icing (Percentage relative to regular move speed)", 200, 6)
+  IcingMinSpeed = createWorkshopSetting(int[100:400], "Mei - Icing ability", "Minimum speed when standing on icing (Percentage relative to regular move speed)", 200, 6)
   #Icing max player speed
-  IcingMaxSpeed = createWorkshopSetting(int[200:500], "Icing ability", "Maximum speed when standing on icing (Percentage relative to regular move speed)", 300, 7)
+  IcingMaxSpeed = createWorkshopSetting(int[200:500], "Mei - Icing ability", "Maximum speed when standing on icing (Percentage relative to regular move speed)", 300, 7)
   #Icing damage on impact
-  IcingDamageOnImpact = createWorkshopSetting(int[0:200], "Icing ability", "Damage on impact of initial Icing hit", 0, 8)
+  IcingDamageOnImpact = createWorkshopSetting(int[0:200], "Mei - Icing ability", "Damage on impact of initial Icing hit", 0, 8)
   #Icing freeze on impact
-  IcingFreezeOnImpact = createWorkshopSetting(float[0:3], "Icing ability", "Freeze duration on impact of initial Icing hit", 0, 9)
+  IcingFreezeOnImpact = createWorkshopSetting(float[0:3], "Mei - Icing ability", "Freeze duration on impact of initial Icing hit", 0, 9)
   #Set how icing is used
-  IcingType = createWorkshopSetting(enum["Create a straight path that \"slides\" teammates from point X to point Y", "Create a straight path that grants a static movement speed buff to teammates"], "Icing ability", "Icing type - How does Icing function?", 0, -1)
+  IcingType = createWorkshopSetting(enum["Create a straight path that \"slides\" teammates from point X to point Y", "Create a straight path that grants a static movement speed buff to teammates"], "Mei - Icing ability", "Icing type - How does Icing function?", 0, -1)
   #Icing slow
-  IcingSlow = createWorkshopSetting(int[0:100], "Icing ability", "Slow for enemies walking over icing", 0, 20)
+  IcingSlow = createWorkshopSetting(int[0:100], "Mei - Icing ability", "Slow for enemies walking over icing", 0, 20)
   #Movement increase for teammates walking on Icing (if Icing type is set to option 2)
-  IcingSpeedIncrease = createWorkshopSetting(int[0:200], "Icing ability", "Movement increase for teammates walking on Icing (if Icing type is set to option 2)", 15, 21)
+  IcingSpeedIncrease = createWorkshopSetting(int[0:200], "Mei - Icing ability", "Movement increase for teammates walking on Icing (if Icing type is set to option 2)", 15, 21)
 
 
 rule "Icing Cooldown HUD if icing is on Primary or Secondary fire":

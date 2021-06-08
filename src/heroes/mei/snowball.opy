@@ -29,13 +29,13 @@ subroutine SnowballDamage
 
 
 rule "Initialise":
-    SnowballEnabled = createWorkshopSetting(bool, "Snowball secondary fire", "Enable Snowball instead of regular right click", false, -1)
-    SnowballFlySpeed = createWorkshopSetting(float[0.1:5], "Snowball secondary fire", "Snowball fly speed", 1.5, 0)
-    SnowballDelay = createWorkshopSetting(float[0.1:1], "Snowball secondary fire", "Snowball time between shots", 0.2, 0)
-    SnowballGravityStrength = 1 + createWorkshopSetting(int[1:10], "Snowball secondary fire", "Snowball gravity strength (how quick the ball falls down)", 4, 0) * 0.01
-    SnowballDamage = createWorkshopSetting(int[0:200], "Snowball secondary fire", "Snowball damage done", 50, 2)
-    SnowballDamageAoE = createWorkshopSetting(int[0:200], "Snowball secondary fire", "Snowball AOE damage done", 25, 3)
-    SnowballAoERadius = createWorkshopSetting(float[0:5], "Snowball secondary fire", "Snowball AoE Radius", 1, 4)
+    SnowballEnabled = createWorkshopSetting(bool, "Mei - Snowball secondary fire", "Enable Snowball instead of regular right click", false, -1)
+    SnowballFlySpeed = createWorkshopSetting(float[0.1:5], "Mei - Snowball secondary fire", "Snowball fly speed", 1.5, 0)
+    SnowballDelay = createWorkshopSetting(float[0.1:1], "Mei - Snowball secondary fire", "Snowball time between shots", 0.2, 0)
+    SnowballGravityStrength = 1 + createWorkshopSetting(int[1:10], "Mei - Snowball secondary fire", "Snowball gravity strength (how quick the ball falls down)", 4, 0) * 0.01
+    SnowballDamage = createWorkshopSetting(int[0:200], "Mei - Snowball secondary fire", "Snowball damage done", 50, 2)
+    SnowballDamageAoE = createWorkshopSetting(int[0:200], "Mei - Snowball secondary fire", "Snowball AOE damage done", 25, 3)
+    SnowballAoERadius = createWorkshopSetting(float[0:5], "Mei - Snowball secondary fire", "Snowball AoE Radius", 1, 4)
     getAllPlayers().SnowballEffects = []
 
 

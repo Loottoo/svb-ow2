@@ -1,8 +1,6 @@
 #!mainFile "../main.opy"
 
 
-playervar NextUltCharge
-
 
 rule "[all.del] Tank Passive: Reduce Ultimate Charge":
   @Event playerDealtDamage

@@ -8,7 +8,6 @@ rule "Init":
 
 rule "------- testing  create bots":
     @Condition devMode
-    @Condition hostPlayer.hasSpawned() == true
     
     wait(2)
     createDummy(Hero.ANA, Color.TEAM_1, -1, vect(0, 0, 0), vect(0, 0, 0))
@@ -45,3 +44,20 @@ rule "Swap hero with key combo":
     eventPlayer.setAllowedHeroes(getAllHeroes().exclude(eventPlayer.getCurrentHero()))
     wait(0.25)
     eventPlayer.resetHeroAvailability()
+
+
+rule "Dev HUD elements":
+    @Condition devMode
+
+    hudSubheader(getAllPlayers(), "Load: {0} - Avg: {1} - Peak: {2}".format(getServerLoad(), getAverageServerLoad(), getServerLoad()), HudPosition.TOP, 5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(getAllPlayers(), "Change hero - Jump + Reload + Crouch", HudPosition.TOP, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(getAllPlayers(), "Spawn bot - Crouch + Interact", HudPosition.TOP, 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
+
+rule "Set Ult charge":
+    @Event eachPlayer
+    @Condition eventPlayer.getUltCharge() < 100
+    
+    eventPlayer.setUltCharge(100)
+    wait(5)
+    goto RULE_START

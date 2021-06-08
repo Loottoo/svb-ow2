@@ -11,10 +11,10 @@ playervar CurrentAmmoSecondary 47
 
 
 rule "Initialise":
-  SeparateAmmoEnabled = createWorkshopSetting(bool, "Separate ammo counter", "Use seperate ammo pool for Primary and Secondary fire", false, 0)
-  MaxAmmoPrimary = createWorkshopSetting(int[30:100], "Separate ammo counter", "Primary Fire Max Ammo", 50, 1)
-  MaxAmmoSecondary = createWorkshopSetting(int[10:200], "Separate ammo counter", "Secondary Fire Max Ammo", 100, 2)
-  SeparateAmmoAutoReload = createWorkshopSetting(bool, "Separate ammo counter", "Auto reload when either primary or secondary is empty", false, 3)
+  SeparateAmmoEnabled = createWorkshopSetting(bool, "Mei - Separate ammo counter", "Use seperate ammo pool for Primary and Secondary fire", false, 0)
+  MaxAmmoPrimary = createWorkshopSetting(int[30:100], "Mei - Separate ammo counter", "Primary Fire Max Ammo", 50, 1)
+  MaxAmmoSecondary = createWorkshopSetting(int[10:200], "Mei - Separate ammo counter", "Secondary Fire Max Ammo", 100, 2)
+  SeparateAmmoAutoReload = createWorkshopSetting(bool, "Mei - Separate ammo counter", "Auto reload when either primary or secondary is empty", false, 3)
 
 
 rule "HUD":

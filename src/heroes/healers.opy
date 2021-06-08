@@ -1,9 +1,6 @@
 #!mainFile "../main.opy"
 
 
-playervar SupportHealingID
-
-
 rule "[all.del] Support Passive":
   @Event playerTookDamage
   @Condition (eventPlayer.getCurrentHero() in getSupportHeroes() or eventPlayer.getHeroOfDuplication() in getSupportHeroes()) == true

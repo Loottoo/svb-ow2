@@ -1,12 +1,6 @@
 #!mainFile "../main.opy"
 
 
-globalvar LastMoveSpeedModificationID
-
-
-playervar DamageMoveSpeedID
-
-
 rule "[all.del] Damage Passive":
   @Event eachPlayer
   @Condition (eventPlayer.getCurrentHero() in getDamageHeroes() or eventPlayer.getHeroOfDuplication() in getDamageHeroes()) == true
