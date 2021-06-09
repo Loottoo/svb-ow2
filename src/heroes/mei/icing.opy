@@ -155,6 +155,7 @@ rule "Player is on Icing and Icing Type is set to slide":
   @Event eachPlayer
   @Condition IcingType == 0
   @Condition eventPlayer.isOnGround() == true
+  @Condition eventPlayer.IsUsingAvalanche != true
   @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
   
   eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
@@ -172,6 +173,7 @@ rule "Player is on Icing and Icing Type is set to slide":
 rule "Player is not on icing and Icing Type is set to slide":
   @Event eachPlayer
   @Condition IcingType == 0
+  @Condition eventPlayer.IsUsingAvalanche != true
   @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI]).IcingStepPositions])) == false
   
   wait(0.064)
