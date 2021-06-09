@@ -1,11 +1,11 @@
 #!mainFile "../../main.opy"
 
 
-playervar PunchDamages 0
-playervar PunchCharge 1
-playervar DFDidHitPlayer 2
-playervar DFPunchCharge 3
-playervar Punching 4
+playervar PunchDamages
+playervar PunchCharge
+playervar DFDidHitPlayer
+playervar DFPunchCharge
+playervar Punching
 
 
 rule "Doomfist uninit":

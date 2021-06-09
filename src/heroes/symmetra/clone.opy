@@ -1,6 +1,10 @@
 #!mainFile "../../main.opy"
 
 
+globalvar symmetraCloneDamageDealt = createWorkshopSetting(int[0:200], "Symmetra", "Light Clone damage dealt percentage", 50, 0)
+globalvar symmetraCloneDuration = createWorkshopSetting(int[0:20], "Symmetra", "Light Clone duration", 12, 0)
+
+
 def CreateSymmetraBotEffects():
     @Name "[symmetra.del] Subroutine: Create Clone Effects"
     
@@ -37,9 +41,9 @@ def SymmetraLightCloneUlt():
     return
     lbl_0:
     wait()
-    eventPlayer.SymmetraBotPlayer.startForcingName("Light Clone")
+    eventPlayer.SymmetraBotPlayer.startForcingName("{0}'s Light Clone".format(eventPlayer))
     eventPlayer.SymmetraBotPlayer.setAmmo(0, eventPlayer.getAmmo(0))
-    eventPlayer.SymmetraBotPlayer.setDamageDealt(50)
+    eventPlayer.SymmetraBotPlayer.setDamageDealt(symmetraCloneDamageDealt)
     eventPlayer.SymmetraBotPlayer.setUltEnabled(false)
     eventPlayer.SymmetraBotPlayer.teleport(eventPlayer.getPosition())
     wait(0.08)
@@ -51,7 +55,7 @@ def SymmetraLightCloneUlt():
     eventPlayer.SymmetraBotPlayer.setInvisibility(Invis.NONE)
     eventPlayer.communicate(Comms.ATTACKING)
     #Wait until the bot is dead or after 12 seconds have elapsed
-    waitUntil(eventPlayer.SymmetraBotPlayer.isDead() or eventPlayer.isDead(), 12)
+    waitUntil(eventPlayer.SymmetraBotPlayer.isDead() or eventPlayer.isDead(), symmetraCloneDuration)
     wait()
     #Cleanup
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer.getPosition(), 10)

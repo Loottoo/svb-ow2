@@ -47,7 +47,14 @@ def BaptisteCastIF():
   eventPlayer.HeroEffects.append(getLastCreatedEntity())
   async(SlowdownBaptiste, AsyncBehavior.NOOP)
   eventPlayer.communicate(Comms.WITH_YOU)
-  waitUntil(any([i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]), 1)
+  waitUntil(
+    any(
+      [i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP),
+      eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN),
+      eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]
+    ),
+    createWorkshopSetting(float[0.75:3], "Baptiste", "Immortality Field cast time", 1.5, 0) - 0.5
+  )
   #Stun check
   if any([i == false for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]):
       eventPlayer.allowButton(Button.ABILITY_2)

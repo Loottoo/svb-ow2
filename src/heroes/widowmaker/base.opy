@@ -1,6 +1,9 @@
 #!mainFile "../../main.opy"
 
 
+globalvar windowmakerMaxFalloff = createWorkshopSetting(int[0:100], "Widowmaker", "Max reverse falloff percentage", 50, 0)
+
+
 def CleanupWidowmaker():
     @Name "[widowmaker.del] Subroutine: Cleanup"
     
@@ -19,7 +22,7 @@ def InitialWidowmaker():
     wait()
     eventPlayer.HeroActive = Hero.WIDOWMAKER
     for eventPlayer.slot in range(5):
-        startDamageModification(getPlayersInSlot(evalOnce(eventPlayer.slot), getOppositeTeam(eventPlayer.getTeam())), eventPlayer, min(max(50, distance(eventPlayer, getPlayersInSlot(evalOnce(eventPlayer.slot), getOppositeTeam(eventPlayer.getTeam()))) * 3.333), 100) if not eventPlayer.isMeleeing() and eventPlayer.isFiringSecondaryFire() else 100, DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
+        startDamageModification(getPlayersInSlot(evalOnce(eventPlayer.slot), getOppositeTeam(eventPlayer.getTeam())), eventPlayer, min(max(100 - windowmakerMaxFalloff, distance(eventPlayer, getPlayersInSlot(evalOnce(eventPlayer.slot), getOppositeTeam(eventPlayer.getTeam()))) * 3.333), 100) if not eventPlayer.isMeleeing() and eventPlayer.isFiringSecondaryFire() else 100, DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
         eventPlayer.HeroDamageModifications.append(getLastDamageModification())
     async(CleanupWidowmaker, AsyncBehavior.NOOP)
 

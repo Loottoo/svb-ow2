@@ -1,6 +1,10 @@
 #!mainFile "../../main.opy"
 
 
+globalvar musicMeterGain = createWorkshopSetting(int[1:100], "Lucio", "Music Meter gain per second of wall riding", 25, 0)
+globalvar musicMeterDrain = createWorkshopSetting(int[1:100], "Lucio", "Music Meter drain per second of not wall riding", 10, 1)
+
+
 def CleanupLucio():
     @Name "[lucio.del] Subroutine: Cleanup"
     
@@ -63,7 +67,7 @@ def InitialLucio():
     progressBarHud(eventPlayer, eventPlayer.MusicMeter, "{0} Music Meter {0}".format(abilityIconString(Hero.LUCIO, Button.ABILITY_1)), HudPosition.TOP, 1, rgba(_objectVariable_0[eventPlayer._extendedPlayerCollection[14]] * (1 - eventPlayer.MusicMeter / 100) + ((_objectVariable_0[eventPlayer._extendedPlayerCollection[15] if eventPlayer.isInAlternateForm() else eventPlayer._extendedPlayerCollection[16]]) * (eventPlayer.MusicMeter / 100)), _objectVariable_1[eventPlayer._extendedPlayerCollection[14]] * (1 - eventPlayer.MusicMeter / 100) + ((_objectVariable_1[eventPlayer._extendedPlayerCollection[15] if eventPlayer.isInAlternateForm() else eventPlayer._extendedPlayerCollection[16]]) * (eventPlayer.MusicMeter / 100)), _objectVariable_2[eventPlayer._extendedPlayerCollection[14]] * (1 - eventPlayer.MusicMeter / 100) + ((_objectVariable_2[eventPlayer._extendedPlayerCollection[15] if eventPlayer.isInAlternateForm() else eventPlayer._extendedPlayerCollection[16]]) * (eventPlayer.MusicMeter / 100)), _objectVariable_3[eventPlayer._extendedPlayerCollection[14]] * (1 - eventPlayer.MusicMeter / 100) + ((_objectVariable_3[eventPlayer._extendedPlayerCollection[15] if eventPlayer.isInAlternateForm() else eventPlayer._extendedPlayerCollection[16]]) * (eventPlayer.MusicMeter / 100))), Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
     chase(eventPlayer.WallrideTimer, 1 if eventPlayer.isOnWall() else 0, rate=100 if eventPlayer.isOnWall() else 1, ChaseReeval.DESTINATION_AND_RATE)
-    chase(eventPlayer.MusicMeter, 100 if eventPlayer.isOnWall() or (eventPlayer.isOnWall() and (eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility2())) else 0, rate=0 if eventPlayer.WallrideTimer > 0 and not eventPlayer.isOnWall() else 25 if eventPlayer.isOnWall() or (eventPlayer.isOnWall() and (eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility2())) else 10, ChaseReeval.DESTINATION_AND_RATE)
+    chase(eventPlayer.MusicMeter, 100 if eventPlayer.isOnWall() or (eventPlayer.isOnWall() and (eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility2())) else 0, rate=0 if eventPlayer.WallrideTimer > 0 and not eventPlayer.isOnWall() else musicMeterGain if eventPlayer.isOnWall() or (eventPlayer.isOnWall() and (eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility2())) else musicMeterDrain, ChaseReeval.DESTINATION_AND_RATE)
     eventPlayer.slot_2 = 0
     while eventPlayer.slot_2 < 5:
         eventPlayer._extendedPlayerCollection[17] = 0

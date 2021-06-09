@@ -4,6 +4,10 @@ settings {
     "main": {
         "description": "SVB Creator Pugs in collab with Elo Hell Workshops Discord"
     },
+    "lobby": {
+        "team1Slots": 5,
+        "team2Slots": 5
+    },
     "gamemodes": {
         "assault": {
             "enabledMaps": [],
@@ -46,7 +50,10 @@ settings {
                 "ability2Cooldown%": 20
             },
             "echo": {
-                "ability1Cooldown%": 133
+                "ability1Cooldown%": 116
+            },
+            "reinhardt": {
+                "ability1Cooldown%": 70
             }
         }
     },

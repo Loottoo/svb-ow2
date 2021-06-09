@@ -23,7 +23,7 @@ rule "Doomfist Vertical Rocket Punch":
                 wait(0.05)
         eventPlayer.applyImpulse(eventPlayer.getFacingDirection(), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait(0.5)
-    eventPlayer.setMoveSpeed(100)
+    setRolePassiveMovementSpeed()
     eventPlayer.DFDidHitPlayer = false
 
 
@@ -50,7 +50,7 @@ rule "Doomfist Vertical Rocket Punch - ECHO":
                 wait(0.05)
         eventPlayer.applyImpulse(eventPlayer.getFacingDirection(), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait(0.5)
-    eventPlayer.setMoveSpeed(100)
+    setRolePassiveMovementSpeed()
     eventPlayer.DFDidHitPlayer = false
 
 

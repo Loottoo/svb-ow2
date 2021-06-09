@@ -7,7 +7,7 @@ rule "[Genji] Shurikens +2 damage":
   @Condition eventPlayer.isUsingUltimate() == false
   @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.SECONDARY_FIRE) == true
   
-  damage(victim, attacker, 2)
+  damage(victim, attacker, eventDamage * (2/28))
 
 
 rule "[Genji]§ Shurikens +2 damage":
@@ -17,4 +17,4 @@ rule "[Genji]§ Shurikens +2 damage":
   @Condition eventPlayer.isUsingUltimate() == false
   @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.SECONDARY_FIRE) == true
   
-  damage(victim, attacker, 2)
+  damage(victim, attacker, eventDamage * (2/28))

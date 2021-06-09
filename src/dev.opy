@@ -30,6 +30,7 @@ rule "Spawn bots - For debugging":
 rule "Respawn faster":
     @Event eachPlayer
     @Condition devMode
+    @Condition eventPlayer.isDummy() != true
     
     eventPlayer.setRespawnTime(1)
 
@@ -60,4 +61,5 @@ rule "Set Ult charge":
     
     eventPlayer.setUltCharge(100)
     wait(5)
-    goto RULE_START
+    if RULE_CONDITION:
+        goto RULE_START

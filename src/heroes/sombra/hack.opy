@@ -1,16 +1,20 @@
 #!mainFile "../../main.opy"
 
 
+globalvar sombraHackDuration = createWorkshopSetting(float[0:10], "Sombra", "Hack Duration", 2, 0)
+globalvar sombraHackCooldown = createWorkshopSetting(float[0:30], "Sombra", "Hack Cooldown", 10, 1)
+
+
 def SombraProjectileHit():
     @Name "[sombra.del] Subroutine: Projectile Hit"
     
-    eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, 10)
+    eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, sombraHackCooldown)
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
     eventPlayer.setSecondaryFireEnabled(true)
     stopChasingVariable(eventPlayer.SombraProjectilePosition)
     #If the projectile isn't blocked by a barrier or the target is not phased out, we can apply the hack status
     if not eventPlayer.SombraSelectedTarget.hasStatusEffect(Status.PHASED_OUT) and not eventPlayer.SombraSelectedTarget.hasStatusEffect(Status.INVINCIBLE) and (not (isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.PASS_THROUGH_BARRIERS) and not isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))):
-        eventPlayer.SombraSelectedTarget.setStatusEffect(eventPlayer, Status.HACKED, 2)
+        eventPlayer.SombraSelectedTarget.setStatusEffect(eventPlayer, Status.HACKED, sombraHackDuration)
     #Team Effects
     playEffect(getPlayers(eventPlayer.getTeam()), DynamicEffect.BAD_EXPLOSION, Color.PURPLE, eventPlayer.SombraProjectilePosition, 1)
     #Enemy Effects

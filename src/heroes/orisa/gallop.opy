@@ -1,6 +1,10 @@
 #!mainFile "../../main.opy"
 
 
+globalvar orisaGallopDuration = createWorkshopSetting(float[0.1:2], "Orisa", "Time gallop duration", 0.25, 0)
+globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time gallop damage dealt", 30, 1)
+
+
 def CreateHeroEffects():
     @Name "[orisa.del] Subroutine: Create Effects"
     
@@ -56,13 +60,13 @@ def OrisaGallop():
     eventPlayer.ExcludedPlayers = []
     eventPlayer.TimeRemaining = 0
     chase(eventPlayer.TimeRemaining, 9999, rate=1, ChaseReeval.DESTINATION_AND_RATE)
-    while eventPlayer.TimeRemaining < 0.25:
+    while eventPlayer.TimeRemaining < orisaGallopDuration:
         if any([i == true for i in [not isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + worldVector(Vector.FORWARD * 2, eventPlayer, Transform.ROTATION), BarrierLos.PASS_THROUGH_BARRIERS), eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]):
             #Stop Gallop
             break
         else:
             eventPlayer.TargetPlayers = [player for player in getPlayersInRadius(eventPlayer.getEyePosition(), 5, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) if eventPlayer.isInViewAngle(player.getEyePosition(), 90)].exclude(eventPlayer.ExcludedPlayers)
-            damage(eventPlayer.TargetPlayers, eventPlayer, 30)
+            damage(eventPlayer.TargetPlayers, eventPlayer, orisaGallopDamage)
             eventPlayer.ExcludedPlayers.append(eventPlayer.TargetPlayers)
         wait()
     stopChasingVariable(eventPlayer.TimeRemaining)

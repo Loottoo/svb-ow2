@@ -1,6 +1,8 @@
 #!mainFile "../main.opy"
 
 
+globalvar rolePassivesTankAmount = 100 - createWorkshopSetting(int[0:100], "Role passives", "Tank knockback reduction", 30, 2)
+
 
 rule "[all.del] Tank Passive: Reduce Ultimate Charge":
   @Event playerDealtDamage
@@ -26,6 +28,6 @@ rule "[all.del] Tank Passive: Reduced Knockback":
   
   if eventPlayer.getCurrentHero() == Hero.REINHARDT:
       return
-  eventPlayer.setKnockbackReceived(70)
+  eventPlayer.setKnockbackReceived(rolePassivesTankAmount)
   waitUntil(not eventPlayer.getCurrentHero() in getTankHeroes() and not eventPlayer.getHeroOfDuplication() in getTankHeroes(), 9999)
   eventPlayer.setKnockbackReceived(100)
