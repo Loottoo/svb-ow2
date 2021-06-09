@@ -2,6 +2,10 @@
 
 globalvar devMode
 
+
+playervar LastDamageReceived
+
+
 rule "Init":
     devMode = createWorkshopSetting(bool, "Dev", "Enable dev mode", true, 0)
 
@@ -32,7 +36,7 @@ rule "Respawn faster":
     @Condition devMode
     @Condition eventPlayer.isDummy() != true
     
-    eventPlayer.setRespawnTime(1)
+    eventPlayer.setRespawnTime(2)
 
 
 rule "Swap hero with key combo":
@@ -63,3 +67,18 @@ rule "Set Ult charge":
     wait(5)
     if RULE_CONDITION:
         goto RULE_START
+
+
+rule "Last damage received hud":
+    @Event eachPlayer
+    @Condition devMode
+    
+    createInWorldText(getAllPlayers(), eventPlayer.LastDamageReceived, eventPlayer, 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+
+
+rule "Set damage received variable":
+    @Event playerTookDamage
+    @Condition devMode
+    
+    eventPlayer.LastDamageReceived = eventDamage
+        

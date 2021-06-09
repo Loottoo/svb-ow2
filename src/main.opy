@@ -68,6 +68,8 @@
 #!include "heroes/lucio/ultimate.opy"
 
 #!include "heroes/mccree/base.opy"
+#!include "heroes/mccree/fan-the-hammer.opy"
+#!include "heroes/mccree/lasso.opy"
 
 #!include "heroes/zarya/base.opy"
 #!include "heroes/zarya/bubbles.opy"
