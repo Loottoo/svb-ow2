@@ -81,6 +81,8 @@
 #!include "heroes/doomfist/rocket-punch.opy"
 #!include "heroes/doomfist/ultimate.opy"
 
+#!include "heroes/dva/baby.opy"
+
 rule "[shared.workshop] Disable Inspector Recording":
     @Condition devMode != true
 
