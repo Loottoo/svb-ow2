@@ -46,9 +46,6 @@ settings {
             "junkrat": {
                 "ability2Cooldown%": 70
             },
-            "symmetra": {
-                "ability2Cooldown%": 20
-            },
             "echo": {
                 "ability1Cooldown%": 116
             },

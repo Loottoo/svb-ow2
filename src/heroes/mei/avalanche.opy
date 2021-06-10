@@ -6,6 +6,7 @@ globalvar AvalancheMaxSpeed
 globalvar AvalancheEnabled
 globalvar AvalancheDamagePerTick
 globalvar AvalancheDamageExplosion
+globalvar AvalancheTurnable
 
 
 playervar IsUsingAvalanche
@@ -29,11 +30,12 @@ subroutine ExplodePlayersInAvalanche
 
 rule "Initialise Avalanche":
   AvalancheEnabled = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Enable Avalanche instead of regular Ultimate", true, 0)
-  AvalancheRadius = createWorkshopSetting(float[1:3], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 2, 1)
-  AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 2)
-  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 200, 3)
-  AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 4)
-  AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 5)
+  AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow full steering during Avalanche", false, 2)
+  AvalancheRadius = createWorkshopSetting(float[1:3], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 2, 2)
+  AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 3)
+  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 200, 4)
+  AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 5)
+  AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 6)
 
 
 rule "Avalanche Progress Bar HUD element":
@@ -115,7 +117,7 @@ def SetAvalancheCamera():
   @Name "Subroutine - Set Avalanche camera"
   
   #Force the player to third person
-  eventPlayer.startCamera(raycast(eventPlayer.getEyePosition() + Vector.UP * 0.5, eventPlayer.getEyePosition() + Vector.UP * 0.5 + eventPlayer.AvalancheFacingDirection * -5, getAllPlayers(), eventPlayer, true).getHitPosition(), raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.AvalancheFacingDirection * 20, null, eventPlayer, false).getHitPosition(), 60)
+  eventPlayer.startCamera(raycast(eventPlayer.getEyePosition() + Vector.UP * 0.5, eventPlayer.getEyePosition() + Vector.UP * 0.5 + eventPlayer.getFacingDirection() * -5, getAllPlayers(), eventPlayer, true).getHitPosition(), raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20, null, eventPlayer, false).getHitPosition(), 60)
 
 
 def ChaseAvalancheSpeed():
@@ -212,6 +214,7 @@ def ExplodePlayersInAvalanche():
 
 rule "Avalanche is active, set facing direction":
   @Event eachPlayer
+  @Condition AvalancheTurnable != true
   @Condition eventPlayer.IsUsingAvalanche == true
   
   #Force facing direction of Mei in direction Avalanche was used
