@@ -150,10 +150,36 @@ def DestroyCurrentSnowball():
 def SnowballDamage():
     @Name "Subroutine - Damage players near snowball"
     
-    #Check if the player closest to the final position got hit directly. We do this by ray casting from the final position to the position of the player. If the distance is less than expected they were theoretically in the radius of the snowball.
-    if distance(eventPlayer.SnowballFinalPosition, raycast(eventPlayer.SnowballFinalPosition, getClosestPlayer(eventPlayer.SnowballFinalPosition, getOppositeTeam(eventPlayer.getTeam())), getPlayers(getOppositeTeam(eventPlayer.getTeam())), eventPlayer, true).getHitPosition()) <= 0.1:
-        #Damage closest player since that's very likely the one who got hit. Subtract the AoE damage since that will also be applied later.
-        damage(getClosestPlayer(eventPlayer.SnowballFinalPosition, getOppositeTeam(eventPlayer.getTeam())), eventPlayer, SnowballDamage - SnowballDamageAoE)
+    #Damage closest player since that's very likely the one who got hit. Subtract the AoE damage since that will also be applied later.
+    damage(
+        raycast(
+            eventPlayer.SnowballFinalPosition,
+            eventPlayer.SnowballFinalPosition + directionTowards(
+                eventPlayer.SnowballFinalPosition,
+                getClosestPlayer(eventPlayer.SnowballFinalPosition, getOppositeTeam(eventPlayer.getTeam())).getEyePosition()
+            ) * 0.2,
+            getPlayers(getOppositeTeam(eventPlayer.getTeam())),
+            eventPlayer,
+            true
+        ).getPlayerHit(),
+        eventPlayer, # Player that dealt the damage
+        SnowballDamage - SnowballDamageAoE # Damage dealt, impact minus AoE since we will also apply that later
+    )
     #Damage all players in AoE range. We can't use Players In Radius since that use Position Of, rather than their actual hitbox.
-    damage([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if distance(eventPlayer.SnowballFinalPosition, raycast(eventPlayer.SnowballFinalPosition, player, player, null, true).getHitPosition()) <= SnowballAoERadius], eventPlayer, SnowballDamageAoE)
+    damage(
+        [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam()))
+            if raycast(
+                eventPlayer.SnowballFinalPosition,
+                eventPlayer.SnowballFinalPosition + directionTowards(
+                    eventPlayer.SnowballFinalPosition,
+                    player.getEyePosition()
+                ) * SnowballAoERadius,
+                player,
+                null,
+                true
+            ).getPlayerHit() == player
+        ],
+        eventPlayer,
+        SnowballDamageAoE
+    )
 
