@@ -5,7 +5,7 @@ globalvar roadhogBreatherCloudSize = createWorkshopSetting(float[1:50], "Roadhog
 
 
 playervar Index
-playervar roadhogCloudEntity
+playervar roadhogCloudEntity = []
 playervar roadhogMovementSpeed
 playervar roadhogCloudPos
 playervar roadhogCloudPlayersAffected
