@@ -119,11 +119,11 @@ def AddSnowball():
 def CreateSnowballEffects():
     @Name "Subroutine - Create snowball effects"
     
-    createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, updateEveryTick(eventPlayer.SnowballCurrentCheckPosition[evalOnce(eventPlayer.SnowballsFlying - 1)]), 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, eventPlayer.SnowballCurrentCheckPosition[evalOnce(eventPlayer.SnowballsFlying - 1)], 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.SnowballEffects = eventPlayer.SnowballEffects.concat(getLastCreatedEntity())
-    createEffect(getAllPlayers(), Effect.SPARKLES, eventPlayer.getTeam(), updateEveryTick(eventPlayer.SnowballCurrentCheckPosition[evalOnce(eventPlayer.SnowballsFlying - 1)]), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers(), Effect.SPARKLES, eventPlayer.getTeam(), eventPlayer.SnowballCurrentCheckPosition[evalOnce(eventPlayer.SnowballsFlying - 1)], 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.SnowballEffects = eventPlayer.SnowballEffects.concat(getLastCreatedEntity())
-    createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.WHITE, updateEveryTick(eventPlayer.SnowballCurrentCheckPosition[evalOnce(eventPlayer.SnowballsFlying - 1)]), 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.WHITE, eventPlayer.SnowballCurrentCheckPosition[evalOnce(eventPlayer.SnowballsFlying - 1)], 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.SnowballEffects = eventPlayer.SnowballEffects.concat(getLastCreatedEntity())
 
 
