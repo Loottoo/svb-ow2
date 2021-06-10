@@ -58,7 +58,7 @@ def RoadhogTakeABreather():
         eventPlayer.setMoveSpeed(eventPlayer.roadhogMovementSpeed)
         wait(0.032)
     eventPlayer.setMoveSpeed(100)
-    wait(createWorkshopSetting(float[2.5:9], "Roadhog", "Cloud duration", 6, 1) - 2.5)
+    wait(createWorkshopSetting(float[2.5:9], "Roadhog", "Cloud duration", 5, 1) - 2.5)
     for eventPlayer.Index in range(len(eventPlayer.roadhogCloudEntity)):
         destroyEffect(eventPlayer.roadhogCloudEntity[eventPlayer.Index])
     stopDamageModification(eventPlayer.roadhogCloudDamageMod)
@@ -92,6 +92,6 @@ def RoadhogCloudHealing():
     @Name "[Sub][Roadhog] Cloud healing"
     
     eventPlayer.roadhogCloudPlayersAffected = getPlayersInRadius(eventPlayer.roadhogCloudPos, roadhogBreatherCloudSize, eventPlayer.getTeam(), LosCheck.SURFACES)
-    eventPlayer.roadhogCloudPlayersAffected.startHoT(eventPlayer, 1, createWorkshopSetting(int[0:100], "Roadhog", "Cloud Healing per second", 10, 2))
+    eventPlayer.roadhogCloudPlayersAffected.startHoT(eventPlayer, 1, createWorkshopSetting(int[0:100], "Roadhog", "Cloud Healing per second", 20, 2))
 
 
