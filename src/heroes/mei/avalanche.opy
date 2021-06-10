@@ -53,6 +53,7 @@ rule "Disable original Ultimate":
   @Hero mei
   @Condition AvalancheEnabled == true
   
+  wait(0.1)
   eventPlayer.disallowButton(Button.ULTIMATE)
 
 
@@ -66,6 +67,12 @@ rule "Player presses Ultimate":
   @Condition eventPlayer.isUsingAbility1() != true
   @Condition eventPlayer.IsUsingAvalanche != true
   
+  eventPlayer.disallowButton(Button.ABILITY_1)
+  eventPlayer.disallowButton(Button.ABILITY_2)
+  eventPlayer.disallowButton(Button.PRIMARY_FIRE)
+  eventPlayer.disallowButton(Button.SECONDARY_FIRE)
+
+  eventPlayer.cancelPrimaryAction()
   eventPlayer.IsUsingAvalanche = true
   #Set timer and chase it down
   eventPlayer.AvalancheTimer = AvalancheDuration
@@ -159,6 +166,11 @@ def ClearAvalanche():
   #Reset camera to normal
   eventPlayer.stopCamera()
 
+  eventPlayer.allowButton(Button.ABILITY_1)
+  eventPlayer.allowButton(Button.ABILITY_2)
+  eventPlayer.allowButton(Button.PRIMARY_FIRE)
+  eventPlayer.allowButton(Button.SECONDARY_FIRE)
+
 
 def ExplodeAvalanche():
   @Name "Subroutine - Explode Avalanche"
@@ -244,6 +256,13 @@ rule "Avalanche hit a wall":
   wait(0.1, Wait.ABORT_WHEN_FALSE)
   ClearAvalanche()
   eventPlayer.setFacing(eventPlayer.AvalancheFacingDirection * -1, Relativity.TO_WORLD)
+
+
+rule "Player died while using Avalanche":
+  @Event playerDied
+  @Condition eventPlayer.IsUsingAvalanche
+
+  ClearAvalanche()
 
 
 rule "Enemy is inside Avalanche":
