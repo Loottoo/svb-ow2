@@ -52,6 +52,7 @@
 #!include "heroes/baptiste/immortality.opy"
 
 #!include "heroes/winston/base.opy"
+#!include "heroes/winston/zap.opy"
 
 #!include "heroes/widowmaker/base.opy"
 #!include "heroes/widowmaker/primary-secondary.opy"

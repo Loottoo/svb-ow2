@@ -66,13 +66,11 @@ rule "Initialise Icing":
 
 
 rule "Icing Cooldown HUD if icing is on Primary or Secondary fire":
-  @Event eachPlayer
-  @Hero mei
   @Condition IcingOverwritesButton != null
   @Condition (IcingOverwritesButton == Button.PRIMARY_FIRE or IcingOverwritesButton == Button.SECONDARY_FIRE) == true
   
-  hudText([i for i in eventPlayer if eventPlayer.getCurrentHero() == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-  hudHeader([i for i in eventPlayer if eventPlayer.getCurrentHero() == Hero.MEI and true], "Icing: {0}".format(eventPlayer.IcingActiveCooldown), HudPosition.RIGHT, 100, Color.RED if eventPlayer.IcingActiveCooldown else Color.AQUA, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+  hudText([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+  hudHeader([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], "Icing: {0}".format(localPlayer.IcingActiveCooldown), HudPosition.RIGHT, 100, Color.RED if localPlayer.IcingActiveCooldown else Color.AQUA, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 
 
 rule "Disable original Ability":

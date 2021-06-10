@@ -61,6 +61,7 @@ rule "Dev HUD elements":
 
 rule "Set Ult charge":
     @Event eachPlayer
+    @Condition devMode
     @Condition eventPlayer.getUltCharge() < 100
     
     eventPlayer.setUltCharge(100)
