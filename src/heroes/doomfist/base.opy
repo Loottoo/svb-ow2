@@ -17,8 +17,8 @@ rule "Doomfist uninit":
     eventPlayer.setDamageDealt(100)
     eventPlayer.setAbility1Enabled(true)
     eventPlayer.setAbility2Enabled(true)
-    eventPlayer.setUltEnabled(true)
     eventPlayer.setMeleeEnabled(true)
+    eventPlayer.allowButton(Button.ULTIMATE)
 
 
 rule "Doomfist Init":
@@ -39,8 +39,8 @@ rule "Doomfist uninit - ECHO":
     eventPlayer.setDamageDealt(100)
     eventPlayer.setAbility1Enabled(true)
     eventPlayer.setAbility2Enabled(true)
-    eventPlayer.setUltEnabled(true)
     eventPlayer.setMeleeEnabled(true)
+    eventPlayer.allowButton(Button.ULTIMATE)
 
 
 rule "Doomfist Init - ECHO":

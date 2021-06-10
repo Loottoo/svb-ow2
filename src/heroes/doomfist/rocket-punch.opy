@@ -63,8 +63,8 @@ rule "Rocket Punch":
     eventPlayer.Punching = true
     eventPlayer.setAbility1Enabled(false)
     eventPlayer.setAbility2Enabled(false)
-    eventPlayer.setUltEnabled(false)
     eventPlayer.setMeleeEnabled(false)
+    eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.PunchDamages = 0
     eventPlayer.PunchCharge = -0.14
     chase(eventPlayer.PunchCharge, 1, rate=1, ChaseReeval.NONE)
@@ -77,8 +77,8 @@ rule "Rocket Punch":
     eventPlayer.setDamageDealt(100)
     eventPlayer.setAbility1Enabled(true)
     eventPlayer.setAbility2Enabled(true)
-    eventPlayer.setUltEnabled(true)
     eventPlayer.setMeleeEnabled(true)
+    eventPlayer.allowButton(Button.ULTIMATE)
     eventPlayer.Punching = false
 
 
@@ -94,6 +94,7 @@ rule "Rocket Punch - ECHO":
     eventPlayer.setAbility2Enabled(false)
     eventPlayer.setUltEnabled(false)
     eventPlayer.setMeleeEnabled(false)
+    eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.PunchDamages = 0
     eventPlayer.PunchCharge = -0.14
     chase(eventPlayer.PunchCharge, 1, rate=1, ChaseReeval.NONE)
@@ -108,4 +109,5 @@ rule "Rocket Punch - ECHO":
     eventPlayer.setAbility2Enabled(true)
     eventPlayer.setUltEnabled(true)
     eventPlayer.setMeleeEnabled(true)
+    eventPlayer.allowButton(Button.ULTIMATE)
     eventPlayer.Punching = false
