@@ -2,7 +2,7 @@
 
 settings {
     "main": {
-        "description": "SVB Creator Pugs in collab with Elo Hell Workshops Discord"
+        "description": "OW2 Changes - SVB Creator Pugs in collab with Elo Hell Workshops Discord."
     },
     "lobby": {
         "team1Slots": 5,
@@ -58,7 +58,6 @@ settings {
         }
     },
     "workshop": {
-        "Cloud duration": 2.5,
         "What button should Icing overwrite?": [
             1
         ],

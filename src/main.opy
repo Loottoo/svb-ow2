@@ -23,6 +23,7 @@
 #!include "heroes/echo/base.opy"
 #!include "heroes/echo/sticky-bombs.opy"
 
+#!include "heroes/roadhog/take-a-breather.opy"
 #!include "heroes/roadhog/ultimate.opy"
 
 #!include "heroes/wrecking-ball/piledriver.opy"
