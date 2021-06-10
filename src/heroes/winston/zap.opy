@@ -101,14 +101,49 @@ rule "Fire Zap":
             destroyHudText(eventPlayer.ZapHUDSpacer)
             destroyProgressBarHud(eventPlayer.ZapHudProgress)
             ZapFired()
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.BLUE, eventPlayer, 100)
-            createBeam(getAllPlayers(), Beam.GOOD, eventPlayer.getEyePosition() + Vector.DOWN, raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * ZapRange, getPlayers(getOppositeTeam(eventPlayer.getTeam())), eventPlayer, true).getHitPosition(), Color.BLUE, EffectReeval.VISIBILITY_AND_COLOR)
-            eventPlayer.ZapEffects.append(getLastCreatedEntity())
-            createBeam(getAllPlayers(), Beam.BAD, eventPlayer.getEyePosition() + Vector.DOWN, raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * ZapRange, getPlayers(getOppositeTeam(eventPlayer.getTeam())), eventPlayer, true).getHitPosition(), Color.AQUA, EffectReeval.VISIBILITY_AND_COLOR)
-            eventPlayer.ZapEffects.append(getLastCreatedEntity())
             ZapHitDetection()
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.BLUE, eventPlayer, 100)
+
+            createBeam(
+                getAllPlayers(),
+                Beam.BAD, eventPlayer.getEyePosition() + Vector.DOWN, raycast(eventPlayer.getEyePosition(),
+                eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange),
+                getPlayers(getOppositeTeam(eventPlayer.getTeam())),
+                eventPlayer,
+                true
+            ).getHitPosition(), Color.AQUA, EffectReeval.VISIBILITY_AND_COLOR)
+            eventPlayer.ZapEffects.append(getLastCreatedEntity())
+
+            createBeam(
+                getAllPlayers(),
+                Beam.GOOD, eventPlayer.getEyePosition() + Vector.DOWN, raycast(eventPlayer.getEyePosition(),
+                eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange),
+                getPlayers(getOppositeTeam(eventPlayer.getTeam())),
+                eventPlayer,
+                true
+            ).getHitPosition(), Color.BLUE, EffectReeval.VISIBILITY_AND_COLOR)
+            eventPlayer.ZapEffects.append(getLastCreatedEntity())
+
+            if eventPlayer.ZapHitPlayer:
+                playEffect(
+                    getAllPlayers(),
+                    DynamicEffect.BAD_PICKUP_EFFECT,
+                    Color.AQUA,
+                    eventPlayer.ZapHitPlayer,
+                    1
+                )
+
+                playEffect(
+                    getAllPlayers(),
+                    DynamicEffect.BAD_EXPLOSION,
+                    Color.BLUE,
+                    eventPlayer.ZapHitPlayer,
+                    2
+                )
+
             eventPlayer.setAmmo(0, eventPlayer.getAmmo(0) - 25)
             wait(1)
+            eventPlayer.ZapHitPlayer = null
             for eventPlayer.INDEX in range(len(eventPlayer.ZapEffects)):
                 destroyEffect(eventPlayer.ZapEffects[eventPlayer.INDEX])
                 destroyHudText(eventPlayer.ZapEffects[eventPlayer.INDEX])
