@@ -37,18 +37,18 @@ def ZapHitDetection():
 
     for ZapLoop in range(len(ZapHitboxArray)):
         eventPlayer.ZapHitPlayer = raycast(
-            vect(0, eventPlayer.getEyePosition().y - 1, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
-            vect(0, eventPlayer.getEyePosition().y - 1, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
+            vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
+            vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
             getPlayers(getOppositeTeam(eventPlayer.getTeam())),
             eventPlayer,
             true
         ).getPlayerHit()
 
         #createBeam(getAllPlayers(), Beam.GRAPPLE,
-        #   vect(0, eventPlayer.getEyePosition().y - 1, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
+        #   vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
         #   raycast(
-        #       vect(0, eventPlayer.getEyePosition().y - 1, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
-        #       vect(0, eventPlayer.getEyePosition().y - 1, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
+        #       vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
+        #       vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
         #       getPlayers(getOppositeTeam(eventPlayer.getTeam())),
         #       eventPlayer,
         #       true
@@ -106,7 +106,7 @@ rule "Fire Zap":
 
             createBeam(
                 getAllPlayers(),
-                Beam.BAD, eventPlayer.getEyePosition() + Vector.DOWN, raycast(eventPlayer.getEyePosition(),
+                Beam.BAD, eventPlayer.getEyePosition() + (Vector.DOWN * 0.5 + Vector.RIGHT * 0.5), raycast(eventPlayer.getEyePosition(),
                 eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange),
                 getPlayers(getOppositeTeam(eventPlayer.getTeam())),
                 eventPlayer,
@@ -116,7 +116,7 @@ rule "Fire Zap":
 
             createBeam(
                 getAllPlayers(),
-                Beam.GOOD, eventPlayer.getEyePosition() + Vector.DOWN, raycast(eventPlayer.getEyePosition(),
+                Beam.GOOD, eventPlayer.getEyePosition() + (Vector.DOWN * 0.5 + Vector.RIGHT * 0.5), raycast(eventPlayer.getEyePosition(),
                 eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange),
                 getPlayers(getOppositeTeam(eventPlayer.getTeam())),
                 eventPlayer,
