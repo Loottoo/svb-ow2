@@ -9,6 +9,9 @@ settings {
         "team2Slots": 5
     },
     "gamemodes": {
+        "general": {
+            "enableSkins": false
+        },
         "assault": {
             "enabledMaps": [],
             "roleLimit": "2OfEachRolePerTeam"
