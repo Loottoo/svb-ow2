@@ -1,11 +1,15 @@
 #!mainFile "../../main.opy"
 
 
+playervar tempDamageMod
+
+
 def CleanupMccree():
     @Name "[mccree.del] Subroutine: Cleanup"
     
     waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
     eventPlayer.setMaxHealth(100)
+    stopDamageModification(eventPlayer.tempDamageMod)
     wait()
     eventPlayer.HeroActive = null
 
@@ -20,6 +24,8 @@ def InitialMccree():
     eventPlayer.HeroActive = Hero.MCCREE
     #Character setup
     eventPlayer.setMaxHealth(88.889)
+    startDamageModification(getAllPlayers(), eventPlayer, 64 if eventPlayer.isFiringSecondaryFire() else 100, DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
+    eventPlayer.tempDamageMod = getLastDamageModification()
     async(CleanupMccree, AsyncBehavior.NOOP)
 
 

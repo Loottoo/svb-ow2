@@ -1,6 +1,6 @@
 #!mainFile "../../main.opy"
 
-globalvar piledriverStreght
+globalvar piledriverStreght = createWorkshopSetting(int[1:100], "Wrecking Ball", "Piledriver lift up (based on distance)    Lower = reduced strenght, Higher = closer to live", 33, 0)
 
 rule "[Wrecking Ball] Reduce Piledriver liftup":
   @Event playerDealtDamage
