@@ -13,7 +13,7 @@ rule "[Widowmaker] Bolt action":
   @Condition eventPlayer.isFiringSecondaryFire() == true
   @Condition eventPlayer.isFiringPrimaryFire() == true
   
-  async(Sub13, AsyncBehavior.NOOP)
+  eventPlayer.setAmmo(0, 0)
 
 
 rule "[Widowmaker]ยง Bolt action":
@@ -23,7 +23,7 @@ rule "[Widowmaker]ยง Bolt action":
   @Condition eventPlayer.isFiringSecondaryFire() == true
   @Condition eventPlayer.isFiringPrimaryFire() == true
   
-  async(Sub13, AsyncBehavior.NOOP)
+  eventPlayer.setAmmo(0, 0)
 
 
 def Sub13():

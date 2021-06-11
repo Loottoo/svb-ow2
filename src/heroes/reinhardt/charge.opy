@@ -34,26 +34,26 @@ rule "[reinhardt.del] Lower Charge Cooldown":
 
 
 def ReinhardtDetectFacingAngle():
-  @Name "[reinhardt.del] Subroutine: Detect Facing Angle"
-  
-  #Code snippet provided by Lotto!
-  eventPlayer.facingAngle = eventPlayer.getHorizontalFacingAngle()
-  wait()
-  if angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.facingAngle) > 0:
-      if eventPlayer.isInAir():
-          eventPlayer.startAcceleration(Vector.RIGHT, 100, 4, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-      else:
-          eventPlayer.startAcceleration(Vector.RIGHT, 500, 11.5, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-  elif angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.facingAngle) < 0:
-      if eventPlayer.isInAir():
-          eventPlayer.startAcceleration(Vector.LEFT, 100, 4, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-      else:
-          eventPlayer.startAcceleration(Vector.LEFT, 500, 11.5, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-  else:
-      eventPlayer.stopAcceleration()
-  if RULE_CONDITION:
-      goto RULE_START
-  eventPlayer.stopAcceleration()
+    @Name "[reinhardt.del] Subroutine: Detect Facing Angle"
+    
+    #Code snippet provided by Lotto!
+    eventPlayer.facingAngle = eventPlayer.getHorizontalFacingAngle()
+    wait()
+    if angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.facingAngle) > 0:
+        if eventPlayer.isInAir():
+            eventPlayer.startAcceleration(Vector.RIGHT, 100, 3, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
+        else:
+            eventPlayer.startAcceleration(Vector.RIGHT, 500, 7, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
+    elif angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.facingAngle) < 0:
+        if eventPlayer.isInAir():
+            eventPlayer.startAcceleration(Vector.LEFT, 100, 3, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
+        else:
+            eventPlayer.startAcceleration(Vector.LEFT, 500, 7, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
+    else:
+        eventPlayer.stopAcceleration()
+    if RULE_CONDITION:
+        goto RULE_START
+    eventPlayer.stopAcceleration()
 
 
 rule "[reinhardt.del] Detect Facing Angle":
