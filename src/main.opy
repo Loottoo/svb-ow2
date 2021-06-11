@@ -75,6 +75,7 @@
 
 #!include "heroes/zarya/base.opy"
 #!include "heroes/zarya/bubbles.opy"
+#!include "heroes/zarya/primary.opy"
 
 #!include "heroes/doomfist/base.opy"
 #!include "heroes/doomfist/primary.opy"
