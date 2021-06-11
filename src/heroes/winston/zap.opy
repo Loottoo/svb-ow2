@@ -37,18 +37,18 @@ def ZapHitDetection():
 
     for ZapLoop in range(len(ZapHitboxArray)):
         eventPlayer.ZapHitPlayer = raycast(
-            vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
-            vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
+            vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
+            vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
             getPlayers(getOppositeTeam(eventPlayer.getTeam())),
             eventPlayer,
             true
         ).getPlayerHit()
 
         #createBeam(getAllPlayers(), Beam.GRAPPLE,
-        #   vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
+        #   vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
         #   raycast(
-        #       vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
-        #       vect(0, eventPlayer.getEyePosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
+        #       vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
+        #       vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
         #       getPlayers(getOppositeTeam(eventPlayer.getTeam())),
         #       eventPlayer,
         #       true
@@ -85,10 +85,23 @@ rule "Fire Zap":
     if eventPlayer.p_ZapCharges == 0:
         playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 50)
     else:
+        eventPlayer.ZapEffects = []
+
+        createEffect(
+            eventPlayer,
+            Effect.GOOD_AURA,
+            Color.SKY_BLUE if eventPlayer.ZapChargeMeter < 100 else Color.BLUE,
+            updateEveryTick(eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 0.675 + normalize(crossProduct(crossProduct(Vector.UP, eventPlayer.getFacingDirection()), eventPlayer.getFacingDirection())) * 0.262 + normalize(crossProduct(Vector.UP, eventPlayer.getFacingDirection())) * -0.135),
+            0.03 * eventPlayer.ZapChargeMeter / 100,
+            EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR
+        )
+        eventPlayer.ZapEffects.append(getLastCreatedEntity())
+
         createEffect(getAllPlayers(), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer, eventPlayer.ZapChargeMeter * 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
-        eventPlayer.ZapEffects = getLastCreatedEntity()
+        eventPlayer.ZapEffects.append(getLastCreatedEntity())
+
         eventPlayer.ZapChargeMeter = 0
-        hudSubheader(eventPlayer, "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", HudPosition.TOP, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+        hudSubheader(eventPlayer, " \r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", HudPosition.TOP, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
         eventPlayer.ZapHUDSpacer = getLastCreatedText()
         eventPlayer.DeletableHUD = eventPlayer.DeletableHUD.concat(getLastCreatedText())
         progressBarHud(eventPlayer, eventPlayer.ZapChargeMeter, " " if eventPlayer.ZapChargeMeter < 100 else "READY", HudPosition.TOP, 21, Color.WHITE if eventPlayer.ZapChargeMeter < 100 else Color.BLUE, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
@@ -165,7 +178,7 @@ rule "Zap charges (UI)":
     
     eventPlayer.CurrentHero = eventPlayer.getCurrentHero()
     eventPlayer.p_ZapCharges = ZapCharges
-    hudSubheader(eventPlayer, "\n\n\n\n\n\n\n\n\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", HudPosition.RIGHT, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(eventPlayer, " \n\n\n\n\n\n\n\n\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", HudPosition.RIGHT, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.DeletableHUD = eventPlayer.DeletableHUD.concat(getLastCreatedText())
     hudText(eventPlayer, ceil(ZapCooldown - eventPlayer.ZapChargeMeter) if eventPlayer.p_ZapCharges == 0 else iconString(Icon.BOLT), null, "{0}".format(buttonString(Button.SECONDARY_FIRE)), HudPosition.RIGHT, 21, Color.RED if eventPlayer.p_ZapCharges == 0 else Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_SORT_ORDER_STRING_AND_COLOR, SpecVisibility.DEFAULT)
     eventPlayer.DeletableHUD = eventPlayer.DeletableHUD.concat(getLastCreatedText())
