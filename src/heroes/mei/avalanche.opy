@@ -7,6 +7,7 @@ globalvar AvalancheEnabled
 globalvar AvalancheDamagePerTick
 globalvar AvalancheDamageExplosion
 globalvar AvalancheTurnable
+globalvar AvalancheTurnSpeed
 
 
 playervar IsUsingAvalanche
@@ -30,12 +31,13 @@ subroutine ExplodePlayersInAvalanche
 
 rule "Initialise Avalanche":
   AvalancheEnabled = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Enable Avalanche instead of regular Ultimate", true, 0)
-  AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow full steering during Avalanche", false, 2)
-  AvalancheRadius = createWorkshopSetting(float[1:3], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 2, 2)
-  AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 3)
-  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 200, 4)
-  AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 5)
-  AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 6)
+  AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow steering during Avalanche", true, 2)
+  AvalancheTurnSpeed = createWorkshopSetting(int[10:200], "Mei - Avalanche ability (Ultimate)", "Turn Speed (if enabled)", 50, 3)
+  AvalancheRadius = createWorkshopSetting(float[1:3], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 2, 4)
+  AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 5)
+  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 200, 6)
+  AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 7)
+  AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 8)
 
 
 rule "Avalanche Progress Bar HUD element":
@@ -97,7 +99,7 @@ rule "Player is using Avalanche":
   async(ChaseAvalancheRadius, AsyncBehavior.NOOP)
   SetAvalancheCamera()
   #Start forcing the player forwards
-  eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0)
+  eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0.01 if AvalancheTurnable else 0)
   #Create a bunch of effects that make up the ability
   eventPlayer.AvalancheEffects = []
   #Spheres
@@ -224,16 +226,30 @@ def ExplodePlayersInAvalanche():
   eventPlayer.PlayersInAvalanche = []
 
 
-rule "Avalanche is active, set facing direction":
+rule "Avalanche is active, start facing direction":
   @Event eachPlayer
-  @Condition AvalancheTurnable != true
   @Condition eventPlayer.IsUsingAvalanche == true
   
   #Force facing direction of Mei in direction Avalanche was used
-  eventPlayer.setFacing(eventPlayer.AvalancheFacingDirection, Relativity.TO_WORLD)
+  eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, 1000, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+  waitUntil(eventPlayer.IsUsingAvalanche != true, AvalancheDuration)
+  eventPlayer.stopFacing()
+
+
+rule "Avalanche is active and turnable, throttling left":
+  @Event eachPlayer
+  @Condition AvalancheTurnable == true
+  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.getThrottle().x != 0
+
+  eventPlayer.AvalancheFacingDirection = angleToDirection(
+    horizontalAngleOfDirection(eventPlayer.AvalancheFacingDirection) + (eventPlayer.getThrottle().x * AvalancheTurnSpeed),
+    eventPlayer.getVerticalFacingAngle()
+  )
+
   wait(0.016, Wait.ABORT_WHEN_FALSE)
   if RULE_CONDITION:
-      goto RULE_START
+    goto RULE_START
 
 
 rule "Avalanche is active, play sound":

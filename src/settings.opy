@@ -53,7 +53,7 @@ settings {
                 "ability1Cooldown%": 116
             },
             "reinhardt": {
-                "ability1Cooldown%": 70
+                "ability1Cooldown%": 80
             }
         }
     },
