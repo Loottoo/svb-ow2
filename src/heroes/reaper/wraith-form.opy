@@ -8,8 +8,7 @@ rule "[Reaper] Wraith Form 2 sec":
     
     waitUntil(eventPlayer.isUsingAbility1() == false, 2)
     if eventPlayer.isUsingAbility1():
-        eventPlayer.cancelPrimaryAction()
-        eventPlayer.setAbilityCooldown(Button.ABILITY_1, 8)
+        eventPlayer.forceButtonPress(Button.ABILITY_1)
 
 
 rule "[Reaper]§ Wraith Form 2 sec":
@@ -20,5 +19,4 @@ rule "[Reaper]§ Wraith Form 2 sec":
 
     waitUntil(eventPlayer.isUsingAbility1() == false, 2)
     if eventPlayer.isUsingAbility1():
-        eventPlayer.cancelPrimaryAction()
-        eventPlayer.setAbilityCooldown(Button.ABILITY_1, 8)
+        eventPlayer.forceButtonPress(Button.ABILITY_1)
