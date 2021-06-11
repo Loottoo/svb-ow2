@@ -1,0 +1,1299 @@
+<style>
+	.notes {
+    margin-top: 3rem;
+    border: 2px solid #464b4f;
+    background: #1f2326;
+  }
+
+  .notes__header {
+    position: relative;
+    padding: 1rem 1rem 1rem calc(1.5rem + 90px);
+    background: #292e31;
+  }
+	
+	.notes__title {
+	  margin: 0 !important;
+	  font-size: 1.5rem;
+	  font-weight: bold;
+	}
+
+  .notes__body {
+    padding: 1rem;
+  }
+
+  .notes__dev {
+    border-left: 4px solid #3fbf74;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+  }
+
+	.notes__icon {
+    position: absolute;
+    bottom: .5rem;
+    width: 90px;
+	  left: .5rem;
+    background: var(--bg-darker);
+    border: 2px solid var(--text-color);
+  }
+
+	.notes__list {
+    margin: 0;
+  }
+
+  .notes__item {
+		display: flex;
+    align-items: flex-start;
+    margin: 1rem 0 0;
+  }
+
+  .notes__item:first-child {
+    margin-top: 0;
+  }
+
+  .notes__ability {
+    width: calc(32px + .5rem);
+    padding: .25rem;
+    margin-right: .5rem;
+    border: 2px solid var(--text-color-dark);
+  }
+
+	.notes__name {
+    line-height: 1.5rem;
+	  font-weight: bold;
+    color: var(--white);
+	}
+
+  .notes__changes {
+	  margin: 0 0;
+    padding-left: 1.5rem !important;
+	}
+
+  .credit-cards {
+    align-items: flex-start;
+  }
+
+  .credit-cards .card__title {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  
+  .credit-cards strong {
+    display: block;
+    margin-top: .5rem;
+    font-size: .85rem;
+  }
+</style>
+
+
+> After the overwhelmingly positive reception to SVB's inaugural creator PUGs, SVB and Elo Hell Workshops have teamed up to tackle one of the most ambitious Workshop projects to date: a community-made Overwatch 2 patch! This project was created with the help of over eight developers and notable community figures, such as Bogur, all working together thanks to the Elo Hell Workshops Discord. Join today at [workshop.codes/discord](https://workshop.codes/discord).
+
+## Credits
+
+In partnership with
+<img src=https://i.imgur.com/JXdWIjU.png loading=lazy style="height: 40px !important; width: auto; margin-top: .5rem" />
+
+### Developers
+
+<div class="credit-cards mb-1/2">
+  <div>
+    <div class="card__title">General</div>
+
+    <strong>Overwatch 2 Role Passives</strong>
+    CaptCaptain and Dab
+  </div>
+</div>
+
+<div class="cards credit-cards">
+  <div>
+    <div class="card__title">Tank</div>
+
+    <strong>Reinhardt, Zarya, Orisa</strong>
+    CaptCaptain
+
+    <strong>Window</strong>
+    CaptCaptain, Mitsiee, Dab, and MagicMan
+
+    <strong>Roadhog, Wrecking Ball</strong>
+    Lotto
+
+    <strong>D.Va</strong>
+    Lotto and Dab
+  </div>
+
+  <div>
+    <div class="card__title">Damage</div>
+
+    <strong>Ashe, Genji, Hanzo, Junkrat, Reaper, Widowmaker</strong>
+    Lotto
+
+    <strong>Doomfist</strong>
+    MagicMan
+
+    <strong>Echo, Mei</strong>
+    Mitsiee
+
+    <strong>Genji, McCree, Sombra, Tracer</strong>
+    CaptCaptain
+
+    <strong>Symmetra</strong>
+    CaptCaptain, Lotto
+  </div>
+
+  <div>
+    <div class="card__title">Support</div>
+  
+    <strong>Baptiste, Lucio, Mercy</strong>
+    CaptCaptain
+  
+    <strong>Mercy</strong>
+    Lotto
+  </div>
+</div>
+
+### Organization + Assembly
+
+<div class="credit-cards mb-1/2">
+  <div>
+    CactusPuppy, CaptCaptain, Josbird, Mitsiee, SVB
+  </div>
+</div>
+
+# **Overwatch SVB Patch Notes – June 10, 2021**
+
+The purpose of these changes are twofold. Firstly, we’re implementing all the changes that are known to us as coming in OW2 - such as role passives, tank changes and 5v5. On top of this, though, we’ve added a host of changes to as many heroes as we can since just changing tanks is not enough - the whole game will need to be rebalanced so to get a proper flavour of what OW2 will play like, we wanted to try our best to adapt the roster accordingly. Secondly, a lot of the new abilities/changes were added with the purpose of being fun and wacky, the way OW’s core philosophy always wanted, while trying to keep them balanced. Bear in mind that this is our first round of testing so some things may well be wildly broken but that is the exact reason we’re testing them so that we can adjust accordingly and, hopefully, have some ideas that we can present to the devs to help them too.
+
+---
+
+## **Tanks**
+
+### Role Passive: 30% knockback reduction and 25% reduced ult charge generation for enemy team
+
+<div style="padding-top: 1rem"></div>
+
+<!-- Reinhardt -->
+<div class="notes" id="Reinhardt">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/67e489338249021ed490b8821f28f78487e34917880220f64e24fee78dcd7ed2.png" loading="lazy" />
+    <h5 class="notes__title">Reinhardt</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      The details we know about Rein so far suggest the devs have given his changes the most thought. He may need more help as a solo tank but we wanted to see him tested first in these PUGs before buffing him.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/40c9f1c060033e58120c9ec174008b8f5d833412923f7f351a32e5df47fe8166.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Charge</div>
+
+          <ul class="notes__changes">
+            <li>Cancel charge by pressing the button again</li>
+            <li>Allow for better steering while charging</li>
+            <li>Cooldown reduced from 10 -> 7 seconds</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/568a5f49875557f735af36dce68474a923f7e8582a7be20fb68b6ee66ac077e6.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Fire Strike</div>
+
+          <ul class="notes__changes">
+            <li>Fire Strike now has 2 charges on a 6 second cooldown</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/299d97f5f256197df2698c32678314f9e08f04bbf68eba3801992e08281fd481.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Barrier Field</div>
+
+          <ul class="notes__changes">
+            <li>1200HP Shield</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">Steadfast Passive</div>
+
+          <ul class="notes__changes">
+            <li>Steadfast removed (as to not stack with extra 30% knockback reduction)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Roadhog -->
+<div class="notes" id="Roadhog">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/5f961a1625091209fdfb6086dee69178d9de88946b4b2d7492c0a4fffe5fdd4b.png" loading="lazy" />
+    <h5 class="notes__title">Roadhog</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Roadhog could easily take over in a 5v5 situation with less shields around (we even saw this in the OW2 stream), so these changes seek to shift the power of Breather towards being more of a team-utility ability. At the moment, it allows Roadhog to go for some crazy plays and get out without punishment but now Hog will have to think harder before taking that risk. We're also reducing the displacement power of Whole Hog, as well as increasing its cost, to avoid making tanking too frustrating.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">General</div>
+
+          <ul class="notes__changes">
+            <li>Ult generation reduced by 20%</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/9cb8d867671bf917a9ba5d4a28ab6cb6ceeb10de2813567fcad97aca32c58499.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Take a Breather</div>
+
+          <ul class="notes__changes">
+            <li>Take a Breather now creates a gas cloud which gives allies [10% dmg reduction & 20hps healing if they stand in it]. Can't move while doing this. Lingers for 3 seconds afterwards</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/4da2a0d46056c6570af1e85be8697eb6e912f09c840d6702bbf5feb2f0bccb23.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Whole Hog</div>
+
+          <ul class="notes__changes">
+            <li>Ultimate rate reduced by 20%</li>
+	          <li>Reduced knockback by 20%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Zarya -->
+<div class="notes" id="Zarya">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/983bd1ba3146529209db5b9d3d851320537270859e8e1debbfffd848c4546398.png" loading="lazy" />
+    <h5 class="notes__title">Zarya</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Zarya may need more than this to make her viable as a solo tank, but first it’d be wise to see her in the hands of great Zarya players. <br><br> Note: at the moment, the Workshop does not allow Zarya to use two ally bubbles at the same time - you have to wait for the first one to disappear before you can apply a second barrier.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/02aebadea29904eca48f514437522f9f3a52ea266e6c2b2688dad39641071bda.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Particle Cannon - Primary Fire</div>
+
+          <ul class="notes__changes">
+            <li>Damage dealt decreased from [75 - 170] to [66 - 150]</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/2d462e28ae2fc60b3ef9c32702bbc88936885dd7d20746a31dd2e3c51c20f199.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Particle Barrier / Projected Barrier</div>
+
+          <ul class="notes__changes">
+            <li>Bubble has 2 charges that can be used on yourself or allies</li>
+            <li>Reduced cooldown from 8 to 5 seconds</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Winston -->
+<div class="notes" id="Winston">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/5048a08caf910d4463ce0c513f7e64c4329f276d358d054e7a8eb7ec5bf26eab.png" loading="lazy" />
+    <h5 class="notes__title">Winston</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Bogur humbly requested an extra 50HP and that was more than fair. We want to see how sniper Monke plays and then decide if he needs more help.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">General</div>
+
+          <ul class="notes__changes">
+            <li>Health increased [350 -> 400 for overall total of 550hp with armor]</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://cdn.workshop.codes/nw2d4jaocd3f63cindju26f01eam" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Secondary Fire: New Alternate Fire</div>
+
+          <ul class="notes__changes">
+            <li>Winston can now hold down secondary fire to charge up a longer-range attack capable of hitting enemies up to 500 meters away.</li>
+            <li>This attack takes 1 second to charge up to 50 damage, and may be held for an additional 1 second after reaching maximum charge.</li>
+            <li>Firing this attack costs 25 ammo.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- D.Va -->
+<div class="notes" id="DVa">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/5d9b834a39e9306ec125dd8c77cdd62a351f8edef2d5dfe66d6cbb22594eae7e.png" loading="lazy" />
+    <h5 class="notes__title">D.Va</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      This brings D.Vas defence matrix back to the full strength it was when it was eating up entire Soldier ults. Let’s see if this alone is enough to make her feel competent as a solo tank, though I suspect not.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/3a98edf05de3697c0b63e52f5eb59ef635a1f6a29d7a62d6ab1f490e28991bfe.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Defense Matrix</div>
+
+          <ul class="notes__changes">
+            <li>Defense Matrix maximum duration increased from 2 to 4 seconds</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Sigma -->
+<div class="notes" id="Sigma">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/72fd43c9d9f9f0d075a78db7a1dfe7766eef4d9c03e34c45b3ae6fe0f8634693.png" loading="lazy" />
+    <h5 class="notes__title">Sigma</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Sig probably needs changes but, again, I think he might be pretty strong in a 5v5 setting. In the interest of reducing shields in OW2, I wanted to take his away and give him a ‘deflect’ instead but it’s a bit tricky to do in the workshop. The summary would simply be: one hand succ, one hand chuck.
+    </div>
+  </div>
+</div>
+
+
+<!-- Orisa -->
+<div class="notes" id="Orisa">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/1f9cf8dd1ea36ba91440be891d79cd97bd4ac2d2e0e409a8eee0c76a4317617a.png" loading="lazy" />
+    <h5 class="notes__title">Orisa</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Orisa is already a lot more ‘brawly’ than she ever was but this is an attempt to take her all the way. Gallop should be both fun and a little silly, the way OW abilities are meant to be. <br><br> Note: I wanted it to take one ally along potentially as well, but that was proving tricky in the Workshop.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/8bf67f548fb8dd8fde4dd07ae567e635f8d6229c330a3656134697b9ecbd9140.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Fusion Driver</div>
+
+          <ul class="notes__changes">
+            <li>Increased projectile speed 120 -> 150m/s</li>
+            <li>Reduced movement penalty when firing 30% -> 10%</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/dd5eae0eb278e6f844f2694ea349cadd782c4e17535dc29e23ba5cd461b85c6a.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Protective Barrier</div>
+
+          <ul class="notes__changes">
+            <li>Removed</li>
+            <li>Replaced by new ability: Gallop. Charge up & release for a burst distance travel (similar to Doomfist punch). Will push enemies out of path. Deals 50 damage</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/613c5ce0514904872b7d7ef026222a34a691674255c4c132acf6ecf276b80640.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Super Charger</div>
+
+          <ul class="notes__changes">
+            <li>Supercharger drops with a 600hp shield in front of it</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Wrecking Ball -->
+<div class="notes" id="WreckingBall">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/c22df3c91a4fbc7f3f9689cd76f9fb86b52b2dfdf9f51c2158b4a9259a5f970d.png" loading="lazy" />
+    <h5 class="notes__title">Wrecking Ball</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Wrecking Ball is the first tank you think of as an obvious beneficiary of a more DPS/Deathmatch-y style Overwatch so perhaps that alone will be enough to make him fit right again in the OW tank roster.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/3e884373721448d109c1646599cfe651a5bccdbc7a12d5062372c91b28acd80c.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Piledriver</div>
+
+          <ul class="notes__changes">
+            <li>Lift scales with distance to epicentre</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+---
+
+## **Damage**
+
+### Role Passive: 15% Movement speed increase for all heroes
+
+<div style="padding-top: 1rem"></div>
+
+<!-- Ashe -->
+<div class="notes" id="Ashe">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/e43bc239ddb5254f9df92f4c19cdf20a2df5be3f546af76c8a13da385bb9dcbd.png" loading="lazy" />
+    <h5 class="notes__title">Ashe</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Ashe could end up being too strong but I don’t wanna play around with numbers just yet. I’ve started with a nerf to B.O.B. ult charge and also reducing her knockback to help a little with closing distance on her. 
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/e18f7b6e464f0cf34789babf7a76b7e1d851e62102dccfe10769bcf8716e5554.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Coach Gun</div>
+
+          <ul class="notes__changes">
+            <li>Knockback reduced (maximum 7m)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/e788b12d476e896dac3831bbc0842fb3b4d07a89b3c337959d9a6cd6ea5a7df5.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">B.O.B.</div>
+
+          <ul class="notes__changes">
+            <li>No longer gains ult charge when B.O.B is active</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Bastion -->
+<div class="notes" id="Bastion">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/0abef5617fb960668f1d3ab9322f416188faf7479d2491a60100b3f59ce890ee.png" loading="lazy" />
+    <h5 class="notes__title">Bastion</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Who really knows how to fix this guy without making him an entirely different hero? 
+    </div>
+  </div>
+</div>
+
+
+<!-- Doomfist -->
+<div class="notes" id="Doomfist">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/e072f79929b20a9bbf56a5862cadf4769fd2062f375ac3ecd243ceb66983c6ea.png" loading="lazy" />
+    <h5 class="notes__title">Doomfist</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Doom is weak but when Doom is strong, no one has fun. Mostly, I think the one-shot burst damage is what feels the worst. So punch is now non-lethal to most characters and instead can be used more for mobility. To compensate, his primary fire does more now and his ult is more lethal.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/49c404d5887c562cdb5aafb55979c5589a450c0e18fa9d62a3c8cc0ac585886e.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Hand Cannon</div>
+
+          <ul class="notes__changes">
+            <li>Primary fire total damage increased from [19.8-66] to [27-80]</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/aa2a067fe151ac2795fe77546711c07be5f0880d9ae5dce554cab0c933d927f0.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Rocket Punch</div>
+
+          <ul class="notes__changes">
+            <li>Rocket punch can now be targeted upwards, damage decreased [50 - 100 (punch) | 50 - 150 (wall impact)] -> [10 - 50 (punch) | 50 - 100 (wall impact)]</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/fa96b2650987b3784a725a0fb1704f7191a686a4f42c9ccf61c404e2f08b158c.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Meteor Strike</div>
+
+          <ul class="notes__changes">
+            <li>Outer ring of Meteor Strike damage increased [200 max/15 min -> max 250 dmg/min 20 dmg]</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Echo -->
+<div class="notes" id="Echo">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/ce8aec64726308d50cc0e4656d9bfe7647b886cc23830e0c80439cb92bfbdbcc.png" loading="lazy" />
+    <h5 class="notes__title">Echo</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Echo is strong, so just a few minor tweaks to maybe bring her more in line with other DPS.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/dcaa626e367b80b5bcd2425e26e0075b5343990785bc96e1705325904f73fe96.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Sticky Bombs</div>
+
+          <ul class="notes__changes">
+            <li>Now fires 5 instead of 6 bombs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/711f211c988ff1fafe99276bddefa3a861789e4b27859260e8ad87df5b879337.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Flight</div>
+
+          <ul class="notes__changes">
+            <li>Cooldown increased 6 -> 7s</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Genji -->
+<div class="notes" id="Genji">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/765cd44aab948bd53082079dfdcf3ce967e8786cf26e4505b797b092c1e6478e.png" loading="lazy" />
+    <h5 class="notes__title">Genji</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Our boy Genji could use some love so this brings him back to his brief ‘Genji meta’ state without the obnoxiousness of the nanoblade that was building every 60 seconds. This should make him not a blade-bot. <br><br> Note: I wanted to reduce his recovery rate of fire a bit more but that’s not possible in the workshop.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">General</div>
+
+          <ul class="notes__changes">
+            <li>Reduced ultimate generation by 5%</li>
+            <li>Increased movement speed passive removed to match speed of all other DPS heroes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/8d0916035141abd9ab2bf72dbcfd0460b7a0019529e023d259ad4340890b34b3.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Shuriken</div>
+
+          <ul class="notes__changes">
+            <li>Increased damage from 28 -> 30</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/e9c3c82c08ce1a6006dbdf6905591040ed83ddceba81efb2e526c217cd57c931.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Dragonblade</div>
+
+          <ul class="notes__changes">
+            <li>Dragonblade no longer receives damage amp from Nanoboost</li>
+            <li>Kills during Dragon Blade also resets Deflect cooldown</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Hanzo -->
+<div class="notes" id="Hanzo">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/871d02150e9b67af02795b137ffc5133c1ff8a2a8d66340ca939f6216a539c9c.png" loading="lazy" />
+    <h5 class="notes__title">Hanzo</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Reverse fall-off damage will make it so that Hanzo can’t be effective at every range. He’ll find more damage with one less tank around and this should make him a bit more specialised.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/1aa4358e8a1d423dd55669780908b856141a783d053224b629b064c66288469e.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Storm Bow</div>
+
+          <ul class="notes__changes">
+            <li>Reverse fall-off damage (doing 50% of damage at point blank range, and 100% at 20m)</li>
+            <li>Increased projectile speed by 15%</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/92c56621ba267d94f16baacda3f10ba7777b475935981b02e5026449d8e3d79c.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Storm Arrows</div>
+
+          <ul class="notes__changes">
+            <li>Reduced number of arrows from 5 -> 4</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Junkrat -->
+<div class="notes" id="Junkrat">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/6136346ab998d7db71f7b37974f54503d2d70b5537bf77a9faf6564cfeaa64e6.png" loading="lazy" />
+    <h5 class="notes__title">Junkrat</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      I don’t know Junkrat well enough to make too many changes to him. This was one that was suggested.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/425136ea32c08355f33df230d900a8cc8010ee7a2b27314f6a1e395bd78eb5aa.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Steel Trap</div>
+
+          <ul class="notes__changes">
+            <li>Reduced cooldown from 10 -> 7 seconds</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- McCree -->
+<div class="notes" id="McCree">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a30fd337709bc9bd52781db34d754cd86825f021c27bcd9bc0e912cc5d88577b.png" loading="lazy" />
+    <h5 class="notes__title">McCree</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Fan The Hammer is ridiculous right now and the 25 extra HP has everyone mad. I think these changes should allow McCree to still be strong in good hands but remove some of the more frustrating elements of going up against him (i.e. flash into fan).
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">General</div>
+
+          <ul class="notes__changes">
+            <li>Health reduced from 225 -> 200</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/afb27d71eeb6f3635ac1ff236c7b3f9e3c6d017360ce022d5d384288ff95bce7.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Fan The Hammer</div>
+
+          <ul class="notes__changes">
+            <li>Fan the hammer damage per bullet reduced from 25-50 -> 15-35</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/c9de6a63247025da4b96ad4a3e36fe2675a5ac9da3b42384590f99eed8f1d9b3.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Flashbang</div>
+
+          <ul class="notes__changes">
+            <li>Flashbang replaced by Lasso. Holds target in position for 1s instead of stunning (works like Junkrat Trap)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Mei -->
+<div class="notes" id="Mei">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a4c1e3c5533675ba4941c48809c54e0412774e022b1e324f7ec5915fef372db9.png" loading="lazy" />
+    <h5 class="notes__title">Mei</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      The dev PVP stream removed the primary fire freeze, but the slow is an equally obnoxious part of Mei’s kit and needs to go. Instead, these changes should push her into the direction of utility and some fun ice-related wackiness. I had a lot of fun just with the brief play around with this.
+      <br><br>
+      This rework is inspired by Heroes of the Storm, giving her many similar abilities, but while still keeping her in the Damage role.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a6e33c5a9c29cbb15d67b9dbd02de11cdf61d3b943c479d678cad0fa94ef4217.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Endothermic Blaster - Primary Fire</div>
+
+          <ul class="notes__changes">
+            <li>Removed</li>
+            <li>Replaced with "Icing". Icing creates a straight 20 meter long path of ice that Mei and her teammates can jump on to quickly move forward</li>
+            <li>Cryo-freeze can be used in conjunction with Icing</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/892fd12cc3f8bd3b54bbc175b6d8caecdedaa819c819c5fc216c3c2b4f486a3f.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Blizzard</div>
+
+          <ul class="notes__changes">
+            <li>Removed</li>
+            <li>Replaced with "Avalanche". Avalanche turns Mei in to a giant rolling Snowball that picks up enemies she rolls over. After 3 seconds (or when reaching a wall) Avalanche explodes, knocking back and damaging (50) everyone caught in Avalanche. Avalanche also damages enemies caught in inside over time while rolling for 30 damage per second</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Pharah -->
+<div class="notes" id="Pharah">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/d69d76162855cea8807b9c163e6b53bb522eef282f368b52a469332313562b98.png" loading="lazy" />
+    <h5 class="notes__title">Pharah</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      No idea what changes Pharah might need.
+    </div>
+  </div>
+</div>
+
+
+<!-- Reaper -->
+<div class="notes" id="Reaper">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/b199eada68c7148fd0f03f3bca53fb98b28a2318603918e72a37b4aed0ef754e.png" loading="lazy" />
+    <h5 class="notes__title">Reaper</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      The Shadowstep into backline, then wraith if in trouble is a little too strong and allows Reaper to just make stupid plays and then rinse-repeat. This should make him just that little bit more careful about his backline adventures.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/dbcceb2a764dcf8bb808078f7a32a039fd259c72e557dcde3fb70b2041247c9a.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Wraith Form</div>
+
+          <ul class="notes__changes">
+            <li>Duration reduced from 3 -> 2 seconds</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Soldier -->
+<div class="notes" id="Soldier76">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/1ab1d67206b689b2dc14282ce65cb070e2956a902f5c4de87884513b661c4297.png" loading="lazy" />
+    <h5 class="notes__title">Soldier: 76</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      This was a nice QoL change from the April Fool’s patch. Does he need more? I don’t think so tbh.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/8408bacddfb4ac7b971dd14f6d8c9d211459fb159b459c3e6eaf06bc0a38bcb2.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Sprint</div>
+
+          <ul class="notes__changes">
+            <li>Now slowly reloads ammo while sprinting (4 ammo per second)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Sombra -->
+<div class="notes" id="Sombra">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/63afd70d44e5d2b3dde1bbbf9a51f1af6fd0cde2b8d72d58dfffdf75b326ea58.png" loading="lazy" />
+    <h5 class="notes__title">Sombra</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      A big change, so may be controversial, but: Hack cannot stay as it is. OW2 is moving away from CCs and things that stop people from playing their hero. So, I’ve tried to make Hack less of a “hack ‘em and they’re useless now” and more of a targeted silence, which works well in MOBAs. The 2 seconds can still be plenty if you’re targeting someone down specifically and now that it can be executed more consistently, Sombra can use it tactically to interrupt things.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/3ebcefc44a278d93afa8339e7e8758e6d471566fdd122d20d9b8ab7269a12017.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Hack</div>
+
+          <ul class="notes__changes">
+            <li>Hack is now a guaranteed-hit seeking single-target projectile</li>
+            <li>Hack duration reduced 5 -> 2 seconds</li>
+            <li>Hack cooldown increased 8 -> 10 seconds</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Symmetra -->
+<div class="notes" id="Symmetra">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/961aa9d625d8104d6f466f63a907027e7083d161da9f02004d7d545c2a52440b.png" loading="lazy" />
+    <h5 class="notes__title">Symmetra</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Sym feels clunky at the moment and barriers need to go so this is an attempt to make her feel more cool and unique. TP can be more dynamic this way & the light clone is wacky fun imo. Note: Due to workshop limitations, this means the teleporter can’t be manually broken. We also wanted to do something with turrets but they are a nightmare to work with in the workshop, apparently.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/13b45663f441144ded977e8ccf9ed180c213176206a9f6f9e189e29f09a03b64.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Teleporter</div>
+
+          <ul class="notes__changes">
+            <li>Cooldown now starts when teleporter is placed</li>
+            <li>Teleporter now lasts 8 seconds</li>
+            <li>Can no longer be manually destroyed</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/366a8cb1fd0718d4e2307674c713277b2a6c095c1997ddb7f4b9d9779063adb1.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Photon Barrier</div>
+
+          <ul class="notes__changes">
+            <li>Removed</li>
+            <li>Replaced with "Light Clone". Light Clone creates a duplicate Symmetra who moves inversely to the real Symmetra and deals 50% damage.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Torbjörn -->
+<div class="notes" id="Torbjorn">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/81a4f644137461fddfef6c24820b0b8958046d5dad1944baf02478fcc916a968.png" loading="lazy" />
+    <h5 class="notes__title">Torbjörn</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      What do we do with Torb? We wanted to give him a grapple specifically to his turret but he has the max number of abilities already.
+    </div>
+  </div>
+</div>
+
+
+<!-- Tracer -->
+<div class="notes" id="Tracer">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a74a59e54131214afedbeb964d8be02de53a08dbef939632235187b1501aa74b.png" loading="lazy" />
+    <h5 class="notes__title">Tracer</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Just a slight tweak back.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">General</div>
+
+          <ul class="notes__changes">
+            <li>Increased movement speed passive removed to match speed of all other DPS heroes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Widowmaker -->
+<div class="notes" id="Widowmaker">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a90c4acb688e425a51164216e40e5e9bd8e82797d26d8db0441bcf5f508ae474.png" loading="lazy" />
+    <h5 class="notes__title">Widowmaker</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Widow is definitely the one to keep an eye on the most in 5v5. These nerfs might be too much, but they should really limit her ability to dictate the entire feel of a match.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/13a1e7903c23a5e140aa01fa930f585c1ea69e1e24378c0462f42053085f7ad9.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Widow's Kiss</div>
+
+          <ul class="notes__changes">
+            <li>Is now a bolt-action rifle. Can only shoot one shot before needing to unscope. 1 second cooldown before she can scope again</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+---
+
+## **Supports**
+
+### Role Passive: Regenerates health at 10 HP/S after 2 seconds of not taking damage
+
+<div style="padding-top: 1rem"></div>
+
+<!-- Ana -->
+<div class="notes" id="Ana">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/b64f0b7062266a58b29a773476b31175aded9fcccfe4a0d86596dbe85f7739d2.png" loading="lazy" />
+    <h5 class="notes__title">Ana</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Ana will probably thrive anyway without as many barriers around to block her so may well not need any buff.
+    </div>
+  </div>
+</div>
+
+
+<!-- Baptiste -->
+<div class="notes" id="Baptiste">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a4f09ac5528ea7c458223747a0b47144f1b6b1d2736fa3b67c18a8ab43d0d815.png" loading="lazy" />
+    <h5 class="notes__title">Baptiste</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      The devs clearly are adamant about immortality staying as an ability that gives immortality. They’ve obviously considered all the damage reduction ideas… well how about a cast time? It still has the power of ‘immortality’ but now requires foresight and gamesense to get value out of.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/d887d165f7b0eb98a30af8f274ff740c6c7735af719b93e95dd9da17558815d8.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Regenerative Burst</div>
+
+          <ul class="notes__changes">
+            <li>Regenerative burst self-healing nerfed: 15 per second (self), 75 overall</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/d66d82bab88fc813080dd15e31629cc3aa7c8b41cfb41d5b962b628dd345e433.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Immortatility Field</div>
+
+          <ul class="notes__changes">
+            <li>Immortality has cast time of 1.5 seconds. Bap is immobile while casting</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Brigitte -->
+<div class="notes" id="Brigitte">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/cc43b7ecb12ebf262080d610ae3209849e304f82764bc3ba38508dd812d88e61.png" loading="lazy" />
+    <h5 class="notes__title">Brigitte</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Idk what to do about Brig. One thing the devs mentioned is that all ‘Overhealth’ in OW2 works the same, which automatically means Rally is now weaker since it just acts like normal health for allies. I wanted to give her shield bash a new effect: Rather than stunning, it sends a ‘fire path’ down a straight line, sort of like a condensed version of Earthshatter, except it only does damage and triggers her Inspire. But, it was too much workshop work to fit in in time for this.
+    </div>
+  </div>
+</div>
+
+
+<!-- Lucio -->
+<div class="notes" id="Lucio">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/6902426f460e3e7880530ee7f974e15d6c912346221e78ee09b5f9eb8c33c401.png" loading="lazy" />
+    <h5 class="notes__title">Lúcio</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      This is a dynamic little change that’s aimed at encouraging your average Lucio players to wallride more and master the skill. It also gives a bit of scalability to Lucio - the good ones can now get more output out of him where sometimes he feels a bit weak when not being part of a Rush comp (which will be much weaker in OW2).
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <div>
+          <div class="notes__name">New Passive: Music Meter</div>
+
+          <ul class="notes__changes">
+            <li>Continuously wall riding charges Music Meter. Maximum charge time 4 seconds, minimum 1 second. Slowly decays as you get off a wall</li>
+	          <li>Music Meter buffs other abilities</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/023a4fcb7ff780b15f62a894fa4ee07f13428c3f1cee17d575884dbe820e0c13.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Amp It Up</div>
+
+          <ul class="notes__changes">
+            <li>Benefits from "Music Meter". Increases efficiancy by max 20%, minimum 5%</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/21c5a17be341a3c0da2dcc9372f4f3c88ef622c80776360bd844d0fba3eb88a7.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Sound Barrier</div>
+
+          <ul class="notes__changes">
+            <li>Benefits from "Music Meter". Increases efficiancy by max 25%, minimum 10%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Mercy -->
+<div class="notes" id="Mercy">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/fa30ff8ebce0bfa8ffcf7a170773077c87eb7d581aec6d93ca63e1a49f2a58d5.png" loading="lazy" />
+    <h5 class="notes__title">Mercy</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Shoutout to EeveeA for the Angelic Blessing change. I wanted to incorporate more ideas she’s suggested on Mercy but they were not possible to do in the Workshop. The change we’ve added on top is beam degeneration which aims at disincentivizing hard pocket Mercy playstyles, which is what most people dislike about playing against her.
+    </div>
+
+    <div class="notes__list">
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/d1a18f702a0e30d58608da51a0b8eeeab72a04faf0de3579ce625066caa8389e.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Caduceus Staff</div>
+
+          <ul class="notes__changes">
+            <li>Mercy now has ‘beam degeneration’. The longer her beam is attached to the same target, the more her healing per second on that target drops. Max healing is 55hp/s and drops to a minimum of 40hp/s in 4 seconds. When the healing target is switched, this number starts to regenerate on the previous target</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes__item">
+        <img class="notes__ability" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/d26768cf459611eedc4fdcc9096ad3b196e8b2babb0782cf24d56f108325e3bb.png" loading="lazy" />
+
+        <div>
+          <div class="notes__name">Resurrect</div>
+
+          <ul class="notes__changes">
+            <li>Removed</li>
+            <li>Replaced by "Angelic Blessing": You can select an ally and send a soul to them. That soul then grants them the ability to, over the next 6 seconds have 1 single GA use. After 6 seconds the soul will fade away. 12 Second cooldown</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Moira -->
+<div class="notes" id="Moira">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/d58b00cca1ff4bea2f18c1715f7c79a58e60b457b3e5ee6d9a63599cf77e299b.png" loading="lazy" />
+    <h5 class="notes__title">Moira</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      We had ideas on messing around with Fade to make Moira feel more dynamic but that didn’t work out due to workshop limitations.
+    </div>
+  </div>
+</div>
+
+
+<!-- Zenyatta -->
+<div class="notes" id="Zenyatta">
+  <div class="notes__header">
+    <img class="notes__icon" src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/0ac1ec8a83a9a8c3de27d975c1da5356cd22ef68e3a662c98bdee5204ca302e7.png" loading="lazy" />
+    <h5 class="notes__title">Zenyatta</h5>
+  </div>
+
+  <div class="notes__body">
+    <div class="notes__dev">
+      Will he able to frag more or will he be even more squishy? Need to try him and see. I had an idea of giving him a 50HP ‘mini-shield’ which appears in front of him when he is charging his right-click. I thought it would give him a tiny bit more of an edge when fighting flankers. But it’s not really doable in the workshop.
+    </div>
+  </div>
+</div>
