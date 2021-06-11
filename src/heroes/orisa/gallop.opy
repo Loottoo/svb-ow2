@@ -3,7 +3,7 @@
 
 globalvar orisaGallopDuration = createWorkshopSetting(float[0.1:2], "Orisa", "Time gallop duration", 0.5, 0)
 globalvar orisaGallopDelay = createWorkshopSetting(float[0:2], "Orisa", "Gallop cast time", 0.1, 1)
-globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time gallop damage dealt", 50, 2)
+globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time gallop damage dealt", 75, 2)
 
 
 def CreateHeroEffects():
