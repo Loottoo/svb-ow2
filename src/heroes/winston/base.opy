@@ -7,6 +7,7 @@ def CleanupWinston():
     waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
     CleanupHealthPools()
     eventPlayer.setMaxHealth(100)
+    eventPlayer.allowButton(Button.SECONDARY_FIRE)
     wait()
     eventPlayer.HeroActive = null
 
