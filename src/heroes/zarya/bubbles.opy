@@ -22,9 +22,9 @@ rule "[zarya.del] Refresh Bubble":
 def ZaryaBubbleRecharge():
     @Name "[zarya.del] Subroutine: Bubble Recharge"
     
-    eventPlayer.ZaryaBubbleCooldown = 5
+    eventPlayer.ZaryaBubbleCooldown = ZaryaBubbleCooldown
     waitUntil(eventPlayer.ZaryaBubbleCooldown == 0, 9999)
-    eventPlayer.ZaryaBubbleCharges = min(eventPlayer.ZaryaBubbleCharges + 1, 2)
+    eventPlayer.ZaryaBubbleCharges = min(eventPlayer.ZaryaBubbleCharges + 1, ZaryaBubbleMaxCharges)
     if RULE_CONDITION:
         goto RULE_START
 
@@ -32,7 +32,7 @@ def ZaryaBubbleRecharge():
 rule "[zarya.del] Bubble Recharge":
     @Event eachPlayer
     @Hero zarya
-    @Condition floor(eventPlayer.ZaryaBubbleCharges) < 2
+    @Condition floor(eventPlayer.ZaryaBubbleCharges) < ZaryaBubbleMaxCharges
     
     ZaryaBubbleRecharge()
 
@@ -104,7 +104,7 @@ rule "[zarya.del] Bubble Recharge":
     @Event eachPlayer
     @Hero echo
     @Condition eventPlayer.getHeroOfDuplication() == Hero.ZARYA
-    @Condition floor(eventPlayer.ZaryaBubbleCharges) < 2
+    @Condition floor(eventPlayer.ZaryaBubbleCharges) < ZaryaBubbleMaxCharges
     
     ZaryaBubbleRecharge()
 
