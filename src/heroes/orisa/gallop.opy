@@ -1,8 +1,9 @@
 #!mainFile "../../main.opy"
 
 
-globalvar orisaGallopDuration = createWorkshopSetting(float[0.1:2], "Orisa", "Time gallop duration", 0.25, 0)
-globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time gallop damage dealt", 30, 1)
+globalvar orisaGallopDuration = createWorkshopSetting(float[0.1:2], "Orisa", "Time gallop duration", 0.5, 0)
+globalvar orisaGallopDelay = createWorkshopSetting(float[0:2], "Orisa", "Gallop cast time", 0.3, 1)
+globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time gallop damage dealt", 50, 2)
 
 
 def CreateHeroEffects():
@@ -48,7 +49,7 @@ def OrisaGallop():
     _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 0
     eventPlayer.setMoveSpeed(0)
     eventPlayer.startFacing(vect(0, 0, 1), 500, Relativity.TO_PLAYER, FacingReeval.DIRECTION_AND_TURN_RATE)
-    waitUntil(any([i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]), 0.6)
+    waitUntil(any([i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]), orisaGallopDelay)
     eventPlayer.setDamageDealt(100)
     #Gallop
     eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0)
