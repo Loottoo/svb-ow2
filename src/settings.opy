@@ -59,6 +59,7 @@ settings {
             1
         ],
         "Enable Snowball instead of regular right click": true,
-        "Snowball time between shots": 0.5
+        "Snowball time between shots": 0.5,
+        "Enable Snowball instead of regular right click": false
     }
 }
