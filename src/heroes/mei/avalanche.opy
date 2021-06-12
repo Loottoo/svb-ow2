@@ -55,8 +55,9 @@ rule "Disable original Ultimate":
   @Hero mei
   @Condition AvalancheEnabled == true
   
-  wait(0.1)
   eventPlayer.disallowButton(Button.ULTIMATE)
+  waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()), 9999)
+  eventPlayer.allowButton(Button.ULTIMATE)
 
 
 rule "Player presses Ultimate":
@@ -68,11 +69,14 @@ rule "Player presses Ultimate":
   @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
   @Condition eventPlayer.isUsingAbility1() != true
   @Condition eventPlayer.IsUsingAvalanche != true
+
+  CheckStatus()
   
   eventPlayer.disallowButton(Button.ABILITY_1)
   eventPlayer.disallowButton(Button.ABILITY_2)
   eventPlayer.disallowButton(Button.PRIMARY_FIRE)
   eventPlayer.disallowButton(Button.SECONDARY_FIRE)
+  eventPlayer.disallowButton(Button.CROUCH)
 
   eventPlayer.cancelPrimaryAction()
   eventPlayer.IsUsingAvalanche = true
@@ -172,6 +176,7 @@ def ClearAvalanche():
   eventPlayer.allowButton(Button.ABILITY_2)
   eventPlayer.allowButton(Button.PRIMARY_FIRE)
   eventPlayer.allowButton(Button.SECONDARY_FIRE)
+  eventPlayer.allowButton(Button.CROUCH)
 
 
 def ExplodeAvalanche():

@@ -5,6 +5,7 @@
 #!include "dev.opy"
 
 #!include "general/4M6QT.opy"
+#!include "general/global.opy"
 
 #!include "heroes/tanks.opy"
 #!include "heroes/healers.opy"

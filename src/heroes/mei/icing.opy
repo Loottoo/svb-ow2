@@ -76,21 +76,26 @@ rule "Icing Cooldown HUD if icing is on Primary or Secondary fire":
 rule "Disable original Ability":
   @Event eachPlayer
   @Condition IcingOverwritesButton != null
-  @Condition eventPlayer.getCurrentHero() == Hero.MEI
+  @Hero mei
   
   if IcingOverwritesButton != Button.PRIMARY_FIRE:
     eventPlayer.disallowButton(IcingOverwritesButton)
+    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()), 9999)
+    eventPlayer.allowButton(IcingOverwritesButton)
 
 
 rule "Presses Ability":
   @Event eachPlayer
+  @Hero mei
+
   @Condition IcingOverwritesButton != null
-  @Condition eventPlayer.getCurrentHero() == Hero.MEI
   @Condition eventPlayer.isAlive() == true
   @Condition ((IcingOverwritesButton == Button.PRIMARY_FIRE and eventPlayer.isFiringPrimaryFire()) or (IcingOverwritesButton != Button.PRIMARY_FIRE and eventPlayer.isHoldingButton(IcingOverwritesButton))) == true
   @Condition eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0
   @Condition eventPlayer.IcingActiveCooldown == 0
   @Condition eventPlayer.IsUsingAvalanche != true
+
+  CheckStatus()
 
   if IcingOverwritesButton == Button.PRIMARY_FIRE:
     eventPlayer.disallowButton(Button.PRIMARY_FIRE)
@@ -143,6 +148,7 @@ rule "Presses Ability":
 
 rule "Icing is off cooldown":
   @Event eachPlayer
+  @Hero mei
   @Condition eventPlayer.IcingActiveCooldown == 0
 
   if IcingOverwritesButton == Button.PRIMARY_FIRE:

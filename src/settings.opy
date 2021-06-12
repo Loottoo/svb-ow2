@@ -61,8 +61,8 @@ settings {
         "What button should Icing overwrite?": [
             1
         ],
-        "Enable Snowball instead of regular right click": true,
         "Snowball time between shots": 0.5,
-        "Enable Snowball instead of regular right click": false
+        "Enable Snowball instead of regular right click": false,
+        "Steps (Higher = more circles on the ground)": 15
     }
 }
