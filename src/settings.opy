@@ -5,6 +5,7 @@ settings {
         "description": "OW2 Changes - SVB Creator Pugs in collab with Elo Hell Workshops Discord."
     },
     "lobby": {
+        "spectatorSlots": 6,
         "team1Slots": 5,
         "team2Slots": 5
     },
