@@ -84,8 +84,6 @@
 
 #!include "heroes/dva/baby.opy"
 
-#!include "heroes/moira/fade.opy"
-
 rule "[shared.workshop] Disable Inspector Recording":
     @Condition devMode != true
 
