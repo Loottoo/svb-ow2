@@ -8,6 +8,7 @@ def CleanupWinston():
     CleanupHealthPools()
     eventPlayer.setMaxHealth(100)
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
+    eventPlayer.setSecondaryFireEnabled(true)
     wait()
     eventPlayer.HeroActive = null
 
