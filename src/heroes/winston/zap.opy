@@ -11,7 +11,7 @@ def ZapHitDetection():
         eventPlayer.ZapHitPlayer = raycast(
             vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION),
             vect(0, eventPlayer.getEyePosition().y - eventPlayer.getPosition().y, 0) + worldVector(ZapHitboxArray[ZapLoop], eventPlayer, Transform.ROTATION_AND_TRANSLATION) + eventPlayer.getFacingDirection() * ZapRange,
-            getPlayers(getOppositeTeam(eventPlayer.getTeam())),
+            [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive()],
             eventPlayer,
             true
         ).getPlayerHit()
@@ -82,10 +82,27 @@ rule "Fire Zap":
             eventPlayer.p_ZapCharges -= 1
             ZapHitDetection()
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.BLUE, eventPlayer, 100)
-            createBeam(getAllPlayers(), Beam.BAD, eventPlayer.getEyePosition() + Vector.DOWN * 0.5 + Vector.RIGHT * 0.5, raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + (eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange)), getPlayers(getOppositeTeam(eventPlayer.getTeam())), eventPlayer, true).getHitPosition(), Color.AQUA, EffectReeval.VISIBILITY_AND_COLOR)
+
+            createBeam(
+                getAllPlayers(),
+                Beam.BAD, eventPlayer.getEyePosition() + (Vector.DOWN * 0.5 + Vector.RIGHT * 0.5), raycast(eventPlayer.getEyePosition(),
+                eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange),
+                [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive()],
+                eventPlayer,
+                true
+            ).getHitPosition(), Color.AQUA, EffectReeval.VISIBILITY_AND_COLOR)
             eventPlayer.ZapEffects.append(getLastCreatedEntity())
-            createBeam(getAllPlayers(), Beam.GOOD, eventPlayer.getEyePosition() + Vector.DOWN * 0.5 + Vector.RIGHT * 0.5, raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + (eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange)), getPlayers(getOppositeTeam(eventPlayer.getTeam())), eventPlayer, true).getHitPosition(), Color.BLUE, EffectReeval.VISIBILITY_AND_COLOR)
+
+            createBeam(
+                getAllPlayers(),
+                Beam.GOOD, eventPlayer.getEyePosition() + (Vector.DOWN * 0.5 + Vector.RIGHT * 0.5), raycast(eventPlayer.getEyePosition(),
+                eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (distance(eventPlayer, eventPlayer.ZapHitPlayer) + 1 if eventPlayer.ZapHitPlayer else ZapRange),
+                [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive()],
+                eventPlayer,
+                true
+            ).getHitPosition(), Color.BLUE, EffectReeval.VISIBILITY_AND_COLOR)
             eventPlayer.ZapEffects.append(getLastCreatedEntity())
+
             if eventPlayer.ZapHitPlayer:
                 playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.AQUA, eventPlayer.ZapHitPlayer, 1)
                 playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.BLUE, eventPlayer.ZapHitPlayer, 2)
