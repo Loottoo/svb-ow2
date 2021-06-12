@@ -5,6 +5,7 @@ settings {
         "description": "OW2 Changes - SVB Creator Pugs in collab with Elo Hell Workshops Discord."
     },
     "lobby": {
+        "spectatorSlots": 6,
         "team1Slots": 5,
         "team2Slots": 5
     },
@@ -61,8 +62,8 @@ settings {
         "What button should Icing overwrite?": [
             1
         ],
-        "Enable Snowball instead of regular right click": true,
         "Snowball time between shots": 0.5,
-        "Enable Snowball instead of regular right click": false
+        "Enable Snowball instead of regular right click": false,
+        "Steps (Higher = more circles on the ground)": 15
     }
 }

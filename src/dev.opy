@@ -55,8 +55,9 @@ rule "Dev HUD elements":
     @Condition devMode
 
     hudSubheader(getAllPlayers(), "Load: {0} - Avg: {1} - Peak: {2}".format(getServerLoad(), getAverageServerLoad(), getServerLoad()), HudPosition.TOP, 5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubheader(getAllPlayers(), "Change hero - Jump + Reload + Crouch", HudPosition.TOP, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubheader(getAllPlayers(), "Spawn bot - Crouch + Interact", HudPosition.TOP, 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(getAllPlayers(), "Text: {0} - Entity Count: {1} - {2}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "Damage Mods: {0} - Healing Mods: {1} Heal over time: {2}".format(getNumberOfDamageModificationIds(), getNumberOfHealingModificationIds(), getNumberOfHoTIds())), HudPosition.TOP, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(getAllPlayers(), "Change hero - Jump + Reload + Crouch", HudPosition.TOP, 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(getAllPlayers(), "Spawn bot - Crouch + Interact", HudPosition.TOP, 8, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
 rule "Set Ult charge":

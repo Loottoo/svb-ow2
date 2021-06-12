@@ -5,6 +5,7 @@
 #!include "dev.opy"
 
 #!include "general/4M6QT.opy"
+#!include "general/global.opy"
 
 #!include "heroes/tanks.opy"
 #!include "heroes/healers.opy"
@@ -17,7 +18,6 @@
 #!include "heroes/mei/base.opy"
 #!include "heroes/mei/avalanche.opy"
 #!include "heroes/mei/seperate-ammo.opy"
-#!include "heroes/mei/snowball.opy"
 #!include "heroes/mei/icing.opy"
 
 #!include "heroes/echo/base.opy"
@@ -83,6 +83,8 @@
 #!include "heroes/doomfist/ultimate.opy"
 
 #!include "heroes/dva/baby.opy"
+
+#!include "heroes/zenyatta/shield.opy"
 
 rule "[shared.workshop] Disable Inspector Recording":
     @Condition devMode != true

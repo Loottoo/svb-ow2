@@ -8,9 +8,9 @@ globalvar speedboostMinGain = createWorkshopSetting(int[1:100], "Lucio", "Speedb
 def LucioSpeedBoost():
     @Name "[lucio.del] Subroutine: Speedboost"
     
-    if eventPlayer.isInAlternateForm():
+    if not eventPlayer.isInAlternateForm():
         return
-    eventPlayer.SpeedboostBonus = speedboostMinGain * (1 - eventPlayer.MusicMeter / 100) + speedboostMaxGain * (eventPlayer.MusicMeter / 100)
+    eventPlayer.SpeedboostBonus = speedboostMinGain * (1 - eventPlayer.MusicMeter / 100) + speedboostMaxGain * (eventPlayer.MusicMeter / 100) if eventPlayer.MusicMeter >= musicMeterGain else 0
     while eventPlayer.isUsingAbility2():
         eventPlayer._extendedPlayerCollection[20] = 0
         while eventPlayer._extendedPlayerCollection[20] < len(eventPlayer.HeroMoveSpeedModifications):

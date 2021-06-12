@@ -4,7 +4,7 @@
 def LucioSoundbarrier():
     @Name "[lucio.del] Subroutine: Soundbarrier"
     
-    eventPlayer.SoundbarrierCalculation = round((750 * (100 + (max(10, min(10 * (1 - eventPlayer.MusicMeter / 100) + 20 * (eventPlayer.MusicMeter / 100), 20))))) / 100 - 750)
+    eventPlayer.SoundbarrierCalculation = round((750 * (100 + (max(10, min(10 * (1 - eventPlayer.MusicMeter / 100) + 20 * (eventPlayer.MusicMeter / 100), 20))))) / 100 - 750) if eventPlayer.MusicMeter >= musicMeterGain else 0
     waitUntil(eventPlayer.getHealthOfType(Health.SHIELDS) > 0 or not eventPlayer.isUsingUltimate(), 9999)
     if not RULE_CONDITION:
         return
