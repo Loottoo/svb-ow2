@@ -84,6 +84,8 @@
 
 #!include "heroes/dva/baby.opy"
 
+#!include "heroes/zenyatta/shield.opy"
+
 rule "[shared.workshop] Disable Inspector Recording":
     @Condition devMode != true
 
