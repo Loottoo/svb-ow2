@@ -31,7 +31,7 @@ def InitialLucio():
     wait()
     eventPlayer.HeroActive = Hero.LUCIO
     #Healing mod
-    startHealingModification(getPlayers(eventPlayer.getTeam()), eventPlayer, 100 + (5 * (1 - eventPlayer.MusicMeter / 100) + 20 * (eventPlayer.MusicMeter / 100) if eventPlayer.isUsingAbility2() else 0), HealingReeval.RECEIVERS_HEALERS_AND_HEALPERCENT)
+    startHealingModification(getPlayers(eventPlayer.getTeam()), eventPlayer, 100 + (0 * (1 - eventPlayer.MusicMeter / 100) + 20 * (eventPlayer.MusicMeter / 100) if eventPlayer.isUsingAbility2() and eventPlayer.MusicMeter >= musicMeterGain else 0), HealingReeval.RECEIVERS_HEALERS_AND_HEALPERCENT)
     eventPlayer.HeroHealingModifications.append(getLastHealingModification())
     eventPlayer._extendedPlayerCollection[14] = _classIndexes.index(0)
     _classIndexes[eventPlayer._extendedPlayerCollection[14]] = 1
