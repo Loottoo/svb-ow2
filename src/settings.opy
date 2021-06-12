@@ -15,19 +15,23 @@ settings {
         },
         "assault": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam"
+            "roleLimit": "2OfEachRolePerTeam",
+            "enableCompetitiveRules": true
         },
         "control": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam"
+            "roleLimit": "2OfEachRolePerTeam",
+            "enableCompetitiveRules": true
         },
         "escort": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam"
+            "roleLimit": "2OfEachRolePerTeam",
+            "enableCompetitiveRules": true
         },
         "hybrid": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam"
+            "roleLimit": "2OfEachRolePerTeam",
+            "enableCompetitiveRules": true
         },
         "skirmish": {
             "enabledMaps": [
