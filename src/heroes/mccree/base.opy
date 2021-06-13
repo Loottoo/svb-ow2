@@ -4,11 +4,9 @@
 playervar tempDamageMod
 
 
-def CleanupMccree():
-    @Name "[mccree.del] Subroutine: Cleanup"
-    
-    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
-    eventPlayer.setMaxHealth(100)
+rule "McCree cleanup":
+    @Event eachPlayer
+    @Condition eventPlayer.hero != Hero.MCCREE
     stopDamageModification(eventPlayer.tempDamageMod)
     wait()
     eventPlayer.HeroActive = null
@@ -23,10 +21,10 @@ def InitialMccree():
     wait()
     eventPlayer.HeroActive = Hero.MCCREE
     #Character setup
-    eventPlayer.setMaxHealth(88.889)
+
+    #This will very likely not affect the first bullet fired from FTH, is it intended?
     startDamageModification(getAllPlayers(), eventPlayer, 64 if eventPlayer.isFiringSecondaryFire() else 100, DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
     eventPlayer.tempDamageMod = getLastDamageModification()
-    async(CleanupMccree, AsyncBehavior.NOOP)
 
 
 rule "[mccree.del] Initial":

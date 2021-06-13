@@ -40,8 +40,6 @@ def SymTP():
     chase(eventPlayer.ability2, 0, rate=1, ChaseReeval.NONE)
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.ability2)
     waitUntil(eventPlayer.getCurrentHero() == Hero.ECHO and eventPlayer.isDuplicatingAHero() == false or eventPlayer.isHoldingButton(Button.ABILITY_2), 8)
-    if (eventPlayer.getCurrentHero() == Hero.ECHO and eventPlayer.isDuplicatingAHero() == false) == true:
-        goto lbl_0
-    eventPlayer.forceButtonPress(Button.ABILITY_2)
-    eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.ability2)
-    lbl_0:
+    if not (eventPlayer.getCurrentHero() == Hero.ECHO and not eventPlayer.isDuplicatingAHero()):
+        eventPlayer.forceButtonPress(Button.ABILITY_2)
+        eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.ability2)

@@ -72,7 +72,6 @@ playervar AngelicBlessingConfirmID
 playervar Superjumping
 playervar Direction
 playervar repeat_0
-playervar hero
 playervar hero_0
 playervar red
 playervar green
@@ -120,7 +119,6 @@ subroutine CleanupOrisa
 subroutine OrisaDecreaseMovementPenalty
 subroutine OrisaGallop
 subroutine CreateHeroEffects
-subroutine OrisaGallopKnockback
 subroutine OrisaUltimate
 subroutine InitialMercy
 subroutine CleanupMercy
@@ -147,7 +145,6 @@ subroutine LucioSoundbarrier
 subroutine LucioSpeedBoost
 subroutine InitialMccree
 subroutine CleanupMccree
-subroutine GenjiResetDeflect
 subroutine InitialZarya
 subroutine CleanupZarya
 subroutine ZaryaRefreshBubble
@@ -296,16 +293,12 @@ def FlankerSetup():
 rule "[flanker.del] Initial Tracer":
     @Event eachPlayer
     @Hero tracer
-    
-    eventPlayer.hero = Hero.TRACER
     FlankerSetup()
 
 
 rule "[flanker.del] Initial Genji":
     @Event eachPlayer
     @Hero genji
-    
-    eventPlayer.hero = Hero.GENJI
     FlankerSetup()
 
 
@@ -313,8 +306,6 @@ rule "[flanker.del] Initial Tracer (Duplication)":
     @Event eachPlayer
     @Hero echo
     @Condition eventPlayer.getHeroOfDuplication() == Hero.TRACER
-    
-    eventPlayer.hero = Hero.TRACER
     FlankerSetup()
 
 
@@ -322,6 +313,4 @@ rule "[flanker.del] Initial Genji (Duplication)":
     @Event eachPlayer
     @Hero echo
     @Condition eventPlayer.getHeroOfDuplication() == Hero.GENJI
-    
-    eventPlayer.hero = Hero.GENJI
     FlankerSetup()

@@ -34,12 +34,10 @@ def SymmetraLightCloneUlt():
     waitUntil(eventPlayer.SymmetraBotPlayer.isAlive(), 1)
     waitUntil(eventPlayer.SymmetraBotPlayer.hasSpawned(), 1)
     #If the bot doesn't spawn, return ult back to Symmetra and abort
-    if entityExists(eventPlayer.SymmetraBotPlayer):
-        goto lbl_0
-    eventPlayer.setUltCharge(100)
-    eventPlayer.setUltEnabled(true)
-    return
-    lbl_0:
+    if not entityExists(eventPlayer.SymmetraBotPlayer):
+        eventPlayer.setUltCharge(100)
+        eventPlayer.setUltEnabled(true)
+        return
     wait()
     eventPlayer.SymmetraBotPlayer.startForcingName("{0}'s Light Clone".format(eventPlayer))
     eventPlayer.SymmetraBotPlayer.setAmmo(0, eventPlayer.getAmmo(0))

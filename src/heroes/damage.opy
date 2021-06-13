@@ -1,14 +1,14 @@
 #!mainFile "../main.opy"
 
 
-globalvar rolePassivesDamageMovementspeed = 100 + createWorkshopSetting(int[0:100], "Role passives", "Damage movement speed bonus", 15, 0)
+globalvar rolePassivesDamageMovementSpeed = 100 + createWorkshopSetting(int[0:100], "Role passives", "Damage movement speed bonus", 15, 0)
 
 subroutine setRolePassiveMovementSpeed
 
 def setRolePassiveMovementSpeed():
   @Name "Subroutine - set movementspeed based on role passive"
 
-  eventPlayer.setMoveSpeed(rolePassivesDamageMovementspeed if eventPlayer.getCurrentHero() in getDamageHeroes() or eventPlayer.getHeroOfDuplication() in getDamageHeroes() else 100)
+  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() or eventPlayer.getHeroOfDuplication() in getDamageHeroes() else 100)
 
 
 rule "[all.del] Damage Passive":
@@ -25,11 +25,11 @@ rule "[all.del] Damage Passive":
           _objectVariable_4[eventPlayer._extendedPlayerCollection[1]] = 0
           _objectVariable_1[eventPlayer._extendedPlayerCollection[1]] = [].concat(eventPlayer)[eventPlayer._extendedPlayerCollection[0]]
           _objectVariable_0[eventPlayer._extendedPlayerCollection[1]] = LastMoveSpeedModificationID
-          _objectVariable_2[eventPlayer._extendedPlayerCollection[1]] = rolePassivesDamageMovementspeed
+          _objectVariable_2[eventPlayer._extendedPlayerCollection[1]] = rolePassivesDamageMovementSpeed
           ActiveModifications.append(eventPlayer._extendedPlayerCollection[1])
           eventPlayer._extendedPlayerCollection[0] += 1
       eventPlayer.DamageMoveSpeedID = LastMoveSpeedModificationID
-  _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.DamageMoveSpeedID])[0]] = rolePassivesDamageMovementspeed
+  _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.DamageMoveSpeedID])[0]] = rolePassivesDamageMovementSpeed
   
   setRolePassiveMovementSpeed() # Temp fix for movementspeed not applying cause I don't get what's going on here
 

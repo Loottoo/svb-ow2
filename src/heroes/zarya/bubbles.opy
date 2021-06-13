@@ -39,7 +39,7 @@ rule "[zarya.del] Bubble Recharge":
 
 rule "[zarya.del] Bubble Expends Charge (Ability 1)":
     @Event eachPlayer
-    @Hero zarya
+    @Condition eventPlayer.hero == Hero.ZARYA
     @Condition eventPlayer.isUsingAbility1() == true
     
     eventPlayer.ZaryaBubbleCharges -= 1
@@ -47,7 +47,7 @@ rule "[zarya.del] Bubble Expends Charge (Ability 1)":
 
 rule "[zarya.del] Bubble Expends Charge (Ability 2)":
     @Event eachPlayer
-    @Hero zarya
+    @Condition eventPlayer.hero == Hero.ZARYA
     @Condition eventPlayer.isUsingAbility2() == true
     
     eventPlayer.ZaryaBubbleCharges -= 1
@@ -107,25 +107,6 @@ rule "[zarya.del] Bubble Recharge":
     @Condition floor(eventPlayer.ZaryaBubbleCharges) < ZaryaBubbleMaxCharges
     
     ZaryaBubbleRecharge()
-
-
-rule "[zarya.del] Bubble Expends Charge (Ability 1)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ZARYA
-    @Condition eventPlayer.isUsingAbility1() == true
-    
-    eventPlayer.ZaryaBubbleCharges -= 1
-
-
-rule "[zarya.del] Bubble Expends Charge (Ability 2)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ZARYA
-    @Condition eventPlayer.isUsingAbility2() == true
-    
-    eventPlayer.ZaryaBubbleCharges -= 1
-
 
 rule "[zarya.del] Enable Bubble when charges are available":
     @Event eachPlayer

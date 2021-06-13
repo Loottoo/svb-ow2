@@ -112,18 +112,12 @@ rule "[orisa.del] Gallop (Duplicate)":
     
     OrisaGallop()
 
-
-def OrisaGallopKnockback():
-    @Name "[orisa.del] Subroutine: Galloping Knockback"
-    
-    victim.applyImpulse(eventDirection + Vector.UP / 2, 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    eventPlayer.setEnvironmentalKillCreditor(attacker)
-
-
 rule "[orisa.del] Galloping Knockback":
     @Event playerTookDamage
-    @Condition (attacker.getCurrentHero() == Hero.ORISA or attacker.getHeroOfDuplication() == Hero.ORISA) == true
+    @Condition attacker.hero == Hero.ORISA
     @Condition attacker.Galloping == true
     @Condition eventAbility == null
+
+    victim.applyImpulse(eventDirection + Vector.UP / 2, 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    eventPlayer.setEnvironmentalKillCreditor(attacker)
     
-    OrisaGallopKnockback()

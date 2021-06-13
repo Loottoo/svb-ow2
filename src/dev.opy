@@ -10,6 +10,12 @@ rule "Init":
     devMode = createWorkshopSetting(bool, "Dev", "Enable dev mode", true, 0)
 
 
+rule "Disable Inspector Recording if not debug":
+    @Condition devMode == false
+
+    disableInspector()
+
+        
 rule "------- testing  create bots":
     @Condition devMode
     
