@@ -9,29 +9,14 @@ rule "Player changed hero":
     do:
         eventPlayer.hero = eventPlayer.getHeroOfDuplication() if eventPlayer.isDuplicatingAHero() else eventPlayer.getCurrentHero()
 
-        eventPlayer.setPrimaryFireEnabled(eventPlayer.hero not in [
-            Hero.DOOMFIST,
-        ])
+        eventPlayer.setPrimaryFireEnabled(true)
         eventPlayer.setSecondaryFireEnabled(true)
-        eventPlayer.setAbility1Enabled(eventPlayer.hero not in [
-            Hero.REINHARDT,
-            Hero.TRACER,
-        ])
-        eventPlayer.setAbility2Enabled(eventPlayer.hero not in [
-            Hero.TRACER,
-        ])
-        eventPlayer.setUltEnabled(eventPlayer.hero not in [
-            Hero.DOOMFIST,
-            Hero.DVA,
-            Hero.PHARAH,
-            Hero.JUNKRAT,
-        ])
+        eventPlayer.setAbility1Enabled(true)
+        eventPlayer.setAbility2Enabled(true)
+        eventPlayer.setUltEnabled(true)
         eventPlayer.setMeleeEnabled(true)
 
-        if eventPlayer.hero in [Hero.DOOMFIST]:
-            eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
-        else:
-            eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+        eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
 
         eventPlayer.setMaxHealth(8/9 * 100 if eventPlayer.hero == Hero.MCCREE else 92.857 if eventPlayer.hero == Hero.WINSTON else 100)
 
