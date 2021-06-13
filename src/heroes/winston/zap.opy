@@ -56,8 +56,8 @@ rule "Fire Zap":
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == true
     @Condition eventPlayer.isFiringPrimaryFire() == false
     @Condition eventPlayer.isReloading() == false
+    @Condition not(eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead())
     
-    CheckStatus()
     if eventPlayer.p_ZapCharges == 0:
         playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 50)
     else:

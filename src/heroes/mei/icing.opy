@@ -94,8 +94,7 @@ rule "Presses Ability":
   @Condition eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0
   @Condition eventPlayer.IcingActiveCooldown == 0
   @Condition eventPlayer.IsUsingAvalanche != true
-
-  CheckStatus()
+  @Condition not(eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead())
 
   if IcingOverwritesButton == Button.PRIMARY_FIRE:
     eventPlayer.disallowButton(Button.PRIMARY_FIRE)
@@ -131,13 +130,17 @@ rule "Presses Ability":
       #Create a bunch of cool effects at current position and save them to a variable
       createEffect(getAllPlayers(), Effect.RING, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius, EffectReeval.NONE)
       eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
-      createEffect(getAllPlayers(), Effect.CLOUD, Color.WHITE, eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius, EffectReeval.NONE)
-      eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
-      createEffect(getAllPlayers(), Effect.SPARKLES, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius, EffectReeval.NONE)
-      eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
-      playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
-      playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.WHITE, eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
-      playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 1)
+
+      if (eventPlayer.IcingCreateStep % (IcingMaxRange * 2 / IcingSteps)):
+        createEffect(getAllPlayers(), Effect.CLOUD, Color.WHITE, eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
+        eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+        createEffect(getAllPlayers(), Effect.SPARKLES, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
+        eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
+        playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.WHITE, eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
+        playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 1)
+      
       playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.IcingStepPositions.last(), 25)
       wait(0.032)
   destroyEffect(eventPlayer.IcingSnowballEffect)

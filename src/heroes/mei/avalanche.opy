@@ -69,8 +69,7 @@ rule "Player presses Ultimate":
   @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
   @Condition eventPlayer.isUsingAbility1() != true
   @Condition eventPlayer.IsUsingAvalanche != true
-
-  CheckStatus()
+  @Condition not(eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead())
   
   eventPlayer.disallowButton(Button.ABILITY_1)
   eventPlayer.disallowButton(Button.ABILITY_2)
