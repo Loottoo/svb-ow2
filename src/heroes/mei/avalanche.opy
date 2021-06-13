@@ -137,7 +137,7 @@ def ChaseAvalancheSpeed():
   @Name "Subroutine - Chase Avalanche Speed"
   
   #Gradually increase the player speed
-  for eventPlayer.AvalancheSpeed in range(100, AvalancheMaxSpeed, (AvalancheMaxSpeed - 100) / 60):
+  for eventPlayer.AvalancheSpeed in range(100, AvalancheMaxSpeed, (AvalancheMaxSpeed - 100) / (30 * AvalancheDuration)):
       eventPlayer.setMoveSpeed(eventPlayer.AvalancheSpeed)
       wait()
 
