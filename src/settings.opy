@@ -11,7 +11,8 @@ settings {
     },
     "gamemodes": {
         "general": {
-            "enableSkins": false
+            "enableSkins": false,
+            "respawnTime%": 80
         },
         "assault": {
             "enabledMaps": [],
