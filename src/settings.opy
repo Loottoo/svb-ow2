@@ -68,6 +68,9 @@ settings {
         ],
         "Snowball time between shots": 0.5,
         "Enable Snowball instead of regular right click": false,
-        "Steps (Higher = more circles on the ground)": 15
+        "Steps (Higher = more circles on the ground)": 15,
+        "Turn Speed (if enabled)": 100,
+        "Avalanche Radius": 2.5,
+        "Avalanche max speed": 300
     }
 }
