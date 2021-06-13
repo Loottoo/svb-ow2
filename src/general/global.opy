@@ -4,6 +4,7 @@
 subroutine CheckStatus
 
 
+#this is useless right?
 def CheckStatus():
     @Name "[SUB] Check Status"
     

@@ -1,66 +1,26 @@
 #!mainFile "../../main.opy"
 
 
+#Is this variable for ana or genji? It seems to be used for both.
 playervar nanoTarget
+
 playervar nanobladeDamageMod
-playervar potentialNanoTargets
 
-
-subroutine AnaUsedNano
 subroutine UsedNanoBlade
 
 
-rule "[Genji] Ana used nano":
-  @Event eachPlayer
-  @Hero ana
-  @Condition eventPlayer.isUsingUltimate() == true
-  
-  async(AnaUsedNano, AsyncBehavior.NOOP)
 
-
-rule "[Genji]§ Ana used nano":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.ANA
-  @Condition eventPlayer.isUsingUltimate() == true
-  
-  async(AnaUsedNano, AsyncBehavior.NOOP)
-
-
-def AnaUsedNano():
-  @Name "[Sub][Genji] Ana used nano"
-  
-  eventPlayer.nanoTarget = null
-  #Nano cast time delays the heal
-  waitUntil(eventPlayer.nanoTarget != null, 0.16)
-  if eventPlayer.nanoTarget == null:
-      eventPlayer.potentialNanoTargets = [player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.GENJI or player.getCurrentHero() == Hero.ECHO]
-      for eventPlayer.Index in range(len(eventPlayer.potentialNanoTargets)):
-          damage(eventPlayer.potentialNanoTargets[eventPlayer.Index], eventPlayer, 0.001 / 10)
-  wait(8)
-  eventPlayer.potentialNanoTargets.nanoTarget = null
-
-
-rule "[Genji] Recieved Nano":
+rule "[Genji] Received Nano":
   @Event playerReceivedHealing
-  @Hero genji
-  @Condition healer.getCurrentHero() == Hero.ANA
+  @Condition healee.hero == Hero.GENJI
+  @Condition healer.hero == Hero.ANA
   @Condition eventAbility == Button.ULTIMATE
   
   eventPlayer.nanoTarget = eventPlayer
 
 
-rule "[Genji]§ Recieved Nano":
-  @Event playerReceivedHealing
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.GENJI
-  @Condition healer.getCurrentHero() == Hero.ANA
-  @Condition eventAbility == Button.ULTIMATE
-  
-  eventPlayer.nanoTarget = eventPlayer
-
-
-rule "[Genji] Detect Nano (only if no heal event was detected)":
+#Unless I'm missing an edge case, this is useless as healing events are now triggered even if the healing is 0.
+/*rule "[Genji] Detect Nano (only if no heal event was detected)":
   @Event playerTookDamage
   @Hero genji
   @Condition eventAbility == null
@@ -81,7 +41,7 @@ rule "[Genji]§ Detect Nano (only if no heal event was detected)":
   
   if eventDamage != 0.001 / 10:
       victim.nanoTarget = eventPlayer
-
+*/
 
 rule "[Genji] Detected Nano+blade":
   @Event eachPlayer

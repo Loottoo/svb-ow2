@@ -28,7 +28,6 @@ def CleanupWinston():
     waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
     CleanupHealthPools()
     CleanupTexts()
-    eventPlayer.setMaxHealth(100)
     wait()
     eventPlayer.HeroActive = null
 
@@ -42,13 +41,12 @@ def InitialWinston():
     wait()
     eventPlayer.HeroActive = Hero.WINSTON
     #Character setup
-    eventPlayer.setMaxHealth(92.857)
     eventPlayer.addHealthPool(Health.NORMAL, 110.714 if eventPlayer.isUsingUltimate() else 75, true, true)
     eventPlayer.HeroHealthPools.append(getLastCreatedHealthPool())
     eventPlayer.addHealthPool(Health.ARMOR, 10.7, true, true)
     eventPlayer.HeroHealthPools.append(getLastCreatedHealthPool())
     eventPlayer.p_ZapCharges = ZapCharges
-    hudSubheader(eventPlayer, " \n\n\n\n\n\n\n\n\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", HudPosition.RIGHT, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubheader(eventPlayer, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
     hudText(eventPlayer, ceil(ZapCooldown - eventPlayer.ZapChargeMeter) if eventPlayer.p_ZapCharges == 0 else iconString(Icon.BOLT), null, "{0}".format(buttonString(Button.SECONDARY_FIRE)), HudPosition.RIGHT, 21, Color.RED if eventPlayer.p_ZapCharges == 0 else Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_SORT_ORDER_STRING_AND_COLOR, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())

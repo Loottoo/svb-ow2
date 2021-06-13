@@ -38,7 +38,7 @@ rule "Initialise Icing":
   #Workshop setting that determines what button icing will use, opening this action might be laggy.
   IcingOverwritesButton = createWorkshopSetting(enum["None", "Primary Fire", "Secondary Fire", "Ability 1 (Cryofreeze)", "Ability 2 (Ice Wall)"], "Mei - Icing ability", "What button should Icing overwrite?", 0, -10)
   #Set the variable from the combo index to the actual button
-  IcingOverwritesButton = OverwriteButtonArray[IcingOverwritesButton]
+  IcingOverwritesButton = [null, Button.PRIMARY_FIRE, Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2][IcingOverwritesButton]
   #Max range
   IcingMaxRange = createWorkshopSetting(float[5:50], "Mei - Icing ability", "Icing max range", 20, 3)
   #Icing steps (more = more accurate, but more effects used)
@@ -194,7 +194,7 @@ rule "Speed up teammates walking on icing (if enabled)":
   @Condition IcingType == 1
   @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
   
-  eventPlayer.setMoveSpeed(rolePassivesDamageMovementspeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 + IcingSpeedIncrease)
+  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 + IcingSpeedIncrease)
   wait(0.032)
   if RULE_CONDITION:
       goto RULE_START
@@ -208,7 +208,7 @@ rule "Slow down enemies walking on icing (if enabled)":
   @Condition IcingSlow > 0
   @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
   
-  eventPlayer.setMoveSpeed(rolePassivesDamageMovementspeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 - IcingSlow)
+  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 - IcingSlow)
   wait(0.032)
   if RULE_CONDITION:
       goto RULE_START

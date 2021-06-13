@@ -67,7 +67,7 @@ rule "Fire Zap":
         createEffect(getAllPlayers(), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer, eventPlayer.ZapChargeMeter * 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
         eventPlayer.ZapEffects.append(getLastCreatedEntity())
         eventPlayer.ZapChargeMeter = 0
-        hudSubheader(eventPlayer, " \r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n", HudPosition.TOP, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+        hudSubheader(eventPlayer, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 20, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
         eventPlayer.ZapHUDSpacer = getLastCreatedText()
         eventPlayer.DeletableHUD = eventPlayer.DeletableHUD.concat(getLastCreatedText())
         progressBarHud(eventPlayer, eventPlayer.ZapChargeMeter, " " if eventPlayer.ZapChargeMeter < 100 else "READY", HudPosition.TOP, 21, Color.WHITE if eventPlayer.ZapChargeMeter < 100 else Color.BLUE, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)

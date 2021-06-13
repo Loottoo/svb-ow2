@@ -35,7 +35,7 @@ def InitialOrisa():
     eventPlayer.disallowButton(Button.ABILITY_2)
     wait()
     #Create Hud
-    hudSubtext(eventPlayer, "{0}({1})".format(" \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n {0}".format("                                                                                                                            {0}".format("                                                                                                                            {0}".format("                                                                             "))), "Gallop"), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer, "{0}({1})".format(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                                                                                                                                                                                                                                                                                                      ", "Gallop"), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
     eventPlayer.setProjectileSpeed(125)
     eventPlayer._extendedPlayerCollection[10] = 0

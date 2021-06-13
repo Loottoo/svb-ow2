@@ -4,6 +4,7 @@
 globalvar MaxAmmoPrimary
 globalvar MaxAmmoSecondary
 globalvar SeparateAmmoAutoReload
+globalvar SeparateAmmoEnabled
 
 
 playervar CurrentAmmoPrimary 46

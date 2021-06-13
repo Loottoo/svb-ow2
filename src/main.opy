@@ -2,6 +2,61 @@
 
 #!include "settings.opy"
 
+
+playervar hero
+
+rule "Player changed hero":
+    @Event eachPlayer
+    @Condition eventPlayer.hero != eventPlayer.getCurrentHero() or eventPlayer.hero != eventPlayer.getHeroOfDuplication()
+    do:
+        eventPlayer.hero = eventPlayer.getHeroOfDuplication() or eventPlayer.getCurrentHero()
+
+        eventPlayer.setPrimaryFireEnabled(eventPlayer.hero not in [
+            Hero.DOOMFIST,
+        ])
+        eventPlayer.setSecondaryFireEnabled(true)
+        eventPlayer.setAbility1Enabled(eventPlayer.hero not in [
+            Hero.REINHARDT,
+            Hero.TRACER,
+        ])
+        eventPlayer.setAbility2Enabled(eventPlayer.hero not in [
+            Hero.TRACER,
+        ])
+        eventPlayer.setUltEnabled(eventPlayer.hero not in [
+            Hero.DOOMFIST,
+            Hero.DVA,
+            Hero.PHARAH,
+            Hero.JUNKRAT,
+        ])
+        eventPlayer.setMeleeEnabled(true)
+
+        if eventPlayer.hero in [Hero.DOOMFIST]:
+            eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+        else:
+            eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+
+        eventPlayer.setMaxHealth(8/9 * 100 if eventPlayer.hero == Hero.MCCREE else 92.857 if eventPlayer.hero == Hero.WINSTON else 100)
+
+        eventPlayer.allowButton(Button.PRIMARY_FIRE)
+        eventPlayer.allowButton(Button.SECONDARY_FIRE)
+        eventPlayer.allowButton(Button.ABILITY_1)
+        eventPlayer.allowButton(Button.ABILITY_2)
+        eventPlayer.allowButton(Button.ULTIMATE)
+        eventPlayer.allowButton(Button.INTERACT)
+
+        eventPlayer.setDamageDealt(100)
+        eventPlayer.setGravity(100)
+        eventPlayer.setJumpVerticalSpeed(100)
+        eventPlayer.setProjectileGravity(100)
+        eventPlayer.setProjectileSpeed(100)
+        eventPlayer.stopForcingThrottle()
+        eventPlayer.stopFacing()
+        eventPlayer.stopCamera()
+        eventPlayer.enablePlayerCollision()
+
+        wait()
+    while RULE_CONDITION
+
 #!include "dev.opy"
 
 #!include "general/4M6QT.opy"
@@ -15,7 +70,6 @@
 #!include "heroes/mercy/primary-secondary.opy"
 #!include "heroes/mercy/angelic-blessing.opy"
 
-#!include "heroes/mei/base.opy"
 #!include "heroes/mei/avalanche.opy"
 #!include "heroes/mei/seperate-ammo.opy"
 #!include "heroes/mei/icing.opy"
@@ -33,6 +87,8 @@
 #!include "heroes/genji/primary-secondary.opy"
 #!include "heroes/genji/ultimate.opy"
 #!include "heroes/genji/deflect.opy"
+
+#!include "heroes/ana/genjiNano.opy"
 
 #!include "heroes/hanzo/primary.opy"
 
@@ -70,7 +126,6 @@
 #!include "heroes/lucio/ultimate.opy"
 
 #!include "heroes/mccree/base.opy"
-#!include "heroes/mccree/fan-the-hammer.opy"
 #!include "heroes/mccree/lasso.opy"
 
 #!include "heroes/zarya/base.opy"
@@ -86,7 +141,3 @@
 
 #!include "heroes/zenyatta/shield.opy"
 
-rule "[shared.workshop] Disable Inspector Recording":
-    @Condition devMode != true
-
-    disableInspector()

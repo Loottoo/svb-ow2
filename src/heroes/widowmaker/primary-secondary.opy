@@ -4,29 +4,19 @@
 playervar ammo
 
 
-subroutine Sub13
+#subroutine Sub13
 
 
 rule "[Widowmaker] Bolt action":
   @Event eachPlayer
-  @Hero widowmaker
+  @Condition eventPlayer.hero == Hero.WIDOWMAKER
   @Condition eventPlayer.isFiringSecondaryFire() == true
   @Condition eventPlayer.isFiringPrimaryFire() == true
   
   eventPlayer.setAmmo(0, 0)
 
-
-rule "[Widowmaker]ยง Bolt action":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.WIDOWMAKER
-  @Condition eventPlayer.isFiringSecondaryFire() == true
-  @Condition eventPlayer.isFiringPrimaryFire() == true
-  
-  eventPlayer.setAmmo(0, 0)
-
-
-def Sub13():
+#Unused
+/*def Sub13():
   @Name "[Sub][Widowmaker] Bolt action"
   
   eventPlayer.ammo = eventPlayer.getAmmo(0)
@@ -36,4 +26,4 @@ def Sub13():
   wait(1)
   eventPlayer.cancelPrimaryAction()
   eventPlayer.setAmmo(0, eventPlayer.ammo)
-  lbl_0:
+  lbl_0:*/

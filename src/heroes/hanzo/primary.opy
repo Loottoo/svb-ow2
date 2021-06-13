@@ -5,7 +5,7 @@ globalvar hanzoReverseFalloff
 
 
 subroutine HanzoReverseFalloff
-subroutine HanzoInital
+subroutine HanzoInitial
 
 
 rule "init":
@@ -16,7 +16,7 @@ rule "[Hanzo] Initial":
   @Event eachPlayer
   @Hero hanzo
   
-  async(HanzoInital, AsyncBehavior.NOOP)
+  async(HanzoInitial, AsyncBehavior.NOOP)
 
 
 rule "[Hanzo]§ Initial":
@@ -24,10 +24,10 @@ rule "[Hanzo]§ Initial":
     @Hero echo
     @Condition eventPlayer.getHeroOfDuplication() == Hero.HANZO
     
-    async(HanzoInital, AsyncBehavior.NOOP)
+    async(HanzoInitial, AsyncBehavior.NOOP)
 
 
-def HanzoInital():
+def HanzoInitial():
     @Name "[Sub][Hanzo] Initial - Reduce damage by 50%"
     
     waitUntil(eventPlayer.HeroActive == null, 9999)
@@ -42,46 +42,19 @@ def HanzoInital():
 
 rule "[Hanzo] Double damage for non-primary fire":
     @Event playerDealtDamage
-    @Hero hanzo
+    @Condition eventPlayer.hero == Hero.HANZO
     @Condition eventAbility != null
     @Condition eventAbility != Button.PRIMARY_FIRE
     @Condition eventAbility != Button.ABILITY_2
     @Condition eventAbility != Button.ABILITY_1
     
-    damage(victim, attacker, eventDamage * 2)
-
-
-rule "[Hanzo]§ Double damage for non-primary fire":
-    @Event playerDealtDamage
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.HANZO
-    @Condition eventAbility != null
-    @Condition eventAbility != Button.PRIMARY_FIRE
-    @Condition eventAbility != Button.ABILITY_2
-    @Condition eventAbility != Button.ABILITY_1
-    
-    damage(victim, attacker, eventDamage * 2)
+    damage(victim, attacker, eventDamage)
 
 
 rule "[Hanzo] Reverse Falloff":
     @Event playerDealtDamage
-    @Hero hanzo
+    @Condition attacker.hero == Hero.HANZO
     @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.ABILITY_2 or eventAbility == Button.ABILITY_1) == true
-    
-    HanzoReverseFalloff()
-
-
-rule "[Hanzo]§ Reverse Falloff":
-    @Event playerDealtDamage
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.HANZO
-    @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.ABILITY_2 or eventAbility == Button.ABILITY_1) == true
-    
-    HanzoReverseFalloff()
-
-
-def HanzoReverseFalloff():
-    @Name "[Sub][Hanzo] Reverse falloff"
     
     #[0] = Primary Fire   [1] = Storm arrows
     if eventAbility == Button.ABILITY_1 or eventAbility == Button.ABILITY_2 and hanzoReverseFalloff[1] == true or eventAbility == Button.PRIMARY_FIRE and hanzoReverseFalloff[0] == true:
@@ -91,5 +64,3 @@ def HanzoReverseFalloff():
             damage(victim, attacker, eventDamage * 2 * (max(0, (distance(attacker, victim) - 1) / 20)))
     else:
         damage(victim, attacker, eventDamage * 2)
-    
-  

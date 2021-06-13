@@ -8,10 +8,9 @@ rule "[echo.del] Max Health Fix":
   #Some heroes change their max health and add health pools, there is currently a bug where normal health pools get affected, so this attempts to fix that.
   if eventPlayer.isDuplicatingAHero():
       return
-  if eventPlayer.isDead():
-      goto lbl_0
-  eventPlayer.resurrect()
-  lbl_0:
+  if not eventPlayer.isDead():
+    eventPlayer.resurrect()
+    
   wait()
   eventPlayer.setMaxHealth(0)
   wait()

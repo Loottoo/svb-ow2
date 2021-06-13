@@ -24,7 +24,7 @@ def InitialSymmetra():
     eventPlayer.HeroActive = Hero.SYMMETRA
     eventPlayer.disallowButton(Button.ULTIMATE)
     #Create Hud
-    hudSubtext(eventPlayer, "{0}({1})".format(" \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n {0}".format("                                                                                                                            {0}".format("                                                                   {0}".format(" "))), "Light Clone"), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer, "{0}({1})".format(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                                                                                                                                                                 ", "Light Clone"), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
     async(CleanupSymmetra, AsyncBehavior.NOOP)
 
