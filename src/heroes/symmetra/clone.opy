@@ -1,7 +1,7 @@
 #!mainFile "../../main.opy"
 
 
-globalvar symmetraCloneDamageDealt = createWorkshopSetting(int[0:200], "Symmetra", "Light Clone damage dealt percentage", 50, 0)
+globalvar symmetraCloneDamageDealt = createWorkshopSetting(int[0:200], "Symmetra", "Light Clone damage dealt percentage", 100, 0)
 globalvar symmetraCloneDuration = createWorkshopSetting(int[0:20], "Symmetra", "Light Clone duration", 12, 0)
 
 
