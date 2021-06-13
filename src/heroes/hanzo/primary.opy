@@ -48,7 +48,7 @@ rule "[Hanzo] Double damage for non-primary fire":
     @Condition eventAbility != Button.ABILITY_2
     @Condition eventAbility != Button.ABILITY_1
     
-    damage(victim, attacker, eventDamage)
+    damage(victim, attacker, eventDamage * 2)
 
 
 rule "[Hanzo] Reverse Falloff":

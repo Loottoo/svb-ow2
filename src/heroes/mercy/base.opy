@@ -41,7 +41,7 @@ def InitialMercy():
         eventPlayer.slot_1 += 1
     eventPlayer.disallowButton(Button.ABILITY_2)
     #Create Hud
-    hudSubtext(eventPlayer, "{0}({1})".format(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                                                                                                                                                                                                                                                                                                                      " if eventPlayer.isInAlternateForm() else "                                                                     ", "Blessing"), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer, "{0}({1})".format(" \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n {0}".format("                                                                                                                            {0}".format("                                                                                                                            {0}".format("                                                                                             " if eventPlayer.isInAlternateForm() else "                                                                     "))), "Blessing"), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
     async(CleanupMercy, AsyncBehavior.NOOP)
 

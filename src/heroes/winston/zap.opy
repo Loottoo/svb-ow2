@@ -50,14 +50,14 @@ rule "Create Zap Radius Array":
 
 rule "Fire Zap":
     @Event eachPlayer
-    @Hero winston
+    @Condition eventPlayer.hero == Hero.WINSTON
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isUsingUltimate() == false
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == true
     @Condition eventPlayer.isFiringPrimaryFire() == false
     @Condition eventPlayer.isReloading() == false
     @Condition not(eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead())
-    
+
     if eventPlayer.p_ZapCharges == 0:
         playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 50)
     else:

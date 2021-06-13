@@ -47,7 +47,7 @@ rule "Avalanche Progress Bar HUD element":
   
   progressBarHud([i for i in eventPlayer if eventPlayer.IsUsingAvalanche], 100 / AvalancheDuration * eventPlayer.AvalancheTimer, "", HudPosition.TOP, 10, Color.AQUA, Color.AQUA, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
   #New lines to push the progress bar down
-  hudSubheader([i for i in eventPlayer if eventPlayer.IsUsingAvalanche], " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+  hudSubheader([i for i in eventPlayer if eventPlayer.IsUsingAvalanche], " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
 rule "Disable original Ultimate":

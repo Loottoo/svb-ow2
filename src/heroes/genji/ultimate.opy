@@ -19,8 +19,7 @@ rule "[Genji] Received Nano":
   eventPlayer.nanoTarget = eventPlayer
 
 
-#Unless I'm missing an edge case, this is useless as healing events are now triggered even if the healing is 0.
-/*rule "[Genji] Detect Nano (only if no heal event was detected)":
+rule "[Genji] Detect Nano (only if no heal event was detected)":
   @Event playerTookDamage
   @Hero genji
   @Condition eventAbility == null
@@ -41,7 +40,6 @@ rule "[Genji]§ Detect Nano (only if no heal event was detected)":
   
   if eventDamage != 0.001 / 10:
       victim.nanoTarget = eventPlayer
-*/
 
 rule "[Genji] Detected Nano+blade":
   @Event eachPlayer

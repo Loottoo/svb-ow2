@@ -22,7 +22,6 @@ def InitialMccree():
     eventPlayer.HeroActive = Hero.MCCREE
     #Character setup
 
-    #This will very likely not affect the first bullet fired from FTH, is it intended?
     startDamageModification(getAllPlayers(), eventPlayer, 64 if eventPlayer.isFiringSecondaryFire() else 100, DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
     eventPlayer.tempDamageMod = getLastDamageModification()
 
