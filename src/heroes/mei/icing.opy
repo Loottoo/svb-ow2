@@ -118,7 +118,14 @@ rule "Presses Ability":
   #Snowball!
   createEffect(getAllPlayers(), Effect.SPHERE, Color.SKY_BLUE, eventPlayer.IcingStepPositions.last() + Vector.UP * 3, 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
   eventPlayer.IcingSnowballEffect = getLastCreatedEntity()
-  playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 100)
+
+  createEffect(getAllPlayers(), Effect.MEI_FROZEN_SOUND, eventPlayer.getTeam(), eventPlayer.IcingStartPosition, 50, EffectReeval.NONE)
+  eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+  createEffect(getAllPlayers(), Effect.MEI_FROZEN_SOUND, eventPlayer.getTeam(), eventPlayer.IcingEndPosition, 50, EffectReeval.NONE)
+  eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+
+  playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 75)
+
   #Loop to create effects and array for Icing location
   for eventPlayer.IcingCreateStep in range(0, IcingMaxRange, IcingMaxRange / IcingSteps):
       #Set position of next icing circle
@@ -127,10 +134,12 @@ rule "Presses Ability":
       eventPlayer.IcingStepPositions[eventPlayer.IcingStepPositions.index(eventPlayer.IcingStepPositions.last())] = raycast(eventPlayer.IcingStepPositions.last(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 10, null, null, false).getHitPosition()
       #Slow enemies hit by the impact, if set by Workshop Setting
       async(IcingFreezeAndDamageOnImpact, AsyncBehavior.RESTART)
+
       #Create a bunch of cool effects at current position and save them to a variable
       createEffect(getAllPlayers(), Effect.RING, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius, EffectReeval.NONE)
       eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
 
+      # Only create these effects half ofthe time
       if (eventPlayer.IcingCreateStep % (IcingMaxRange * 2 / IcingSteps)):
         createEffect(getAllPlayers(), Effect.CLOUD, Color.WHITE, eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
         eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
@@ -140,9 +149,10 @@ rule "Presses Ability":
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
         playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.WHITE, eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
         playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 1)
-      
-      playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.IcingStepPositions.last(), 25)
+        playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.IcingStepPositions.last(), 25)
+
       wait(0.032)
+
   destroyEffect(eventPlayer.IcingSnowballEffect)
   #Clear after delay (duration)
   wait(IcingDuration)
