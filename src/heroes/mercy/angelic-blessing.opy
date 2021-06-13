@@ -54,7 +54,7 @@ def MercyAngelicBlessing():
     playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.AngelicBlessingPosition, 100)
     #Stop casting
     eventPlayer.AngelicBlessingPosition = null
-    eventPlayer.setAbilityCooldown(Button.ABILITY_2, 12)
+    eventPlayer.setAbilityCooldown(Button.ABILITY_2, createWorkshopSetting(float[0:60], "Mercy", "Angelic Blessing Cooldown", 20, 0))
     eventPlayer.setAbility2Enabled(true)
     eventPlayer.AngelicBlessingTarget.disallowButton(Button.INTERACT)
     #Wait until target chooses to fly to a target, after 6 seconds have elapsed, or if the target is using an ability that restricts their movement
