@@ -33,6 +33,8 @@ subroutine ClearIcing
 subroutine ChaseIcingSpeed
 subroutine IcingFreezeAndDamageOnImpact
 
+subroutine DeployIcing
+subroutine DisableAbility
 
 rule "Initialise Icing":
   #Workshop setting that determines what button icing will use, opening this action might be laggy.
@@ -69,37 +71,47 @@ rule "Icing Cooldown HUD if icing is on Primary or Secondary fire":
   @Condition IcingOverwritesButton != null
   @Condition (IcingOverwritesButton == Button.PRIMARY_FIRE or IcingOverwritesButton == Button.SECONDARY_FIRE) == true
   
-  hudText([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-  hudHeader([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], "Icing: {0}".format(localPlayer.IcingActiveCooldown), HudPosition.RIGHT, 100, Color.RED if localPlayer.IcingActiveCooldown else Color.AQUA, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+  hudText([i for i in localPlayer if localPlayer.hero == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+  hudHeader([i for i in localPlayer if localPlayer.hero == Hero.MEI and true], "Icing: {0}".format(localPlayer.IcingActiveCooldown), HudPosition.RIGHT, 100, Color.RED if localPlayer.IcingActiveCooldown else Color.AQUA, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 
+def DisableAbility():
+  if IcingOverwritesButton != Button.PRIMARY_FIRE:
+    eventPlayer.disallowButton(IcingOverwritesButton)
+    waitUntil(eventPlayer.hero != evalOnce(eventPlayer.hero), 9999)
+    eventPlayer.allowButton(IcingOverwritesButton)
 
 rule "Disable original Ability":
   @Event eachPlayer
   @Condition IcingOverwritesButton != null
   @Hero mei
   
-  if IcingOverwritesButton != Button.PRIMARY_FIRE:
-    eventPlayer.disallowButton(IcingOverwritesButton)
-    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()), 9999)
-    eventPlayer.allowButton(IcingOverwritesButton)
+  DisableAbility()
 
-
-rule "Presses Ability":
+rule "Disable original Ability (Echo)":
   @Event eachPlayer
-  @Hero mei
-
   @Condition IcingOverwritesButton != null
-  @Condition eventPlayer.isAlive() == true
-  @Condition ((IcingOverwritesButton == Button.PRIMARY_FIRE and eventPlayer.isFiringPrimaryFire()) or (IcingOverwritesButton != Button.PRIMARY_FIRE and eventPlayer.isHoldingButton(IcingOverwritesButton))) == true
-  @Condition eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0
-  @Condition eventPlayer.IcingActiveCooldown == 0
-  @Condition eventPlayer.IsUsingAvalanche != true
-  @Condition not(eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead())
+  @Hero echo
+  @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
+  
+  DisableAbility()
+
+
+def DeployIcing():
+  @Name "[mei/icing.opy] Subroutine: Deploy Icing"
+
+  if IcingOverwritesButton == null: return
+  if eventPlayer.isAlive() == false: return
+  if not eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0: return
+  if not eventPlayer.IcingActiveCooldown == 0: return
+  if not eventPlayer.IsUsingAvalanche != true: return
+  if (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead()): return
 
   if IcingOverwritesButton == Button.PRIMARY_FIRE:
     eventPlayer.disallowButton(Button.PRIMARY_FIRE)
     eventPlayer.cancelPrimaryAction()
     eventPlayer.setAmmo(0, eventPlayer.getAmmo(0) + 1)
+
+  ClearIcing()
   
   #Set cooldown of button used for Icing
   eventPlayer.setAbilityCooldown(IcingOverwritesButton, IcingCooldown)
@@ -155,27 +167,36 @@ rule "Presses Ability":
 
   destroyEffect(eventPlayer.IcingSnowballEffect)
   #Clear after delay (duration)
-  wait(IcingDuration)
+  waitUntil(eventPlayer.hero != evalOnce(eventPlayer.hero), IcingDuration)
   ClearIcing()
-
-
-rule "Icing is off cooldown":
-  @Event eachPlayer
-  @Hero mei
-  @Condition eventPlayer.IcingActiveCooldown == 0
-
+  waitUntil(eventPlayer.IcingActiveCooldown == 0, IcingCooldown)
   if IcingOverwritesButton == Button.PRIMARY_FIRE:
     eventPlayer.allowButton(Button.PRIMARY_FIRE)
 
+
+rule "Presses Ability":
+  @Event eachPlayer
+  @Hero mei
+  @Condition ((IcingOverwritesButton == Button.PRIMARY_FIRE and eventPlayer.isFiringPrimaryFire()) or (IcingOverwritesButton != Button.PRIMARY_FIRE and eventPlayer.isHoldingButton(IcingOverwritesButton))) == true
+
+  async(DeployIcing, AsyncBehavior.RESTART)
+
+rule "Presses Ability (Echo)":
+  @Event eachPlayer
+  @Hero echo
+  @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
+  @Condition ((IcingOverwritesButton == Button.PRIMARY_FIRE and eventPlayer.isFiringPrimaryFire()) or (IcingOverwritesButton != Button.PRIMARY_FIRE and eventPlayer.isHoldingButton(IcingOverwritesButton))) == true
+
+  async(DeployIcing, AsyncBehavior.RESTART)
 
 rule "Player is on Icing and Icing Type is set to slide":
   @Event eachPlayer
   @Condition IcingType == 0
   @Condition eventPlayer.isOnGround() == true
   @Condition eventPlayer.IsUsingAvalanche != true
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
+  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
   
-  eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
+  eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
   eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 1)
   #If player is facing end of icing and moving towards it
   if eventPlayer.getSpeedInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.InIcingOfPlayer.IcingStartPosition)) > eventPlayer.getSpeedInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.InIcingOfPlayer.IcingEndPosition)):
@@ -191,7 +212,7 @@ rule "Player is not on icing and Icing Type is set to slide":
   @Event eachPlayer
   @Condition IcingType == 0
   @Condition eventPlayer.IsUsingAvalanche != true
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI]).IcingStepPositions])) == false
+  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI]).IcingStepPositions])) == false
   
   wait(0.064)
   eventPlayer.stopAcceleration()
@@ -205,7 +226,7 @@ rule "Player is not on icing and Icing Type is set to slide":
 rule "Speed up teammates walking on icing (if enabled)":
   @Event eachPlayer
   @Condition IcingType == 1
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
+  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
   
   eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 + IcingSpeedIncrease)
   wait(0.032)
@@ -219,7 +240,7 @@ rule "Speed up teammates walking on icing (if enabled)":
 rule "Slow down enemies walking on icing (if enabled)":
   @Event eachPlayer
   @Condition IcingSlow > 0
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
+  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
   
   eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 - IcingSlow)
   wait(0.032)
