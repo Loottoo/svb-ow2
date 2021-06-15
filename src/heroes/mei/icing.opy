@@ -37,42 +37,43 @@ subroutine DeployIcing
 subroutine DisableAbility
 
 rule "Initialise Icing":
-  #Workshop setting that determines what button icing will use, opening this action might be laggy.
-  IcingOverwritesButton = createWorkshopSetting(enum["None", "Primary Fire", "Secondary Fire", "Ability 1 (Cryofreeze)", "Ability 2 (Ice Wall)"], "Mei - Icing ability", "What button should Icing overwrite?", 0, -10)
-  #Set the variable from the combo index to the actual button
-  IcingOverwritesButton = [null, Button.PRIMARY_FIRE, Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2][IcingOverwritesButton]
-  #Max range
-  IcingMaxRange = createWorkshopSetting(float[5:50], "Mei - Icing ability", "Icing max range", 20, 3)
-  #Icing steps (more = more accurate, but more effects used)
-  IcingSteps = createWorkshopSetting(int[5:50], "Mei - Icing ability", "Steps (Higher = more circles on the ground)", 20, 5)
-  #Width of icing
-  IcingRadius = createWorkshopSetting(float[0.5:5], "Mei - Icing ability", "Icing radius (width)", 1.5, 4)
-  #Duration of icing
-  IcingDuration = createWorkshopSetting(float[0:20], "Mei - Icing ability", "Icing Duration", 5, 2)
-  #Cooldown of icing
-  IcingCooldown = createWorkshopSetting(float[0:100], "Mei - Icing ability", "Icing Cooldown", 10, 1)
-  #Icing min player speed
-  IcingMinSpeed = createWorkshopSetting(int[100:400], "Mei - Icing ability", "Minimum speed when standing on icing (Percentage relative to regular move speed)", 200, 6)
-  #Icing max player speed
-  IcingMaxSpeed = createWorkshopSetting(int[200:500], "Mei - Icing ability", "Maximum speed when standing on icing (Percentage relative to regular move speed)", 300, 7)
-  #Icing damage on impact
-  IcingDamageOnImpact = createWorkshopSetting(int[0:200], "Mei - Icing ability", "Damage on impact of initial Icing hit", 0, 8)
-  #Icing freeze on impact
-  IcingFreezeOnImpact = createWorkshopSetting(float[0:3], "Mei - Icing ability", "Freeze duration on impact of initial Icing hit", 0, 9)
-  #Set how icing is used
-  IcingType = createWorkshopSetting(enum["Create a straight path that \"slides\" teammates from point X to point Y", "Create a straight path that grants a static movement speed buff to teammates"], "Mei - Icing ability", "Icing type - How does Icing function?", 0, -1)
-  #Icing slow
-  IcingSlow = createWorkshopSetting(int[0:100], "Mei - Icing ability", "Slow for enemies walking over icing", 0, 20)
-  #Movement increase for teammates walking on Icing (if Icing type is set to option 2)
-  IcingSpeedIncrease = createWorkshopSetting(int[0:200], "Mei - Icing ability", "Movement increase for teammates walking on Icing (if Icing type is set to option 2)", 15, 21)
+    #Workshop setting that determines what button icing will use, opening this action might be laggy.
+    IcingOverwritesButton = createWorkshopSetting(enum["None", "Primary Fire", "Secondary Fire", "Ability 1 (Cryofreeze)", "Ability 2 (Ice Wall)"], "Mei - Icing ability", "What button should Icing overwrite?", 0, -10)
+    #Set the variable from the combo index to the actual button
+    IcingOverwritesButton = [null, Button.PRIMARY_FIRE, Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2][IcingOverwritesButton]
+    #Max range
+    IcingMaxRange = createWorkshopSetting(float[5:50], "Mei - Icing ability", "Icing max range", 20, 3)
+    #Icing steps (more = more accurate, but more effects used)
+    IcingSteps = createWorkshopSetting(int[5:50], "Mei - Icing ability", "Steps (Higher = more circles on the ground)", 20, 5)
+    #Width of icing
+    IcingRadius = createWorkshopSetting(float[0.5:5], "Mei - Icing ability", "Icing radius (width)", 1.5, 4)
+    #Duration of icing
+    IcingDuration = createWorkshopSetting(float[0:20], "Mei - Icing ability", "Icing Duration", 5, 2)
+    #Cooldown of icing
+    IcingCooldown = createWorkshopSetting(float[0:100], "Mei - Icing ability", "Icing Cooldown", 10, 1)
+    #Icing min player speed
+    IcingMinSpeed = createWorkshopSetting(int[100:400], "Mei - Icing ability", "Minimum speed when standing on icing (Percentage relative to regular move speed)", 200, 6)
+    #Icing max player speed
+    IcingMaxSpeed = createWorkshopSetting(int[200:500], "Mei - Icing ability", "Maximum speed when standing on icing (Percentage relative to regular move speed)", 300, 7)
+    #Icing damage on impact
+    IcingDamageOnImpact = createWorkshopSetting(int[0:200], "Mei - Icing ability", "Damage on impact of initial Icing hit", 0, 8)
+    #Icing freeze on impact
+    IcingFreezeOnImpact = createWorkshopSetting(float[0:3], "Mei - Icing ability", "Freeze duration on impact of initial Icing hit", 0, 9)
+    #Set how icing is used
+    IcingType = createWorkshopSetting(enum["Create a straight path that \"slides\" teammates from point X to point Y", "Create a straight path that grants a static movement speed buff to teammates"], "Mei - Icing ability", "Icing type - How does Icing function?", 0, -1)
+    #Icing slow
+    IcingSlow = createWorkshopSetting(int[0:100], "Mei - Icing ability", "Slow for enemies walking over icing", 0, 20)
+    #Movement increase for teammates walking on Icing (if Icing type is set to option 2)
+    IcingSpeedIncrease = createWorkshopSetting(int[0:200], "Mei - Icing ability", "Movement increase for teammates walking on Icing (if Icing type is set to option 2)", 15, 21)
 
 
 rule "Icing Cooldown HUD if icing is on Primary or Secondary fire":
-  @Condition IcingOverwritesButton != null
-  @Condition (IcingOverwritesButton == Button.PRIMARY_FIRE or IcingOverwritesButton == Button.SECONDARY_FIRE) == true
-  
-  hudText([i for i in localPlayer if localPlayer.hero == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-  hudHeader([i for i in localPlayer if localPlayer.hero == Hero.MEI and true], "Icing: {0}".format(localPlayer.IcingActiveCooldown), HudPosition.RIGHT, 100, Color.RED if localPlayer.IcingActiveCooldown else Color.AQUA, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+    @Condition IcingOverwritesButton != null
+    @Condition (IcingOverwritesButton == Button.PRIMARY_FIRE or IcingOverwritesButton == Button.SECONDARY_FIRE) == true
+    
+    hudText([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], null, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.RIGHT, 99, null, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+    hudHeader([i for i in localPlayer if localPlayer.getCurrentHero() == Hero.MEI and true], "Icing: {0}".format(localPlayer.IcingActiveCooldown), HudPosition.RIGHT, 100, Color.RED if localPlayer.IcingActiveCooldown else Color.AQUA, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+
 
 def DisableAbility():
   if IcingOverwritesButton != Button.PRIMARY_FIRE:
@@ -163,7 +164,8 @@ def DeployIcing():
         playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 1)
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.IcingStepPositions.last(), 25)
 
-      wait(0.032)
+        wait(0.032)
+
 
   destroyEffect(eventPlayer.IcingSnowballEffect)
   #Clear after delay (duration)
@@ -254,39 +256,39 @@ def ClearIcing():
   
   #Clear icing and all of it's effects
   while len(eventPlayer.IcingEffects) > 0:
-      destroyEffect(eventPlayer.IcingEffects[0])
-      eventPlayer.IcingEffects = eventPlayer.IcingEffects.exclude(eventPlayer.IcingEffects[0])
-      destroyEffect(eventPlayer.IcingEffects[0])
-      eventPlayer.IcingEffects = eventPlayer.IcingEffects.exclude(eventPlayer.IcingEffects[0])
-      destroyEffect(eventPlayer.IcingEffects[0])
-      eventPlayer.IcingEffects = eventPlayer.IcingEffects.exclude(eventPlayer.IcingEffects[0])
-      eventPlayer.IcingStepPositions = eventPlayer.IcingStepPositions.exclude(eventPlayer.IcingStepPositions[0])
-      wait(0.032)
+    destroyEffect(eventPlayer.IcingEffects[0])
+    eventPlayer.IcingEffects = eventPlayer.IcingEffects.exclude(eventPlayer.IcingEffects[0])
+    destroyEffect(eventPlayer.IcingEffects[0])
+    eventPlayer.IcingEffects = eventPlayer.IcingEffects.exclude(eventPlayer.IcingEffects[0])
+    destroyEffect(eventPlayer.IcingEffects[0])
+    eventPlayer.IcingEffects = eventPlayer.IcingEffects.exclude(eventPlayer.IcingEffects[0])
+    eventPlayer.IcingStepPositions = eventPlayer.IcingStepPositions.exclude(eventPlayer.IcingStepPositions[0])
+    wait(0.032)
   #Set to empty, just in case
   eventPlayer.IcingStepPositions = []
 
 
 def ChaseIcingSpeed():
-  @Name "Subroutine - Chase Icing Speed"
-  
-  #Slowly accelerate player between a range
-  for eventPlayer.IcingCurrentSpeed in range(IcingMinSpeed, IcingMaxSpeed, (IcingMaxSpeed - IcingMinSpeed) / 60):
-      eventPlayer.setMoveSpeed(eventPlayer.IcingCurrentSpeed)
-      wait(0.016, Wait.ABORT_WHEN_FALSE)
+    @Name "Subroutine - Chase Icing Speed"
+
+    #Slowly accelerate player between a range
+    for eventPlayer.IcingCurrentSpeed in range(IcingMinSpeed, IcingMaxSpeed, (IcingMaxSpeed - IcingMinSpeed) / 60):
+        eventPlayer.setMoveSpeed(eventPlayer.IcingCurrentSpeed)
+        wait(0.016, Wait.ABORT_WHEN_FALSE)
 
 
 def IcingFreezeAndDamageOnImpact():
-  @Name "Subroutine - Freeze and damage enemies on impact"
-  
-  #Freeze players in radius if freeze duration is set
-  if IcingFreezeOnImpact > 0:
-      getPlayersInRadius(eventPlayer.IcingStepPositions.last(), IcingRadius, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES).setStatusEffect(eventPlayer, Status.FROZEN, IcingFreezeOnImpact)
-  #Damage players in radius if damage is set
-  if IcingDamageOnImpact > 0:
-      eventPlayer.IcingPlayersToDamage = [player for player in getPlayersInRadius(eventPlayer.IcingStepPositions.last(), IcingRadius, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) if player in eventPlayer.IcingPlayersDamaged != true]
-      #Damage players in this radius and remove them from the array, continue until array is empty
-      while len(eventPlayer.IcingPlayersToDamage) > 0:
-          damage(eventPlayer.IcingPlayersToDamage.last(), eventPlayer, IcingDamageOnImpact)
-          eventPlayer.IcingPlayersDamaged = eventPlayer.IcingPlayersDamaged.concat(eventPlayer.IcingPlayersToDamage.last())
-          eventPlayer.IcingPlayersToDamage = eventPlayer.IcingPlayersToDamage.exclude(eventPlayer.IcingPlayersToDamage.last())
+    @Name "Subroutine - Freeze and damage enemies on impact"
+
+    #Freeze players in radius if freeze duration is set
+    if IcingFreezeOnImpact > 0:
+        getPlayersInRadius(eventPlayer.IcingStepPositions.last(), IcingRadius, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES).setStatusEffect(eventPlayer, Status.FROZEN, IcingFreezeOnImpact)
+    #Damage players in radius if damage is set
+    if IcingDamageOnImpact > 0:
+        eventPlayer.IcingPlayersToDamage = [player for player in getPlayersInRadius(eventPlayer.IcingStepPositions.last(), IcingRadius, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) if player in eventPlayer.IcingPlayersDamaged != true]
+        #Damage players in this radius and remove them from the array, continue until array is empty
+        while len(eventPlayer.IcingPlayersToDamage) > 0:
+            damage(eventPlayer.IcingPlayersToDamage.last(), eventPlayer, IcingDamageOnImpact)
+            eventPlayer.IcingPlayersDamaged = eventPlayer.IcingPlayersDamaged.concat(eventPlayer.IcingPlayersToDamage.last())
+            eventPlayer.IcingPlayersToDamage = eventPlayer.IcingPlayersToDamage.exclude(eventPlayer.IcingPlayersToDamage.last())
 

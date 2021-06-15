@@ -33,10 +33,10 @@ subroutine DeployAvalanche
 rule "Initialise Avalanche":
   AvalancheEnabled = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Enable Avalanche instead of regular Ultimate", true, 0)
   AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow steering during Avalanche", true, 2)
-  AvalancheTurnSpeed = createWorkshopSetting(int[10:200], "Mei - Avalanche ability (Ultimate)", "Turn Speed (if enabled)", 50, 3)
-  AvalancheRadius = createWorkshopSetting(float[1:3], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 2, 4)
+  AvalancheTurnSpeed = createWorkshopSetting(int[10:500], "Mei - Avalanche ability (Ultimate)", "Turn Speed (if enabled)", 200, 3)
+  AvalancheRadius = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 3, 4)
   AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 5)
-  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 200, 6)
+  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 300, 6)
   AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 7)
   AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 8)
 
@@ -127,7 +127,7 @@ rule "Player is using Avalanche":
   #Create a bunch of effects that make up the ability
   eventPlayer.AvalancheEffects = []
   #Spheres
-  createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, eventPlayer, eventPlayer.AvalancheCurrentRadius, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+  createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, updateEveryTick(eventPlayer), eventPlayer.AvalancheCurrentRadius, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
   eventPlayer.AvalancheEffects = eventPlayer.AvalancheEffects.concat(getLastCreatedEntity())
   createEffect(getAllPlayers(), Effect.SPHERE, eventPlayer.getTeam(), eventPlayer, eventPlayer.AvalancheCurrentRadius, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
   eventPlayer.AvalancheEffects = eventPlayer.AvalancheEffects.concat(getLastCreatedEntity())
@@ -256,12 +256,12 @@ rule "Avalanche is active, start facing direction":
   @Condition eventPlayer.IsUsingAvalanche == true
   
   #Force facing direction of Mei in direction Avalanche was used
-  eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, 1000, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+  eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, AvalancheTurnSpeed * 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
   waitUntil(eventPlayer.IsUsingAvalanche != true, AvalancheDuration)
   eventPlayer.stopFacing()
 
 
-rule "Avalanche is active and turnable, throttling left":
+rule "Avalanche is active and turnable, throttling":
   @Event eachPlayer
   @Condition AvalancheTurnable == true
   @Condition eventPlayer.IsUsingAvalanche == true
