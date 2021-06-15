@@ -8,6 +8,7 @@ def CleanupSymmetra():
     destroyDummy(eventPlayer.SymmetraBotPlayer.getTeam(), eventPlayer.SymmetraBotPlayer.getSlot())
     CleanupEffects()
     CleanupTexts()
+    eventPlayer.allowButton(Button.ABILITY_2)
     eventPlayer.allowButton(Button.ULTIMATE)
     eventPlayer.setUltEnabled(true)
     wait()
