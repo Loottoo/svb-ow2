@@ -9,6 +9,10 @@ rule "Player changed hero":
     do:
         eventPlayer.hero = eventPlayer.getHeroOfDuplication() if eventPlayer.isDuplicatingAHero() else eventPlayer.getCurrentHero()
 
+        # We don't want to have dummy bots summoned by abilities (e.g. Symmetra Light Clone) to be affected by the clean slate code
+        if eventPlayer.isDummy() and eventPlayer.getSlot() > 4:
+            return
+
         eventPlayer.setPrimaryFireEnabled(true)
         eventPlayer.setSecondaryFireEnabled(true)
         eventPlayer.setAbility1Enabled(true)
