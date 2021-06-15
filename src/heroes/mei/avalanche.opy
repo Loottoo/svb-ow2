@@ -28,6 +28,7 @@ subroutine ExplodePlayersInAvalanche
 
 subroutine DeployAvalanche
 
+
 rule "Initialise Avalanche":
   AvalancheEnabled = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Enable Avalanche instead of regular Ultimate", true, 0)
   AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow steering during Avalanche", true, 2)
@@ -70,7 +71,7 @@ def DeployAvalanche():
   if AvalancheEnabled == false: return
   if eventPlayer.isAlive() == false: return
   if eventPlayer.isUsingAbility1() == true: return
-  if eventPlayer.IsUsingAvalanche == true: return
+  if eventPlayer.AvalancheTimer == true: return
   if (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead()): return
 
   eventPlayer.disallowButton(Button.ABILITY_1)
@@ -88,7 +89,7 @@ def DeployAvalanche():
   eventPlayer.communicate(Comms.INCOMING)
   waitUntil(eventPlayer.hero != evalOnce(eventPlayer.hero), AvalancheDuration + 0.5)
   eventPlayer.setUltCharge(0)
-  eventPlayer.IsUsingAvalanche = false
+  eventPlayer.AvalancheTimer = 0
 
 
 rule "Player presses Ultimate":
@@ -139,7 +140,7 @@ rule "Player is using Avalanche":
   createEffect(getAllPlayers(), Effect.CLOUD, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getPosition()), eventPlayer.AvalancheCurrentRadius * 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
   eventPlayer.AvalancheEffects = eventPlayer.AvalancheEffects.concat(getLastCreatedEntity())
   #Wait before clearing avalanche
-  waitUntil(eventPlayer.IsUsingAvalanche == false, AvalancheDuration)
+  waitUntil(eventPlayer.AvalancheTimer == false, AvalancheDuration)
   ClearAvalanche()
 
 
@@ -252,7 +253,7 @@ rule "Avalanche is active, start facing direction":
   
   #Force facing direction of Mei in direction Avalanche was used
   eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, AvalancheTurnSpeed * 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-  waitUntil(eventPlayer.IsUsingAvalanche != true, AvalancheDuration)
+  waitUntil(eventPlayer.AvalancheTimer != true, AvalancheDuration)
   eventPlayer.stopFacing()
 
 

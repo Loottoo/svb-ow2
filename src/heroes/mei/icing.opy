@@ -104,7 +104,7 @@ def DeployIcing():
     if eventPlayer.isAlive() == false: return
     if not eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0: return
     if not eventPlayer.IcingActiveCooldown == 0: return
-    if not eventPlayer.IsUsingAvalanche != true: return
+    if not eventPlayer.AvalancheTimer != true: return
     if (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead()): return
 
     if IcingOverwritesButton == Button.PRIMARY_FIRE:
@@ -195,7 +195,7 @@ rule "Player is on Icing and Icing Type is set to slide":
     @Event eachPlayer
     @Condition IcingType == 0
     @Condition eventPlayer.isOnGround() == true
-    @Condition eventPlayer.IsUsingAvalanche != true
+    @Condition eventPlayer.AvalancheTimer != true
     @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
 
     eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
@@ -220,14 +220,14 @@ rule "Player is on Icing and Icing Type is set to slide":
 rule "Player is not on icing and Icing Type is set to slide":
     @Event eachPlayer
     @Condition IcingType == 0
-    @Condition eventPlayer.IsUsingAvalanche != true
+    @Condition eventPlayer.AvalancheTimer != true
     @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius * 1.2 for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI]).IcingStepPositions])) == false
 
     wait(0.064)
     eventPlayer.stopAcceleration()
     eventPlayer.InIcingOfPlayer = null
     #Don't reset speed is using Avalanche
-    if eventPlayer.IsUsingAvalanche != true:
+    if eventPlayer.AvalancheTimer != true:
         setRolePassiveMovementSpeed()
         eventPlayer.stopForcingThrottle()
 
@@ -242,7 +242,7 @@ rule "Speed up teammates walking on icing (if enabled)":
     if RULE_CONDITION:
         goto RULE_START
     #Don't reset speed is using Avalanche
-    if eventPlayer.IsUsingAvalanche != true:
+    if eventPlayer.AvalancheTimer != true:
         setRolePassiveMovementSpeed()
 
 

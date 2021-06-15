@@ -72,6 +72,7 @@ playervar repeat_0
 playervar slot_2
 playervar SoundbarrierCalculation
 playervar SpeedboostBonus
+playervar Index
 
 
 #Subroutine names
