@@ -121,11 +121,10 @@ rule "Fire Zap":
             eventPlayer.setAmmo(0, eventPlayer.getAmmo(0) - 25)
             wait(1)
             eventPlayer.ZapHitPlayer = null
-            for eventPlayer.INDEX in range(len(eventPlayer.ZapEffects)):
-                destroyEffect(eventPlayer.ZapEffects[eventPlayer.INDEX])
-                destroyHudText(eventPlayer.ZapEffects[eventPlayer.INDEX])
-                destroyProgressBarHud(eventPlayer.ZapEffects[eventPlayer.INDEX])
-                wait()
+            for eventPlayer.Index in range(len(eventPlayer.ZapEffects)):
+                destroyEffect(eventPlayer.ZapEffects[eventPlayer.Index])
+                destroyHudText(eventPlayer.ZapEffects[eventPlayer.Index])
+                destroyProgressBarHud(eventPlayer.ZapEffects[eventPlayer.Index])
         else:
             stopChasingVariable(eventPlayer.ZapChargeMeter)
             eventPlayer.ZapChargeMeter = 0
