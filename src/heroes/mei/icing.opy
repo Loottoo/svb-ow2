@@ -82,98 +82,98 @@ def DisableAbility():
     eventPlayer.allowButton(IcingOverwritesButton)
 
 rule "Disable original Ability":
-  @Event eachPlayer
-  @Condition IcingOverwritesButton != null
-  @Hero mei
-  
-  DisableAbility()
+    @Event eachPlayer
+    @Condition IcingOverwritesButton != null
+    @Hero mei
+    
+    DisableAbility()
 
 rule "Disable original Ability (Echo)":
-  @Event eachPlayer
-  @Condition IcingOverwritesButton != null
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
-  
-  DisableAbility()
+    @Event eachPlayer
+    @Condition IcingOverwritesButton != null
+    @Hero echo
+    @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
+    
+    DisableAbility()
 
 
 def DeployIcing():
-  @Name "[mei/icing.opy] Subroutine: Deploy Icing"
+    @Name "[mei/icing.opy] Subroutine: Deploy Icing"
 
-  if IcingOverwritesButton == null: return
-  if eventPlayer.isAlive() == false: return
-  if not eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0: return
-  if not eventPlayer.IcingActiveCooldown == 0: return
-  if not eventPlayer.IsUsingAvalanche != true: return
-  if (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead()): return
+    if IcingOverwritesButton == null: return
+    if eventPlayer.isAlive() == false: return
+    if not eventPlayer.getAbilityCooldown(IcingOverwritesButton) == 0: return
+    if not eventPlayer.IcingActiveCooldown == 0: return
+    if not eventPlayer.IsUsingAvalanche != true: return
+    if (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead()): return
 
-  if IcingOverwritesButton == Button.PRIMARY_FIRE:
-    eventPlayer.disallowButton(Button.PRIMARY_FIRE)
-    eventPlayer.cancelPrimaryAction()
-    eventPlayer.setAmmo(0, eventPlayer.getAmmo(0) + 1)
+    if IcingOverwritesButton == Button.PRIMARY_FIRE:
+        eventPlayer.disallowButton(Button.PRIMARY_FIRE)
+        eventPlayer.cancelPrimaryAction()
+        eventPlayer.setAmmo(0, eventPlayer.getAmmo(0) + 1)
 
-  ClearIcing()
-  
-  #Set cooldown of button used for Icing
-  eventPlayer.setAbilityCooldown(IcingOverwritesButton, IcingCooldown)
-  eventPlayer.IcingActiveCooldown = IcingCooldown
-  eventPlayer.IcingPlayersDamaged = []
-  chase(eventPlayer.IcingActiveCooldown, 0, duration=IcingCooldown, ChaseReeval.DESTINATION_AND_DURATION)
-  #Communite, for extra flare
-  eventPlayer.communicate(Comms.GOING_IN)
-  #Reset icing
-  eventPlayer.IcingEffects = []
-  eventPlayer.IcingStepPositions = []
-  #set the start of icing right in front of the player
-  eventPlayer.IcingStartPosition = vect((eventPlayer.getEyePosition() + (eventPlayer.getFacingDirection() * (IcingRadius + 1))).x, eventPlayer.getEyePosition().y, (eventPlayer.getEyePosition() + (eventPlayer.getFacingDirection() * (IcingRadius + 1))).z)
-  #Set the end position, always at the same eye position as event player
-  eventPlayer.IcingEndPosition = raycast(eventPlayer.getEyePosition(), vect((eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * IcingMaxRange).x, eventPlayer.getEyePosition().y, (eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * IcingMaxRange).z), null, null, false).getHitPosition()
-  #Snowball!
-  createEffect(getAllPlayers(), Effect.SPHERE, Color.SKY_BLUE, eventPlayer.IcingStepPositions.last() + Vector.UP * 3, 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-  eventPlayer.IcingSnowballEffect = getLastCreatedEntity()
+    ClearIcing()
+    
+    #Set cooldown of button used for Icing
+    eventPlayer.setAbilityCooldown(IcingOverwritesButton, IcingCooldown)
+    eventPlayer.IcingActiveCooldown = IcingCooldown
+    eventPlayer.IcingPlayersDamaged = []
+    chase(eventPlayer.IcingActiveCooldown, 0, duration=IcingCooldown, ChaseReeval.DESTINATION_AND_DURATION)
+    #Communite, for extra flare
+    eventPlayer.communicate(Comms.GOING_IN)
+    #Reset icing
+    eventPlayer.IcingEffects = []
+    eventPlayer.IcingStepPositions = []
+    #set the start of icing right in front of the player
+    eventPlayer.IcingStartPosition = vect((eventPlayer.getEyePosition() + (eventPlayer.getFacingDirection() * (IcingRadius + 1))).x, eventPlayer.getEyePosition().y, (eventPlayer.getEyePosition() + (eventPlayer.getFacingDirection() * (IcingRadius + 1))).z)
+    #Set the end position, always at the same eye position as event player
+    eventPlayer.IcingEndPosition = raycast(eventPlayer.getEyePosition(), vect((eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * IcingMaxRange).x, eventPlayer.getEyePosition().y, (eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * IcingMaxRange).z), null, null, false).getHitPosition()
+    #Snowball!
+    createEffect(getAllPlayers(), Effect.SPHERE, Color.SKY_BLUE, eventPlayer.IcingStepPositions.last() + Vector.UP * 3, 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.IcingSnowballEffect = getLastCreatedEntity()
 
-  createEffect(getAllPlayers(), Effect.MEI_FROZEN_SOUND, eventPlayer.getTeam(), eventPlayer.IcingStartPosition, 50, EffectReeval.NONE)
-  eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
-  createEffect(getAllPlayers(), Effect.MEI_FROZEN_SOUND, eventPlayer.getTeam(), eventPlayer.IcingEndPosition, 50, EffectReeval.NONE)
-  eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+    createEffect(getAllPlayers(), Effect.MEI_FROZEN_SOUND, eventPlayer.getTeam(), eventPlayer.IcingStartPosition, 50, EffectReeval.NONE)
+    eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+    createEffect(getAllPlayers(), Effect.MEI_FROZEN_SOUND, eventPlayer.getTeam(), eventPlayer.IcingEndPosition, 50, EffectReeval.NONE)
+    eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
 
-  playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 75)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 75)
 
-  #Loop to create effects and array for Icing location
-  for eventPlayer.IcingCreateStep in range(0, IcingMaxRange, IcingMaxRange / IcingSteps):
-      #Set position of next icing circle
-      eventPlayer.IcingStepPositions = eventPlayer.IcingStepPositions.concat(eventPlayer.IcingStartPosition + directionTowards(eventPlayer.IcingStartPosition, eventPlayer.IcingEndPosition) * eventPlayer.IcingCreateStep)
-      #Cast icing down in case we're going over slopes
-      eventPlayer.IcingStepPositions[eventPlayer.IcingStepPositions.index(eventPlayer.IcingStepPositions.last())] = raycast(eventPlayer.IcingStepPositions.last(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 10, null, null, false).getHitPosition()
-      #Slow enemies hit by the impact, if set by Workshop Setting
-      async(IcingFreezeAndDamageOnImpact, AsyncBehavior.RESTART)
+    #Loop to create effects and array for Icing location
+    for eventPlayer.IcingCreateStep in range(0, IcingMaxRange, IcingMaxRange / IcingSteps):
+        #Set position of next icing circle
+        eventPlayer.IcingStepPositions = eventPlayer.IcingStepPositions.concat(eventPlayer.IcingStartPosition + directionTowards(eventPlayer.IcingStartPosition, eventPlayer.IcingEndPosition) * eventPlayer.IcingCreateStep)
+        #Cast icing down in case we're going over slopes
+        eventPlayer.IcingStepPositions[eventPlayer.IcingStepPositions.index(eventPlayer.IcingStepPositions.last())] = raycast(eventPlayer.IcingStepPositions.last(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 10, null, null, false).getHitPosition()
+        #Slow enemies hit by the impact, if set by Workshop Setting
+        async(IcingFreezeAndDamageOnImpact, AsyncBehavior.RESTART)
 
-      #Create a bunch of cool effects at current position and save them to a variable
-      createEffect(getAllPlayers(), Effect.RING, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius, EffectReeval.NONE)
-      eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
-
-      # Only create these effects half ofthe time
-      if (eventPlayer.IcingCreateStep % (IcingMaxRange * 2 / IcingSteps)):
-        createEffect(getAllPlayers(), Effect.CLOUD, Color.WHITE, eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
-        eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
-        createEffect(getAllPlayers(), Effect.SPARKLES, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
+        #Create a bunch of cool effects at current position and save them to a variable
+        createEffect(getAllPlayers(), Effect.RING, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius, EffectReeval.NONE)
         eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
 
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
-        playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.WHITE, eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
-        playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 1)
-        playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.IcingStepPositions.last(), 25)
+        # Only create these effects half ofthe time
+        if (eventPlayer.IcingCreateStep % (IcingMaxRange * 2 / IcingSteps)):
+            createEffect(getAllPlayers(), Effect.CLOUD, Color.WHITE, eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
+            eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
+            createEffect(getAllPlayers(), Effect.SPARKLES, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last() + Vector.DOWN * 0.25, IcingRadius * 1.5, EffectReeval.NONE)
+            eventPlayer.IcingEffects = eventPlayer.IcingEffects.concat(getLastCreatedEntity())
 
-        wait(0.032)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
+            playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.WHITE, eventPlayer.IcingStepPositions.last(), IcingRadius * 2)
+            playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, eventPlayer.getTeam(), eventPlayer.IcingStepPositions.last(), IcingRadius * 1)
+            playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.IcingStepPositions.last(), 25)
+
+            wait(0.032)
 
 
-  destroyEffect(eventPlayer.IcingSnowballEffect)
-  #Clear after delay (duration)
-  waitUntil(eventPlayer.hero != evalOnce(eventPlayer.hero), IcingDuration)
-  ClearIcing()
-  waitUntil(eventPlayer.IcingActiveCooldown == 0, IcingCooldown)
-  if IcingOverwritesButton == Button.PRIMARY_FIRE:
-    eventPlayer.allowButton(Button.PRIMARY_FIRE)
+    destroyEffect(eventPlayer.IcingSnowballEffect)
+    #Clear after delay (duration)
+    waitUntil(eventPlayer.hero != evalOnce(eventPlayer.hero), IcingDuration)
+    ClearIcing()
+    waitUntil(eventPlayer.IcingActiveCooldown == 0, IcingCooldown)
+    if IcingOverwritesButton == Button.PRIMARY_FIRE:
+        eventPlayer.allowButton(Button.PRIMARY_FIRE)
 
 
 rule "Presses Ability":
@@ -192,63 +192,70 @@ rule "Presses Ability (Echo)":
   async(DeployIcing, AsyncBehavior.RESTART)
 
 rule "Player is on Icing and Icing Type is set to slide":
-  @Event eachPlayer
-  @Condition IcingType == 0
-  @Condition eventPlayer.isOnGround() == true
-  @Condition eventPlayer.IsUsingAvalanche != true
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
-  
-  eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
-  eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 1)
-  #If player is facing end of icing and moving towards it
-  if eventPlayer.getSpeedInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.InIcingOfPlayer.IcingStartPosition)) > eventPlayer.getSpeedInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.InIcingOfPlayer.IcingEndPosition)):
-      #Accelerate towards end of icing
-      eventPlayer.startAcceleration(directionTowards(eventPlayer.InIcingOfPlayer.IcingEndPosition, eventPlayer.InIcingOfPlayer.IcingStartPosition), 400, 200, Relativity.TO_WORLD, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-  else:
-      #Accelerate towards start of icing
-      eventPlayer.startAcceleration(directionTowards(eventPlayer.InIcingOfPlayer.IcingStartPosition, eventPlayer.InIcingOfPlayer.IcingEndPosition), 400, 200, Relativity.TO_WORLD, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-  ChaseIcingSpeed()
+    @Event eachPlayer
+    @Condition IcingType == 0
+    @Condition eventPlayer.isOnGround() == true
+    @Condition eventPlayer.IsUsingAvalanche != true
+    @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
+
+    eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
+
+    # Accelerate in current moving direction
+    eventPlayer.startAcceleration(
+        directionTowards(
+            vect(0, 0, 0),
+            evalOnce(eventPlayer.getThrottle() if eventPlayer.getThrottle() != vect(0, 0, 0) else vect(0, 0, 1))
+        ),
+        400,
+        200,
+        Relativity.TO_PLAYER,
+        AccelReeval.NONE
+    )
+
+    eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 0)
+
+    ChaseIcingSpeed()
 
 
 rule "Player is not on icing and Icing Type is set to slide":
-  @Event eachPlayer
-  @Condition IcingType == 0
-  @Condition eventPlayer.IsUsingAvalanche != true
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI]).IcingStepPositions])) == false
-  
-  wait(0.064)
-  eventPlayer.stopAcceleration()
-  eventPlayer.InIcingOfPlayer = null
-  #Don't reset speed is using Avalanche
-  if eventPlayer.IsUsingAvalanche != true:
-      setRolePassiveMovementSpeed()
-      eventPlayer.stopForcingThrottle()
+    @Event eachPlayer
+    @Condition IcingType == 0
+    @Condition eventPlayer.IsUsingAvalanche != true
+    @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius * 1.2 for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI]).IcingStepPositions])) == false
+
+    wait(0.064)
+    eventPlayer.stopAcceleration()
+    eventPlayer.InIcingOfPlayer = null
+    #Don't reset speed is using Avalanche
+    if eventPlayer.IsUsingAvalanche != true:
+        setRolePassiveMovementSpeed()
+        eventPlayer.stopForcingThrottle()
 
 
 rule "Speed up teammates walking on icing (if enabled)":
-  @Event eachPlayer
-  @Condition IcingType == 1
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
-  
-  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 + IcingSpeedIncrease)
-  wait(0.032)
-  if RULE_CONDITION:
-      goto RULE_START
-  #Don't reset speed is using Avalanche
-  if eventPlayer.IsUsingAvalanche != true:
-      setRolePassiveMovementSpeed()
+    @Event eachPlayer
+    @Condition IcingType == 1
+    @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
+    
+    eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 + IcingSpeedIncrease)
+    wait(0.032)
+    if RULE_CONDITION:
+        goto RULE_START
+    #Don't reset speed is using Avalanche
+    if eventPlayer.IsUsingAvalanche != true:
+        setRolePassiveMovementSpeed()
 
 
 rule "Slow down enemies walking on icing (if enabled)":
-  @Event eachPlayer
-  @Condition IcingSlow > 0
-  @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
-  
-  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 - IcingSlow)
-  wait(0.032)
-  if RULE_CONDITION:
-      goto RULE_START
-  setRolePassiveMovementSpeed()
+    @Event eachPlayer
+    @Condition IcingSlow > 0
+    @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
+    
+    eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 - IcingSlow)
+    wait(0.032)
+    if RULE_CONDITION:
+        goto RULE_START
+    setRolePassiveMovementSpeed()
 
 
 def ClearIcing():
