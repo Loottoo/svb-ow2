@@ -65,8 +65,6 @@ playervar ExcludedPlayers
 playervar TimeRemaining
 playervar TargetPlayers
 playervar TemporaryCooldown
-playervar slot_0
-playervar slot_1
 playervar AngelicBlessingTextID
 playervar AngelicBlessingConfirmID
 playervar Superjumping
