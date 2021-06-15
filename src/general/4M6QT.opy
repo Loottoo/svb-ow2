@@ -70,7 +70,6 @@ playervar AngelicBlessingConfirmID
 playervar Superjumping
 playervar Direction
 playervar repeat_0
-playervar hero_0
 playervar slot_2
 playervar SoundbarrierCalculation
 playervar SpeedboostBonus
@@ -272,7 +271,6 @@ def FlankerSetup():
         ActiveModifications.append(eventPlayer._extendedPlayerCollection[13])
         eventPlayer._extendedPlayerCollection[12] += 1
     eventPlayer.HeroMoveSpeedModifications.append(LastMoveSpeedModificationID)
-    eventPlayer.hero_0 = eventPlayer.hero
     async(FlankerCleanup, AsyncBehavior.NOOP)
 
 
