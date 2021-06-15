@@ -39,7 +39,6 @@ playervar BaptisteMoveSpeedID
 playervar EchoLastHealth
 playervar ReinhardtFirestrikeCharges
 playervar ReinhardtFirestrikeCooldown
-playervar facingAngle
 playervar CastingUltimate
 playervar OrisaMoveSpeedID
 playervar Galloping
