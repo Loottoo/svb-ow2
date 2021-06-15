@@ -1,8 +1,6 @@
 #!mainFile "../../main.opy"
 
 
-playervar ability2
-
 
 subroutine SymTP
 
