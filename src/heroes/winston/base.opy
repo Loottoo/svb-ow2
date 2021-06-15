@@ -12,7 +12,6 @@ globalvar ZapLoop
 
 playervar ZapChargeMeter
 playervar DeletableHUD
-playervar INDEX
 playervar ZapHUDSpacer
 playervar CurrentHero
 playervar readyForHUD
