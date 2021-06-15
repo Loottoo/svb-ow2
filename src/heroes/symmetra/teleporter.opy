@@ -1,8 +1,6 @@
 #!mainFile "../../main.opy"
 
 
-playervar ability2
-
 
 subroutine SymTP
 
@@ -32,14 +30,14 @@ rule "[Symmetra]ยง TP":
 
 def SymTP():
     @Name "[Sub][Symmetra] TP lasts 8 sec, cooldown begins when TP is put down"
-
+    eventPlayer.disallowButton(Button.ABILITY_2)
     waitUntil(eventPlayer.isUsingAbility2() == false, 0.656)
     if eventPlayer.isUsingAbility2() == false:
         return
-    eventPlayer.ability2 = 10
-    chase(eventPlayer.ability2, 0, rate=1, ChaseReeval.NONE)
-    eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.ability2)
+    eventPlayer.setAbilityCooldown(Button.ABILITY_2, 10)
     waitUntil(eventPlayer.getCurrentHero() == Hero.ECHO and eventPlayer.isDuplicatingAHero() == false or eventPlayer.isHoldingButton(Button.ABILITY_2), 8)
     if not (eventPlayer.getCurrentHero() == Hero.ECHO and not eventPlayer.isDuplicatingAHero()):
+        eventPlayer.Index = eventPlayer.getAbilityCooldown(Button.ABILITY_2)
+        eventPlayer.allowButton(Button.ABILITY_2)
         eventPlayer.forceButtonPress(Button.ABILITY_2)
-        eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.ability2)
+        eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.Index)

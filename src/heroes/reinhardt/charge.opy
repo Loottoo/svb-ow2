@@ -37,14 +37,14 @@ def ReinhardtDetectFacingAngle():
     @Name "[reinhardt.del] Subroutine: Detect Facing Angle"
     
     #Code snippet provided by Lotto!
-    eventPlayer.facingAngle = eventPlayer.getHorizontalFacingAngle()
+    eventPlayer.Direction = eventPlayer.getHorizontalFacingAngle()
     wait()
-    if angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.facingAngle) > 0:
+    if angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.Direction) > 0:
         if eventPlayer.isInAir():
             eventPlayer.startAcceleration(Vector.RIGHT, 100, 3, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
         else:
             eventPlayer.startAcceleration(Vector.RIGHT, 500, 7, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
-    elif angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.facingAngle) < 0:
+    elif angleDifference(eventPlayer.getHorizontalFacingAngle(), eventPlayer.Direction) < 0:
         if eventPlayer.isInAir():
             eventPlayer.startAcceleration(Vector.LEFT, 100, 3, Relativity.TO_PLAYER, AccelReeval.DIRECTION_RATE_AND_MAX_SPEED)
         else:

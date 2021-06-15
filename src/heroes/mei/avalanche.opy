@@ -10,9 +10,7 @@ globalvar AvalancheTurnable
 globalvar AvalancheTurnSpeed
 
 
-playervar IsUsingAvalanche
 playervar AvalancheEffects
-playervar AvalancheLoop
 playervar AvalancheSpeed
 playervar AvalancheCurrentRadius
 playervar AvalancheFacingDirection
@@ -46,9 +44,9 @@ rule "Avalanche Progress Bar HUD element":
   @Hero mei
   @Condition AvalancheEnabled == true
   
-  progressBarHud([i for i in eventPlayer if eventPlayer.IsUsingAvalanche], 100 / AvalancheDuration * eventPlayer.AvalancheTimer, "", HudPosition.TOP, 10, Color.AQUA, Color.AQUA, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+  progressBarHud([i for i in eventPlayer if eventPlayer.AvalancheTimer], 100 / AvalancheDuration * eventPlayer.AvalancheTimer, "", HudPosition.TOP, 10, Color.AQUA, Color.AQUA, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
   #New lines to push the progress bar down
-  hudSubheader([i for i in eventPlayer if eventPlayer.IsUsingAvalanche], " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+  hudSubheader([i for i in eventPlayer if eventPlayer.AvalancheTimer], " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
 rule "Disable original Ultimate":
@@ -83,7 +81,6 @@ def DeployAvalanche():
 
   eventPlayer.cancelPrimaryAction()
 
-  eventPlayer.IsUsingAvalanche = true
   #Set timer and chase it down
   eventPlayer.AvalancheTimer = AvalancheDuration
   chase(eventPlayer.AvalancheTimer, 0, duration=AvalancheDuration, ChaseReeval.DESTINATION_AND_DURATION)
@@ -111,7 +108,7 @@ rule "Player presses Ultimate (Echo)":
 
 rule "Player is using Avalanche":
   @Event eachPlayer
-  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.AvalancheTimer == true
   
   #Set initial facing direction
   eventPlayer.AvalancheFacingDirection = eventPlayer.getFacingDirection()
@@ -177,15 +174,13 @@ def ClearAvalanche():
   eventPlayer.setStatusEffect(null, Status.ROOTED, 1)
   chase(eventPlayer.AvalancheCurrentRadius, 0, duration=0.75, ChaseReeval.DESTINATION_AND_DURATION)
   eventPlayer.AvalancheSpeed = 500
-  eventPlayer.IsUsingAvalanche = false
+  eventPlayer.AvalancheTimer = 0
   eventPlayer.AvalancheFinalPosition = eventPlayer.getPosition()
   eventPlayer.stopForcingThrottle()
   eventPlayer.setMoveSpeed(100)
   ExplodeAvalanche()
   #Destroy Effects
-  for eventPlayer.AvalancheLoop in range(len(eventPlayer.AvalancheEffects)):
-      destroyEffect(eventPlayer.AvalancheEffects[eventPlayer.AvalancheLoop])
-  #Clear statuses
+  destroyEffect(eventPlayer.AvalancheEffects)
   eventPlayer.clearStatusEffect(Status.INVINCIBLE)
   eventPlayer.clearStatusEffect(Status.ROOTED)
   eventPlayer.clearStatusEffect(Status.PHASED_OUT)
@@ -253,7 +248,7 @@ def ExplodePlayersInAvalanche():
 
 rule "Avalanche is active, start facing direction":
   @Event eachPlayer
-  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.AvalancheTimer == true
   
   #Force facing direction of Mei in direction Avalanche was used
   eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, AvalancheTurnSpeed * 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
@@ -264,7 +259,7 @@ rule "Avalanche is active, start facing direction":
 rule "Avalanche is active and turnable, throttling":
   @Event eachPlayer
   @Condition AvalancheTurnable == true
-  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.AvalancheTimer == true
   @Condition eventPlayer.getThrottle().x != 0
 
   eventPlayer.AvalancheFacingDirection = angleToDirection(
@@ -279,7 +274,7 @@ rule "Avalanche is active and turnable, throttling":
 
 rule "Avalanche is active, play sound":
   @Event eachPlayer
-  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.AvalancheTimer == true
   
   #Play a constant sound while snowball is rolling
   playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 50)
@@ -291,7 +286,7 @@ rule "Avalanche is active, play sound":
 
 rule "Avalanche hit a wall":
   @Event eachPlayer
-  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.AvalancheTimer == true
   @Condition eventPlayer.getSpeed() < 5 * (eventPlayer.AvalancheSpeed / 100)
   
   wait(0.1, Wait.ABORT_WHEN_FALSE)
@@ -301,7 +296,7 @@ rule "Avalanche hit a wall":
 
 rule "Player died while using Avalanche":
   @Event playerDied
-  @Condition eventPlayer.IsUsingAvalanche
+  @Condition eventPlayer.AvalancheTimer
 
   ClearAvalanche()
 
@@ -309,9 +304,9 @@ rule "Player died while using Avalanche":
 rule "Enemy is inside Avalanche":
   @Event eachPlayer
   #If any player is using avalanche
-  @Condition len([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.IsUsingAvalanche == true]) > 0
+  @Condition len([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.AvalancheTimer == true]) > 0
   #If event player is near anyone using avalanche
-  @Condition any([distance(eventPlayer.getPosition(), i.getPosition()) < i.AvalancheCurrentRadius * 1.25 for i in [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.IsUsingAvalanche]]) == true
+  @Condition any([distance(eventPlayer.getPosition(), i.getPosition()) < i.AvalancheCurrentRadius * 1.25 for i in [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.AvalancheTimer]]) == true
   
   getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())).PlayersInAvalanche = getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())).PlayersInAvalanche.concat(eventPlayer)
   eventPlayer.attachTo(getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())), localVector(eventPlayer.getPosition(), getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())), Transform.ROTATION_AND_TRANSLATION))
@@ -320,7 +315,7 @@ rule "Enemy is inside Avalanche":
 
 rule "Damage players inside of Avalanche":
   @Event eachPlayer
-  @Condition eventPlayer.IsUsingAvalanche == true
+  @Condition eventPlayer.AvalancheTimer == true
   
   damage(eventPlayer.PlayersInAvalanche, eventPlayer, AvalancheDamagePerTick)
   wait(0.05)

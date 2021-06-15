@@ -39,7 +39,6 @@ playervar BaptisteMoveSpeedID
 playervar EchoLastHealth
 playervar ReinhardtFirestrikeCharges
 playervar ReinhardtFirestrikeCooldown
-playervar facingAngle
 playervar CastingUltimate
 playervar OrisaMoveSpeedID
 playervar Galloping
@@ -65,26 +64,11 @@ playervar ExcludedPlayers
 playervar TimeRemaining
 playervar TargetPlayers
 playervar TemporaryCooldown
-playervar slot_0
-playervar slot_1
 playervar AngelicBlessingTextID
 playervar AngelicBlessingConfirmID
 playervar Superjumping
 playervar Direction
 playervar repeat_0
-playervar hero_0
-playervar red
-playervar green
-playervar blue
-playervar alpha
-playervar red_0
-playervar green_0
-playervar blue_0
-playervar alpha_0
-playervar red_1
-playervar green_1
-playervar blue_1
-playervar alpha_1
 playervar slot_2
 playervar SoundbarrierCalculation
 playervar SpeedboostBonus
@@ -286,7 +270,6 @@ def FlankerSetup():
         ActiveModifications.append(eventPlayer._extendedPlayerCollection[13])
         eventPlayer._extendedPlayerCollection[12] += 1
     eventPlayer.HeroMoveSpeedModifications.append(LastMoveSpeedModificationID)
-    eventPlayer.hero_0 = eventPlayer.hero
     async(FlankerCleanup, AsyncBehavior.NOOP)
 
 
