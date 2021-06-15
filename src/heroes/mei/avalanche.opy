@@ -12,7 +12,6 @@ globalvar AvalancheTurnSpeed
 
 playervar IsUsingAvalanche
 playervar AvalancheEffects
-playervar AvalancheLoop
 playervar AvalancheSpeed
 playervar AvalancheCurrentRadius
 playervar AvalancheFacingDirection
@@ -160,9 +159,7 @@ def ClearAvalanche():
   eventPlayer.setMoveSpeed(100)
   ExplodeAvalanche()
   #Destroy Effects
-  for eventPlayer.AvalancheLoop in range(len(eventPlayer.AvalancheEffects)):
-      destroyEffect(eventPlayer.AvalancheEffects[eventPlayer.AvalancheLoop])
-  #Clear statuses
+  destroyEffect(eventPlayer.AvalancheEffects)
   eventPlayer.clearStatusEffect(Status.INVINCIBLE)
   eventPlayer.clearStatusEffect(Status.ROOTED)
   eventPlayer.clearStatusEffect(Status.PHASED_OUT)
