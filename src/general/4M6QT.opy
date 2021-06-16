@@ -67,7 +67,6 @@ playervar AngelicBlessingTextID
 playervar AngelicBlessingConfirmID
 playervar Superjumping
 playervar Direction
-playervar repeat_0
 playervar SoundbarrierCalculation
 playervar SpeedboostBonus
 playervar Index
