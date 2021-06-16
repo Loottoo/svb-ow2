@@ -56,7 +56,6 @@ playervar MusicMeter
 playervar WallrideTimer
 playervar ZaryaBubbleCharges
 playervar ZaryaBubbleCooldown
-playervar repeat
 playervar frac
 playervar frac_0
 playervar ExcludedPlayers
