@@ -1,7 +1,5 @@
 #!mainFile "../../main.opy"
 
-playervar EchoLastVelocity
-
 rule "Cancel Sticky Bombs early so only 5 spawn instead of 6":
   @Event eachPlayer
   @Condition eventPlayer.hero == Hero.ECHO
@@ -9,6 +7,6 @@ rule "Cancel Sticky Bombs early so only 5 spawn instead of 6":
   
   wait(0.06 * createWorkshopSetting(int[1:6], "Echo", "Number of sticky bombs to fire", 5, 0), Wait.ABORT_WHEN_FALSE)
   # We record the player's current velocity and apply an impulse after the status, this ensures that the momentum is maintained.
-  eventPlayer.EchoLastVelocity = eventPlayer.getVelocity()
+  eventPlayer.Index = eventPlayer.getVelocity()
   eventPlayer.setStatusEffect(null, Status.STUNNED, 0.016)
-  eventPlayer.applyImpulse(eventPlayer.EchoLastVelocity, eventPlayer.getHorizontalSpeed(), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+  eventPlayer.applyImpulse(eventPlayer.Index, eventPlayer.getHorizontalSpeed(), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
