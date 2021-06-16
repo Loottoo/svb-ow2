@@ -15,10 +15,9 @@ def CreateSymmetraBotEffects():
     createEffect(getAllPlayers(), Effect.WINSTON_TESLA_CANNON_TARGET_SOUND, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 700, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.HeroEffects.append(getLastCreatedEntity())
     wait(0.1)
-    for eventPlayer.repeat_0 in range(3):
+    for eventPlayer.Index in range(3):
         createEffect(getAllPlayers(), Effect.BAD_AURA, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 0, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.HeroEffects.append(getLastCreatedEntity())
-        wait(0.083)
 
 
 def SymmetraLightCloneUlt():

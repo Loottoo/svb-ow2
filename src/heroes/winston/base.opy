@@ -13,8 +13,6 @@ globalvar ZapLoop
 playervar ZapChargeMeter
 playervar DeletableHUD
 playervar ZapHUDSpacer
-playervar CurrentHero
-playervar readyForHUD
 playervar ZapEffects
 playervar ZapHudProgress
 playervar ZapHitPlayer

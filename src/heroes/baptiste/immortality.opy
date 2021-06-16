@@ -40,7 +40,7 @@ def BaptisteCastIF():
       return
   if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.isDead():
       return
-  for eventPlayer.repeat in range(5):
+  for eventPlayer.Index in range(5):
       createEffect(getAllPlayers(), Effect.HEAL_TARGET, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition()), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
       eventPlayer.HeroEffects.append(getLastCreatedEntity())
   createEffect(eventPlayer, Effect.GOOD_AURA_SOUND, eventPlayer.getTeam(), eventPlayer, 700, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)

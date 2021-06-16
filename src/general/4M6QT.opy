@@ -56,10 +56,8 @@ playervar MusicMeter
 playervar WallrideTimer
 playervar ZaryaBubbleCharges
 playervar ZaryaBubbleCooldown
-playervar repeat
 playervar frac
 playervar frac_0
-playervar slot
 playervar ExcludedPlayers
 playervar TimeRemaining
 playervar TargetPlayers
@@ -68,8 +66,6 @@ playervar AngelicBlessingTextID
 playervar AngelicBlessingConfirmID
 playervar Superjumping
 playervar Direction
-playervar repeat_0
-playervar slot_2
 playervar SoundbarrierCalculation
 playervar SpeedboostBonus
 playervar Index
