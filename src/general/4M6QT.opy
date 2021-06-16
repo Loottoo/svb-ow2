@@ -59,7 +59,6 @@ playervar ZaryaBubbleCooldown
 playervar repeat
 playervar frac
 playervar frac_0
-playervar slot
 playervar ExcludedPlayers
 playervar TimeRemaining
 playervar TargetPlayers
