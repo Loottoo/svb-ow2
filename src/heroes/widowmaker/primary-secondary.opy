@@ -1,9 +1,5 @@
 #!mainFile "../../main.opy"
 
-
-playervar ammo
-
-
 rule "[Widowmaker] Bolt action":
   @Event eachPlayer
   @Condition eventPlayer.hero == Hero.WIDOWMAKER
