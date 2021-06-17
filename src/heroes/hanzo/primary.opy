@@ -5,40 +5,20 @@ globalvar hanzoReverseFalloff
 
 
 subroutine HanzoReverseFalloff
-subroutine HanzoInitial
 
 
 rule "init":
     hanzoReverseFalloff = [createWorkshopSetting(bool, "Hanzo", "Reverse falloff on storm arrows", true, 1), createWorkshopSetting(bool, "Hanzo", "Reverse falloff on Primary Fire", true, 0)]
 
 
-rule "[Hanzo] Initial":
-  @Event eachPlayer
-  @Hero hanzo
-  
-  async(HanzoInitial, AsyncBehavior.NOOP)
-
-
-rule "[Hanzo]§ Initial":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.HANZO
-    
-    async(HanzoInitial, AsyncBehavior.NOOP)
-
-
-def HanzoInitial():
+def InitialHanzo():
     @Name "[Sub][Hanzo] Initial - Reduce damage by 50%"
     
-    waitUntil(eventPlayer.HeroActive == null, 9999)
-    if eventPlayer.HeroActive == Hero.HANZO:
-        return
-    wait()
     eventPlayer.setDamageDealt(50)
-    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
+    
+def CleanupHanzo():
+    @Name "[Sub][Hanzo] Cleanup - Return damage to normal"
     eventPlayer.setDamageDealt(100)
-    eventPlayer.HeroActive = null
-
 
 rule "[Hanzo] Double damage for non-primary fire":
     @Event playerDealtDamage

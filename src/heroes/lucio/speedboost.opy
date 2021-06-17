@@ -5,8 +5,10 @@ globalvar speedboostMaxGain = createWorkshopSetting(int[1:100], "Lucio", "Speedb
 globalvar speedboostMinGain = createWorkshopSetting(int[1:100], "Lucio", "Speedboost min extra by Music Meter", 5, 3)
 
 
-def LucioSpeedBoost():
-    @Name "[lucio.del] Subroutine: Speedboost"
+rule "[lucio.del] Speedboost":
+    @Event eachPlayer
+    @Hero lucio
+    @Condition eventPlayer.isUsingAbility2() == true
     
     if not eventPlayer.isInAlternateForm():
         return
@@ -25,20 +27,3 @@ def LucioSpeedBoost():
     while eventPlayer._extendedPlayerCollection[21] < len(eventPlayer.HeroMoveSpeedModifications):
         _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.HeroMoveSpeedModifications[eventPlayer._extendedPlayerCollection[21]]])[0]] = 100
         eventPlayer._extendedPlayerCollection[21] += 1
-
-
-rule "[lucio.del] Speedboost":
-    @Event eachPlayer
-    @Hero lucio
-    @Condition eventPlayer.isUsingAbility2() == true
-    
-    LucioSpeedBoost()
-
-
-rule "[lucio.del] Speedboost (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.LUCIO
-    @Condition eventPlayer.isUsingAbility2() == true
-    
-    LucioSpeedBoost()

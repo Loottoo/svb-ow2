@@ -20,7 +20,7 @@ globalvar cIndex
 globalvar c_0
 globalvar cIndex_0
 globalvar MoveSpeed
-
+globalvar UltChargeReqArray
 
 #Player variables
 
@@ -28,7 +28,6 @@ playervar _extendedPlayerCollection
 playervar SupportHealingID
 playervar DamageMoveSpeedID
 playervar NextUltCharge
-playervar HeroActive
 playervar HeroEffects
 playervar HeroTexts
 playervar HeroHealthPools
@@ -69,69 +68,52 @@ playervar Direction
 playervar SoundbarrierCalculation
 playervar SpeedboostBonus
 playervar Index
+playervar DuplicateTimer
+playervar DuplicateFacing
+playervar DuplicateVals
+playervar DuplicatePassiveCharge
 
 
 #Subroutine names
 
-subroutine InitialBaptiste
-subroutine CleanupBaptiste
+
+#subroutines CleanupHERO declared in resets
+#subroutines CleanSlate declared in resets
+#subroutines InitialHERO declared in resets
+
+
+#subroutine InitialBaptiste
+#subroutine CleanupBaptiste
 subroutine CleanupEffects
 subroutine CleanupHealingMods
 subroutine CleanupMoveSpeedMods
-subroutine BaptisteCastIF
 subroutine SlowdownBaptiste
 subroutine ReturnBaptisteToNormalSpeed
-subroutine InitialReinhardt
-subroutine CleanupReinhardt
+#subroutine InitialReinhardt
+#subroutine CleanupReinhardt
 subroutine CleanupHealthPools
 subroutine CleanupTexts
-subroutine ReinhardtChargeCancelling
-subroutine ReinhardtLowerChargeCooldown
-subroutine ReinhardtRefreshFirestrike
-subroutine ReinhardtFirestrikeRecharge
-subroutine ReinhardtDetectFacingAngle
-subroutine InitialWinston
-subroutine CleanupWinston
-subroutine InitialWidowmaker
-subroutine CleanupWidowmaker
+#subroutine InitialWinston
+#subroutine CleanupWinston
+#subroutine InitialWidowmaker
+#subroutine CleanupWidowmaker
 subroutine CleanupDamageMods
-subroutine InitialOrisa
-subroutine CleanupOrisa
-subroutine OrisaDecreaseMovementPenalty
-subroutine OrisaGallop
-subroutine CreateHeroEffects
-subroutine OrisaUltimate
-subroutine InitialMercy
-subroutine CleanupMercy
-subroutine MercyDegenerateBeam
-subroutine MercyRegenerateBeam
-subroutine MercyUpdateDegeneration
-subroutine MercyClearLastTarget
-subroutine MercyAngelicBlessing
-subroutine MercyAngelicBlessingOutline
-subroutine InitialSymmetra
-subroutine CleanupSymmetra
-subroutine SymmetraLightCloneUlt
-subroutine CreateSymmetraBotEffects
-subroutine UpdateSymmetraAI
+#subroutine InitialOrisa
+#subroutine CleanupOrisa
+#subroutine InitialMercy
+#subroutine CleanupMercy
+#subroutine InitialSymmetra
+#subroutine CleanupSymmetra
 subroutine FlankerSetup
 subroutine FlankerCleanup
-subroutine InitialSombra
-subroutine CleanupSombra
-subroutine SombraProjectileHit
-subroutine SombraLaunchProjectile
-subroutine InitialLucio
-subroutine CleanupLucio
-subroutine LucioSoundbarrier
-subroutine LucioSpeedBoost
-subroutine InitialMccree
-subroutine CleanupMccree
-subroutine InitialZarya
-subroutine CleanupZarya
-subroutine ZaryaRefreshBubble
-subroutine ZaryaBubbleRecharge
-subroutine ZaryaBubbleEnable
-subroutine ZaryaBubbleDisable
+#subroutine InitialSombra
+#subroutine CleanupSombra
+#subroutine InitialLucio
+#subroutine CleanupLucio
+#subroutine InitialMccree
+#subroutine CleanupMccree
+#subroutine InitialZarya
+#subroutine CleanupZaryaZ
 
 
 #!extension buffStatusEffects
@@ -149,13 +131,14 @@ rule "Initial Global":
     ForbiddenUltimateHeroes = [Hero.DOOMFIST, Hero.DVA, Hero.PHARAH, Hero.JUNKRAT]
     ForbiddenAbility1Heroes = [Hero.REINHARDT, Hero.TRACER]
     ForbiddenAbility2Heroes = [Hero.TRACER]
+    UltChargeReqArray = [2100, 1260, 1820, 1680, 2142, 1540, 2100, 1540, 1540, 2310, 1680, 2310, 1932, 1800, 1680, 1925, 2100, 2310, 2940, 1540, 1610, 1400, 1680, 2100, 1680, 2800, 2380, 1540, 2240, 1960, 2310, 1960]
+    progressBarHud(localPlayer if localPlayer.DuplicateTimer and localPlayer.isAlive() else null, localPlayer.DuplicateTimer * (100 / 15), "Duplicating: {0}".format(15 if localPlayer.DuplicateTimer > 15 else ceil(localPlayer.DuplicateTimer)), HudPosition.TOP, 3, Color.ORANGE, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
 
 
 rule "Initial Player":
     @Event eachPlayer
     
     eventPlayer.NextUltCharge = 5
-    eventPlayer.HeroActive = null
     eventPlayer.HeroEffects = []
     eventPlayer.HeroTexts = []
     eventPlayer.HeroHealthPools = []
@@ -240,20 +223,12 @@ def CleanupDamageMods():
 def FlankerCleanup():
     @Name "[flanker.del] Subroutine: Cleanup"
     
-    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
     CleanupMoveSpeedMods()
-    wait()
-    eventPlayer.HeroActive = null
 
 
 def FlankerSetup():
     @Name "[flanker.del] Subroutine: Setup"
     
-    waitUntil(eventPlayer.HeroActive == null, 9999)
-    if eventPlayer.HeroActive == eventPlayer.hero:
-        return
-    wait()
-    eventPlayer.HeroActive = eventPlayer.hero
     eventPlayer._extendedPlayerCollection[12] = 0
     while eventPlayer._extendedPlayerCollection[12] < len([].concat(eventPlayer)):
         LastMoveSpeedModificationID += 1
@@ -270,27 +245,11 @@ def FlankerSetup():
     async(FlankerCleanup, AsyncBehavior.NOOP)
 
 
-rule "[flanker.del] Initial Tracer":
-    @Event eachPlayer
-    @Hero tracer
+def InitialTracer():
+    @Name "[flanker.del] Subroutine: Initial Tracer"
     FlankerSetup()
 
 
-rule "[flanker.del] Initial Genji":
-    @Event eachPlayer
-    @Hero genji
-    FlankerSetup()
-
-
-rule "[flanker.del] Initial Tracer (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.TRACER
-    FlankerSetup()
-
-
-rule "[flanker.del] Initial Genji (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.GENJI
+def InitialGenji():
+    @Name "[flanker.del] Subroutine: Initial Genji"
     FlankerSetup()

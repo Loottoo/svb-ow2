@@ -88,14 +88,6 @@ rule "Disable original Ability":
     
     DisableAbility()
 
-rule "Disable original Ability (Echo)":
-    @Event eachPlayer
-    @Condition IcingOverwritesButton != null
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
-    
-    DisableAbility()
-
 
 def DeployIcing():
     @Name "[mei/icing.opy] Subroutine: Deploy Icing"
@@ -179,14 +171,6 @@ def DeployIcing():
 rule "Presses Ability":
   @Event eachPlayer
   @Hero mei
-  @Condition ((IcingOverwritesButton == Button.PRIMARY_FIRE and eventPlayer.isFiringPrimaryFire()) or (IcingOverwritesButton != Button.PRIMARY_FIRE and eventPlayer.isHoldingButton(IcingOverwritesButton))) == true
-
-  async(DeployIcing, AsyncBehavior.RESTART)
-
-rule "Presses Ability (Echo)":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
   @Condition ((IcingOverwritesButton == Button.PRIMARY_FIRE and eventPlayer.isFiringPrimaryFire()) or (IcingOverwritesButton != Button.PRIMARY_FIRE and eventPlayer.isHoldingButton(IcingOverwritesButton))) == true
 
   async(DeployIcing, AsyncBehavior.RESTART)

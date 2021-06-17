@@ -4,23 +4,14 @@
 def CleanupBaptiste():
   @Name "[baptiste.del] Subroutine: Cleanup"
   
-  waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
   CleanupEffects()
   eventPlayer.allowButton(Button.ABILITY_2)
   CleanupHealingMods()
   CleanupMoveSpeedMods()
-  wait()
-  eventPlayer.HeroActive = null
 
 
 def InitialBaptiste():
   @Name "[baptiste.del] Subroutine: Initial"
-  
-  waitUntil(eventPlayer.HeroActive == null, 9999)
-  if eventPlayer.HeroActive == Hero.BAPTISTE:
-      return
-  wait()
-  eventPlayer.HeroActive = Hero.BAPTISTE
   eventPlayer._extendedPlayerCollection[2] = 0
   while eventPlayer._extendedPlayerCollection[2] < len([].concat(eventPlayer)):
       LastMoveSpeedModificationID += 1
@@ -39,19 +30,3 @@ def InitialBaptiste():
   startHealingModification(eventPlayer, eventPlayer, 50, HealingReeval.RECEIVERS_AND_HEALERS)
   eventPlayer.HeroHealingModifications.append(getLastHealingModification())
   eventPlayer.disallowButton(Button.ABILITY_2)
-  async(CleanupBaptiste, AsyncBehavior.NOOP)
-
-
-rule "[baptiste.del] Initial":
-  @Event eachPlayer
-  @Hero baptiste
-  
-  InitialBaptiste()
-
-
-rule "[baptiste.del] Initial (Duplication)":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.BAPTISTE
-
-  InitialBaptiste()

@@ -8,7 +8,7 @@ def SlowdownBaptiste():
   eventPlayer.frac = 1
   chase(eventPlayer.frac, 0.25, duration=1, ChaseReeval.DESTINATION_AND_DURATION)
   while eventPlayer.frac > 0.25:
-      if not (eventPlayer.getCurrentHero() == Hero.BAPTISTE or eventPlayer.getHeroOfDuplication() == Hero.BAPTISTE):
+      if not (eventPlayer.getCurrentHero() == Hero.BAPTISTE):
           break
       _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = (4 * eventPlayer.frac * eventPlayer.frac * eventPlayer.frac if eventPlayer.frac < 0.5 else 1 - ((((-2 * eventPlayer.frac + 2) * (-2 * eventPlayer.frac + 2)) * (-2 * eventPlayer.frac + 2)) / 2)) * 100
       eventPlayer.setMoveSpeed((4 * eventPlayer.frac * eventPlayer.frac * eventPlayer.frac if eventPlayer.frac < 0.5 else 1 - ((((-2 * eventPlayer.frac + 2) * (-2 * eventPlayer.frac + 2)) * (-2 * eventPlayer.frac + 2)) / 2)) * 100)
@@ -24,7 +24,7 @@ def ReturnBaptisteToNormalSpeed():
   eventPlayer.frac_0 = 0.25
   chase(eventPlayer.frac_0, 1, duration=1, ChaseReeval.DESTINATION_AND_DURATION)
   while eventPlayer.frac_0 < 1:
-      if not (eventPlayer.getCurrentHero() == Hero.BAPTISTE or eventPlayer.getHeroOfDuplication() == Hero.BAPTISTE):
+      if not (eventPlayer.getCurrentHero() == Hero.BAPTISTE):
           break
       _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = (4 * eventPlayer.frac_0 * eventPlayer.frac_0 * eventPlayer.frac_0 if eventPlayer.frac_0 < 0.5 else 1 - ((((-2 * eventPlayer.frac_0 + 2) * (-2 * eventPlayer.frac_0 + 2)) * (-2 * eventPlayer.frac_0 + 2)) / 2)) * 100
       eventPlayer.setMoveSpeed((4 * eventPlayer.frac_0 * eventPlayer.frac_0 * eventPlayer.frac_0 if eventPlayer.frac_0 < 0.5 else 1 - ((((-2 * eventPlayer.frac_0 + 2) * (-2 * eventPlayer.frac_0 + 2)) * (-2 * eventPlayer.frac_0 + 2)) / 2)) * 100)
@@ -33,8 +33,11 @@ def ReturnBaptisteToNormalSpeed():
   stopChasingVariable(eventPlayer.frac_0)
 
 
-def BaptisteCastIF():
-  @Name "[baptiste.del] Subroutine: Cast Immortality Field"
+
+rule "[baptiste.del] Cast IF":
+  @Event eachPlayer
+  @Hero baptiste
+  @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
   
   if eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0:
       return
@@ -64,20 +67,3 @@ def BaptisteCastIF():
   async(ReturnBaptisteToNormalSpeed, AsyncBehavior.NOOP)
   waitUntil(not eventPlayer.isUsingAbility2(), 0.5)
   eventPlayer.setAbilityCooldown(Button.ABILITY_2, 25)
-
-
-rule "[baptiste.del] Cast IF":
-  @Event eachPlayer
-  @Hero baptiste
-  @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
-  
-  BaptisteCastIF()
-
-
-rule "[baptiste.del] Cast IF (Duplication)":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.BAPTISTE
-  @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
-  
-  BaptisteCastIF()

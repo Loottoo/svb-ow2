@@ -57,14 +57,6 @@ rule "Disable original Ultimate":
   
   eventPlayer.disallowButton(Button.ULTIMATE)
 
-rule "Disable original Ultimate (Echo)":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
-  @Condition AvalancheEnabled == true
-  
-  eventPlayer.disallowButton(Button.ULTIMATE)
-
 def DeployAvalanche():
   @Name "[mei/avalanche.opy] Subroutine: Deploy Avalanche"
 
@@ -95,14 +87,6 @@ def DeployAvalanche():
 rule "Player presses Ultimate":
   @Event eachPlayer
   @Hero mei
-  @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
-
-  async(DeployAvalanche, AsyncBehavior.RESTART)
-
-rule "Player presses Ultimate (Echo)":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.MEI
   @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
 
   async(DeployAvalanche, AsyncBehavior.RESTART)

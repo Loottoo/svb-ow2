@@ -8,7 +8,6 @@ globalvar musicMeterDrain = createWorkshopSetting(int[1:100], "Lucio", "Music Me
 def CleanupLucio():
     @Name "[lucio.del] Subroutine: Cleanup"
     
-    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
     CleanupTexts()
     CleanupHealingMods()
     CleanupEffects()
@@ -18,18 +17,11 @@ def CleanupLucio():
     stopChasingVariable(eventPlayer.WallrideTimer)
     eventPlayer.WallrideTimer = 0
     eventPlayer.MusicMeter = 0
-    wait()
-    eventPlayer.HeroActive = null
 
 
 def InitialLucio():
     @Name "[lucio.del] Subroutine: Initial"
     
-    waitUntil(eventPlayer.HeroActive == null, 9999)
-    if eventPlayer.HeroActive == Hero.LUCIO:
-        return
-    wait()
-    eventPlayer.HeroActive = Hero.LUCIO
     #Healing mod
     startHealingModification(getPlayers(eventPlayer.getTeam()), eventPlayer, 100 + (0 * (1 - eventPlayer.MusicMeter / 100) + 20 * (eventPlayer.MusicMeter / 100) if eventPlayer.isUsingAbility2() and eventPlayer.MusicMeter >= musicMeterGain else 0), HealingReeval.RECEIVERS_HEALERS_AND_HEALPERCENT)
     eventPlayer.HeroHealingModifications.append(getLastHealingModification())
@@ -60,19 +52,3 @@ def InitialLucio():
             eventPlayer._extendedPlayerCollection[17] += 1
         eventPlayer.HeroMoveSpeedModifications.append(LastMoveSpeedModificationID)
         eventPlayer.Index += 1
-    async(CleanupLucio, AsyncBehavior.NOOP)
-
-
-rule "[lucio.del] Initial":
-    @Event eachPlayer
-    @Hero lucio
-    
-    InitialLucio()
-
-
-rule "[lucio.del] Initial (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.LUCIO
-    
-    InitialLucio()
