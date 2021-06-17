@@ -1,8 +1,10 @@
 #!mainFile "../../main.opy"
 
 
-def LucioSoundbarrier():
-    @Name "[lucio.del] Subroutine: Soundbarrier"
+rule "[lucio.del] Soundbarrier":
+    @Event eachPlayer
+    @Hero lucio
+    @Condition eventPlayer.isUsingUltimate() == true
     
     eventPlayer.SoundbarrierCalculation = round((750 * (100 + (max(10, min(10 * (1 - eventPlayer.MusicMeter / 100) + 20 * (eventPlayer.MusicMeter / 100), 20))))) / 100 - 750) if eventPlayer.MusicMeter >= musicMeterGain else 0
     waitUntil(eventPlayer.getHealthOfType(Health.SHIELDS) > 0 or not eventPlayer.isUsingUltimate(), 9999)
@@ -19,20 +21,3 @@ def LucioSoundbarrier():
     wait(6 + eventPlayer.SoundbarrierCalculation / 125)
     CleanupHealthPools()
     CleanupEffects()
-
-
-rule "[lucio.del] Soundbarrier":
-    @Event eachPlayer
-    @Hero lucio
-    @Condition eventPlayer.isUsingUltimate() == true
-    
-    LucioSoundbarrier()
-
-
-rule "[lucio.del] Soundbarrier (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.LUCIO
-    @Condition eventPlayer.isUsingUltimate() == true
-    
-    LucioSoundbarrier()

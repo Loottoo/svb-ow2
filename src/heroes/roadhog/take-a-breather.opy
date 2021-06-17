@@ -23,15 +23,6 @@ rule "[Roadhog] Take a breather":
     async(RoadhogTakeABreather, AsyncBehavior.NOOP)
 
 
-rule "[Roadhog]§ Take a breather":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ROADHOG
-    @Condition eventPlayer.isUsingAbility2() == true
-    
-    async(RoadhogTakeABreather, AsyncBehavior.NOOP)
-
-
 def RoadhogTakeABreather():
     @Name "[Sub][Roadhog] Take a breather"
     
@@ -67,18 +58,6 @@ def RoadhogTakeABreather():
 rule "[Roadhog] Cloud healing":
     @Event eachPlayer
     @Hero roadhog
-    @Condition eventPlayer.roadhogCloudEntity != []
-    
-    RoadhogCloudHealing()
-    wait(1)
-    if RULE_CONDITION:
-        goto RULE_START
-
-
-rule "[Roadhog]§ Cloud healing":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ROADHOG
     @Condition eventPlayer.roadhogCloudEntity != []
     
     RoadhogCloudHealing()

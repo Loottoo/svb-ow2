@@ -14,16 +14,3 @@ rule "Zarya is firing primary":
     waitUntil(eventPlayer.isFiringPrimaryFire() != true, 10)
 
     eventPlayer.setDamageDealt(100)
-
-
-rule "Zarya is firing primary":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ZARYA
-    @Condition eventPlayer.isFiringPrimaryFire()
-    
-    eventPlayer.setDamageDealt(100 - zaryaReducePrimaryPercentage)
-  
-    waitUntil(eventPlayer.isFiringPrimaryFire() != true, 10)
-  
-    eventPlayer.setDamageDealt(100)

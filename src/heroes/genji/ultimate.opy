@@ -29,18 +29,6 @@ rule "[Genji] Detect Nano (only if no heal event was detected)":
   if eventDamage != 0.001 / 10:
       victim.nanoTarget = eventPlayer
 
-
-rule "[Genji]§ Detect Nano (only if no heal event was detected)":
-  @Event playerTookDamage
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.GENJI
-  @Condition eventAbility == null
-  @Condition attacker.getTeam() == eventPlayer.getTeam()
-  @Condition attacker.getCurrentHero() == Hero.ANA
-  
-  if eventDamage != 0.001 / 10:
-      victim.nanoTarget = eventPlayer
-
 rule "[Genji] Detected Nano+blade":
   @Event eachPlayer
   @Hero genji
@@ -48,17 +36,6 @@ rule "[Genji] Detected Nano+blade":
   @Condition eventPlayer.nanoTarget == eventPlayer
   
   async(UsedNanoBlade, AsyncBehavior.NOOP)
-
-
-rule "[Genji]§ Detected Nano+blade":
-  @Event eachPlayer
-  @Hero echo
-  @Condition eventPlayer.getHeroOfDuplication() == Hero.GENJI
-  @Condition eventPlayer.isUsingUltimate() == true
-  @Condition eventPlayer.nanoTarget == eventPlayer
-  
-  async(UsedNanoBlade, AsyncBehavior.NOOP)
-
 
 def UsedNanoBlade():
   @Name "[Sub][Genji] Detected Nano+blade"

@@ -5,23 +5,12 @@ globalvar symmetraCloneDamageDealt = createWorkshopSetting(int[0:200], "Symmetra
 globalvar symmetraCloneDuration = createWorkshopSetting(int[0:20], "Symmetra", "Light Clone duration", 12, 0)
 
 
-def CreateSymmetraBotEffects():
-    @Name "[symmetra.del] Subroutine: Create Clone Effects"
-    
-    wait(0.1)
-    createEffect(getAllPlayers(), Effect.ECHO_CLONING, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    wait(0.1)
-    createEffect(getAllPlayers(), Effect.WINSTON_TESLA_CANNON_TARGET_SOUND, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 700, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    wait(0.1)
-    for eventPlayer.Index in range(3):
-        createEffect(getAllPlayers(), Effect.BAD_AURA, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 0, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.HeroEffects.append(getLastCreatedEntity())
-
-
-def SymmetraLightCloneUlt():
-    @Name "[symmetra.del] Subroutine: Ult"
+rule "[symmetra.del] Light Clone Ult":
+    @Event eachPlayer
+    @Hero symmetra
+    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.getUltCharge() == 100
     
     eventPlayer.setUltCharge(0)
     eventPlayer.setUltEnabled(false)
@@ -44,7 +33,14 @@ def SymmetraLightCloneUlt():
     eventPlayer.SymmetraBotPlayer.setUltEnabled(false)
     eventPlayer.SymmetraBotPlayer.teleport(eventPlayer.getPosition())
     wait(0.08)
-    async(CreateSymmetraBotEffects, AsyncBehavior.NOOP)
+    #Create effects
+    createEffect(getAllPlayers(), Effect.ECHO_CLONING, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.HeroEffects.append(getLastCreatedEntity())
+    createEffect(getAllPlayers(), Effect.WINSTON_TESLA_CANNON_TARGET_SOUND, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 700, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.HeroEffects.append(getLastCreatedEntity())
+    for eventPlayer.Index in range(3):
+        createEffect(getAllPlayers(), Effect.BAD_AURA, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer, 0, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.HeroEffects.append(getLastCreatedEntity())
     #Casting
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer.getPosition(), 10)
     playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_DISAPPEAR_SOUND, eventPlayer.getTeam(), eventPlayer.SymmetraBotPlayer.getEyePosition(), 500)
@@ -64,18 +60,10 @@ def SymmetraLightCloneUlt():
     CleanupEffects()
 
 
-rule "[symmetra.del] Light Clone Ult":
+rule "[symmetra.del] Light Clone AI":
     @Event eachPlayer
     @Hero symmetra
-    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.getUltCharge() == 100
-    
-    SymmetraLightCloneUlt()
-
-
-def UpdateSymmetraAI():
-    @Name "[symmetra.del] Subroutine: Update Symmetra AI"
+    @Condition entityExists(eventPlayer.SymmetraBotPlayer) == true
     
     #Mirror the player's movement
     eventPlayer.SymmetraBotPlayer.startThrottleInDirection(directionTowards(worldVector(vect(0, 0, 0), eventPlayer, Transform.ROTATION_AND_TRANSLATION), worldVector(vect(-1 * eventPlayer.getThrottle().x, 0, eventPlayer.getThrottle().z), eventPlayer, Transform.ROTATION_AND_TRANSLATION)), eventPlayer.getHorizontalSpeed(), Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
@@ -117,28 +105,3 @@ def UpdateSymmetraAI():
         wait()
 
 
-rule "[symmetra.del] Light Clone AI":
-    @Event eachPlayer
-    @Hero symmetra
-    @Condition entityExists(eventPlayer.SymmetraBotPlayer) == true
-    
-    UpdateSymmetraAI()
-
-
-rule "[symmetra.del] Light Clone Ult (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.SYMMETRA
-    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
-    @Condition eventPlayer.getUltCharge() == 100
-    
-    SymmetraLightCloneUlt()
-
-
-rule "[symmetra.del] Light Clone AI (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.SYMMETRA
-    @Condition entityExists(eventPlayer.SymmetraBotPlayer) == true
-    
-    UpdateSymmetraAI()

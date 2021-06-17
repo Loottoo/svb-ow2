@@ -22,21 +22,13 @@ playervar p_ZapCharges
 def CleanupWinston():
     @Name "[winston.del] Subroutine: Cleanup"
     
-    waitUntil(eventPlayer.getCurrentHero() != evalOnce(eventPlayer.getCurrentHero()) or eventPlayer.getHeroOfDuplication() != evalOnce(eventPlayer.getHeroOfDuplication()), 9999)
     CleanupHealthPools()
     CleanupTexts()
-    wait()
-    eventPlayer.HeroActive = null
 
 
 def InitialWinston():
     @Name "[winston.del] Subroutine: Initial"
     
-    waitUntil(eventPlayer.HeroActive == null, 9999)
-    if eventPlayer.HeroActive == Hero.WINSTON:
-        return
-    wait()
-    eventPlayer.HeroActive = Hero.WINSTON
     #Character setup
     eventPlayer.addHealthPool(Health.NORMAL, 110.714 if eventPlayer.isUsingUltimate() else 75, true, true)
     eventPlayer.HeroHealthPools.append(getLastCreatedHealthPool())
@@ -47,19 +39,4 @@ def InitialWinston():
     eventPlayer.HeroTexts.append(getLastCreatedText())
     hudText(eventPlayer, ceil(ZapCooldown - eventPlayer.ZapChargeMeter) if eventPlayer.p_ZapCharges == 0 else iconString(Icon.BOLT), null, "{0}".format(buttonString(Button.SECONDARY_FIRE)), HudPosition.RIGHT, 21, Color.RED if eventPlayer.p_ZapCharges == 0 else Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_SORT_ORDER_STRING_AND_COLOR, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
-    async(CleanupWinston, AsyncBehavior.NOOP)
 
-
-rule "[winston.del] Initial":
-    @Event eachPlayer
-    @Hero winston
-    
-    InitialWinston()
-
-
-rule "[winston.del] Initial (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.WINSTON
-    
-    InitialWinston()

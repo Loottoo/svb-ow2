@@ -6,21 +6,10 @@ globalvar orisaGallopDelay = createWorkshopSetting(float[0:2], "Orisa", "Gallop 
 globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time gallop damage dealt", 75, 2)
 
 
-def CreateHeroEffects():
-    @Name "[orisa.del] Subroutine: Create Effects"
-    
-    createEffect(getPlayers(eventPlayer.getTeam()), Effect.GOOD_AURA, Color.LIME_GREEN, updateEveryTick(eventPlayer.getEyePosition()), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    createEffect(getPlayers(getOppositeTeam(eventPlayer.getTeam())), Effect.GOOD_AURA, Color.RED, updateEveryTick(eventPlayer.getEyePosition()), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition()), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    createEffect(getAllPlayers(), Effect.ENERGY_SOUND, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition()), 500, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-
-
-def OrisaGallop():
-    @Name "[orisa.del] Subroutine: Gallop"
+rule "[orisa.del] Gallop":
+    @Event eachPlayer
+    @Hero orisa
+    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
     
     if eventPlayer.CastingUltimate:
         return
@@ -42,7 +31,15 @@ def OrisaGallop():
     eventPlayer.startCamera(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 30)
     wait()
     eventPlayer.startCamera(raycast(worldVector(vect(0, 0, 0), eventPlayer, Transform.ROTATION_AND_TRANSLATION), worldVector(vect(0, 3, -2), eventPlayer, Transform.ROTATION_AND_TRANSLATION), getAllPlayers(), eventPlayer, true).getHitPosition(), worldVector(vect(0, 3, 0), eventPlayer, Transform.ROTATION_AND_TRANSLATION), 30)
-    async(CreateHeroEffects, AsyncBehavior.NOOP)
+    #Create effects
+    createEffect(getPlayers(eventPlayer.getTeam()), Effect.GOOD_AURA, Color.LIME_GREEN, updateEveryTick(eventPlayer.getEyePosition()), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.HeroEffects.append(getLastCreatedEntity())
+    createEffect(getPlayers(getOppositeTeam(eventPlayer.getTeam())), Effect.GOOD_AURA, Color.RED, updateEveryTick(eventPlayer.getEyePosition()), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.HeroEffects.append(getLastCreatedEntity())
+    createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition()), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.HeroEffects.append(getLastCreatedEntity())
+    createEffect(getAllPlayers(), Effect.ENERGY_SOUND, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition()), 500, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.HeroEffects.append(getLastCreatedEntity())
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, eventPlayer.getTeam(), eventPlayer.getEyePosition(), 500)
     playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, eventPlayer.getTeam(), eventPlayer.getEyePosition(), 500)
     #Casting
@@ -95,22 +92,6 @@ def OrisaGallop():
     eventPlayer.setAbility2Enabled(true)
     eventPlayer.allowButton(Button.ULTIMATE)
 
-
-rule "[orisa.del] Gallop":
-    @Event eachPlayer
-    @Hero orisa
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
-    
-    OrisaGallop()
-
-
-rule "[orisa.del] Gallop (Duplicate)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ORISA
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
-    
-    OrisaGallop()
 
 rule "[orisa.del] Galloping Knockback":
     @Event playerTookDamage

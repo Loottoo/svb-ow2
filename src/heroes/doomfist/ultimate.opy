@@ -9,14 +9,3 @@ rule "Meteor Strike":
     eventPlayer.setPrimaryFireEnabled(true)
     waitUntil(not eventPlayer.isUsingUltimate(), 99999)
     eventPlayer.setPrimaryFireEnabled(false)
-
-    
-rule "Meteor Strike - ECHO":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.isUsingUltimate() == true
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.DOOMFIST
-    
-    eventPlayer.setPrimaryFireEnabled(true)
-    waitUntil(not eventPlayer.isUsingUltimate(), 99999)
-    eventPlayer.setPrimaryFireEnabled(false)

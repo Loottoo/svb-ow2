@@ -9,8 +9,11 @@ globalvar sombraHackCooldown = createWorkshopSetting(float[0:30], "Sombra", "Hac
 #!define ProjectileInLOS(sens) (isInLoS(eventPlayer.getEyePosition(), eventPlayer.SombraSelectedTarget.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) or isInLoS(eventPlayer.getEyePosition() + worldVector(vect(sens, 0, 0), eventPlayer, Transform.ROTATION), eventPlayer.SombraSelectedTarget.getEyePosition() + worldVector(vect(-sens, 0, 0), eventPlayer, Transform.ROTATION), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) or isInLoS(eventPlayer.getEyePosition() + worldVector(vect(-sens, 0, 0), eventPlayer, Transform.ROTATION), eventPlayer.SombraSelectedTarget.getEyePosition() + worldVector(vect(sens, 0, 0), eventPlayer, Transform.ROTATION), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
 
 
-def SombraProjectileHit():
-    @Name "[sombra.del] Subroutine: Projectile Hit"
+rule "[sombra.del] Projectile Hit":
+    @Event eachPlayer
+    @Hero sombra
+    @Condition eventPlayer.SombraProjectilePosition != null
+    @Condition (distance(eventPlayer.SombraSelectedTarget.getEyePosition(), eventPlayer.SombraProjectilePosition) < 1 or isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.PASS_THROUGH_BARRIERS) and not isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()) < 5) == true
     
     eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, sombraHackCooldown)
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
@@ -29,19 +32,14 @@ def SombraProjectileHit():
     eventPlayer.SombraSelectedTarget = null
 
 
-rule "[sombra.del] Projectile Hit":
+rule "[sombra.del] Launch Projectile":
     @Event eachPlayer
     @Hero sombra
-    @Condition eventPlayer.SombraProjectilePosition != null
-    @Condition (distance(eventPlayer.SombraSelectedTarget.getEyePosition(), eventPlayer.SombraProjectilePosition) < 1 or isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.PASS_THROUGH_BARRIERS) and not isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()) < 5) == true
+    @Condition eventPlayer.isFiringSecondaryFire() == true
+    @Condition eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0
+    @Condition ((sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 30) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]) == true
     
-    SombraProjectileHit()
-
-
-def SombraLaunchProjectile():
-    @Name "[sombra.del] Subroutine: Launch Projectile"
-    
-    eventPlayer.SombraSelectedTarget = (sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 30) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]
+    eventPlayer.SombraSelectedTarget = (sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 30) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]
     #Check if we can target the enemy
     waitUntil(not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) <= 16 and ProjectileInLOS(0.25), 9999)
     if not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) > 16 or not entityExists(eventPlayer.SombraSelectedTarget) or not ProjectileInLOS(0.25):
@@ -50,34 +48,3 @@ def SombraLaunchProjectile():
     eventPlayer.setSecondaryFireEnabled(false)
     eventPlayer.SombraProjectilePosition = eventPlayer.getEyePosition()
     chase(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition(), rate=50, ChaseReeval.DESTINATION_AND_RATE)
-
-
-rule "[sombra.del] Launch Projectile":
-    @Event eachPlayer
-    @Hero sombra
-    @Condition eventPlayer.isFiringSecondaryFire() == true
-    @Condition eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0
-    @Condition ((sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 30) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]) == true
-    
-    SombraLaunchProjectile()
-
-
-rule "[sombra.del] Projectile Hit (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.SOMBRA
-    @Condition eventPlayer.SombraProjectilePosition != null
-    @Condition (distance(eventPlayer.SombraSelectedTarget.getEyePosition(), eventPlayer.SombraProjectilePosition) < 1 or isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.PASS_THROUGH_BARRIERS) and not isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()) < 5) == true
-    
-    SombraProjectileHit()
-
-
-rule "[sombra.del] Launch Projectile (Duplication)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.SOMBRA
-    @Condition eventPlayer.isFiringSecondaryFire() == true
-    @Condition eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0
-    @Condition ((sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 30) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes or i.getHeroOfDuplication() in ForbiddenUltimateHeroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]) == true
-    
-    SombraLaunchProjectile()

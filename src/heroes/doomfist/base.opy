@@ -8,10 +8,8 @@ playervar DFPunchCharge
 playervar Punching
 
 
-rule "Doomfist Init":
-    @Event eachPlayer
-    @Condition eventPlayer.hero == Hero.DOOMFIST
-
+def InitialDoomfist():
+    @Name "[Sub] Initial Doomfist"
     eventPlayer.Punching = false
 
 rule "Rocket Punch and Meteor Strike Damage, Plus Vertical Punch Damage Checks":

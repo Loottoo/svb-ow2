@@ -1,8 +1,10 @@
 #!mainFile "../../main.opy"
 
 
-def OrisaUltimate():
-    @Name "[orisa.del] Subroutine: Ultimate"
+rule "[orisa.del] Ultimate":
+    @Event eachPlayer
+    @Hero orisa
+    @Condition eventPlayer.isUsingUltimate() == true
     
     eventPlayer.TemporaryCooldown = eventPlayer.getAbilityCooldown(Button.ABILITY_2)
     eventPlayer.CastingUltimate = true
@@ -20,20 +22,3 @@ def OrisaUltimate():
     eventPlayer.setProjectileGravity(100)
     eventPlayer.setProjectileSpeed(125)
     eventPlayer.CastingUltimate = false
-
-
-rule "[orisa.del] Ultimate":
-    @Event eachPlayer
-    @Hero orisa
-    @Condition eventPlayer.isUsingUltimate() == true
-    
-    OrisaUltimate()
-
-
-rule "[orisa.del] Ultimate (Duplicate)":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.ORISA
-    @Condition eventPlayer.isUsingUltimate() == true
-    
-    OrisaUltimate()

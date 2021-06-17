@@ -8,12 +8,12 @@ subroutine setRolePassiveMovementSpeed
 def setRolePassiveMovementSpeed():
   @Name "Subroutine - set movementspeed based on role passive"
 
-  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() or eventPlayer.getHeroOfDuplication() in getDamageHeroes() else 100)
+  eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100)
 
 
 rule "[all.del] Damage Passive":
   @Event eachPlayer
-  @Condition (eventPlayer.getCurrentHero() in getDamageHeroes() or eventPlayer.getHeroOfDuplication() in getDamageHeroes()) == true
+  @Condition (eventPlayer.getCurrentHero() in getDamageHeroes()) == true
   
   if not eventPlayer.DamageMoveSpeedID:
       eventPlayer._extendedPlayerCollection[0] = 0
@@ -33,11 +33,9 @@ rule "[all.del] Damage Passive":
   
   setRolePassiveMovementSpeed() # Temp fix for movementspeed not applying cause I don't get what's going on here
 
-  waitUntil(not eventPlayer.getCurrentHero() in getDamageHeroes() and not eventPlayer.getHeroOfDuplication() in getDamageHeroes() or eventPlayer.getCurrentHero() == Hero.ECHO and eventPlayer.isDuplicatingAHero() and not eventPlayer.getHeroOfDuplication() in getDamageHeroes(), 9999)
+  waitUntil(not eventPlayer.getCurrentHero() in getDamageHeroes(), 9999)
   _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.DamageMoveSpeedID])[0]] = 100
   
   setRolePassiveMovementSpeed() # Temp fix for movementspeed not applying cause I don't get what's going on here
 
-  waitUntil(eventPlayer.getCurrentHero() == Hero.ECHO and not eventPlayer.isDuplicatingAHero() or not eventPlayer.getCurrentHero() in getDamageHeroes(), 9999)
-  if eventPlayer.getCurrentHero() == Hero.ECHO and not eventPlayer.isDuplicatingAHero():
-      goto RULE_START
+  waitUntil(not eventPlayer.getCurrentHero() in getDamageHeroes(), 9999)

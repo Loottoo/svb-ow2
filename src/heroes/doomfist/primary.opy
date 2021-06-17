@@ -22,27 +22,3 @@ rule "Primary Damage":
     wait()
     if RULE_CONDITION:
         goto RULE_START
-
-        
-rule "Primary Damage - ECHO":
-    @Event eachPlayer
-    @Hero echo
-    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == true
-    @Condition (not eventPlayer.isMeleeing()) == true
-    @Condition (not eventPlayer.isUsingAbility1() and not eventPlayer.isUsingAbility2() and not eventPlayer.isUsingUltimate() and not eventPlayer.isFiringSecondaryFire()) == true
-    @Condition (not (eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or false)) == true
-    @Condition eventPlayer.getAmmo(0) > 0
-    @Condition eventPlayer.getHeroOfDuplication() == Hero.DOOMFIST
-    @Condition (not eventPlayer.Punching) == true
-    
-    eventPlayer.setPrimaryFireEnabled(true)
-    eventPlayer.setDamageDealt(900 / 6.6)
-    eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
-    eventPlayer.setDamageDealt(100)
-    eventPlayer.setPrimaryFireEnabled(false)
-    wait(0.333)
-    if RULE_CONDITION:
-        goto RULE_START
-    wait()
-    if RULE_CONDITION:
-        goto RULE_START
