@@ -180,22 +180,12 @@ rule "Player is on Icing and Icing Type is set to slide":
     @Condition IcingType == 0
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer.AvalancheTimer != true
-    @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
-
+    @Condition any([len(player.IcingStepPositions) > 0 for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())]) == true
+    @Condition any([distance(eventPlayer, player) < IcingRadius for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())[0].IcingStepPositions]) == true
+    
     eventPlayer.InIcingOfPlayer = ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI and len(player.IcingStepPositions) > 0])[0]
-
-    # Accelerate in current moving direction
-    eventPlayer.startAcceleration(
-        directionTowards(
-            vect(0, 0, 0),
-            evalOnce(eventPlayer.getThrottle() if eventPlayer.getThrottle() != vect(0, 0, 0) else vect(0, 0, 1))
-        ),
-        400,
-        200,
-        Relativity.TO_PLAYER,
-        AccelReeval.NONE
-    )
-
+    #Accelerate in current moving direction
+    eventPlayer.startAcceleration(directionTowards(vect(0, 0, 0), evalOnce(eventPlayer.getThrottle() if eventPlayer.getThrottle() != vect(0, 0, 0) else vect(0, 0, 1))), 400, 200, Relativity.TO_PLAYER, AccelReeval.NONE)
     eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 0)
 
     ChaseIcingSpeed()
@@ -205,8 +195,9 @@ rule "Player is not on icing and Icing Type is set to slide":
     @Event eachPlayer
     @Condition IcingType == 0
     @Condition eventPlayer.AvalancheTimer != true
-    @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius * 1.2 for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.getCurrentHero() == Hero.MEI]).IcingStepPositions])) == false
-
+    @Condition eventPlayer.InIcingOfPlayer != null
+    @Condition any([distance(eventPlayer, player) < IcingRadius * 1.2 for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())[0].IcingStepPositions]) == false
+    
     wait(0.064)
     eventPlayer.stopAcceleration()
     eventPlayer.InIcingOfPlayer = null
