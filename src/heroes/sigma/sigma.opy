@@ -24,6 +24,7 @@ rule "Global Sigma Config Init":
 def InitialSigma():
     
     eventPlayer.disallowButton(Button.SECONDARY_FIRE)
+    eventPlayer.addHealthPool(Health.SHIELDS, 50, true, false)
 
 
 def CleanupSigma():
