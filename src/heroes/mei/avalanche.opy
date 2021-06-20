@@ -45,26 +45,15 @@ rule "Avalanche Progress Bar HUD element":
   @Hero mei
   @Condition AvalancheEnabled == true
   
-  progressBarHud([i for i in eventPlayer if eventPlayer.AvalancheTimer], 100 / AvalancheDuration * eventPlayer.AvalancheTimer, "", HudPosition.TOP, 10, Color.AQUA, Color.AQUA, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+  progressBarHud([i for i in eventPlayer if eventPlayer.AvalancheTimer], 100 / AvalancheDuration * eventPlayer.AvalancheTimer, "", HudPosition.TOP, 10, Color.ORANGE, Color.ORANGE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
   #New lines to push the progress bar down
   hudSubheader([i for i in eventPlayer if eventPlayer.AvalancheTimer], " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
-rule "Disable original Ultimate":
+rule "Player uses Ultimate":
   @Event eachPlayer
   @Hero mei
-  @Condition AvalancheEnabled == true
-  
-  eventPlayer.disallowButton(Button.ULTIMATE)
-
-def DeployAvalanche():
-  @Name "[mei/avalanche.opy] Subroutine: Deploy Avalanche"
-
-  if AvalancheEnabled == false: return
-  if eventPlayer.isAlive() == false: return
-  if eventPlayer.isUsingAbility1() == true: return
-  if eventPlayer.AvalancheTimer == true: return
-  if (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.isDead()): return
+  @Condition eventPlayer.isUsingUltimate() == true
 
   eventPlayer.disallowButton(Button.ABILITY_1)
   eventPlayer.disallowButton(Button.ABILITY_2)
@@ -73,30 +62,27 @@ def DeployAvalanche():
   eventPlayer.disallowButton(Button.CROUCH)
 
   eventPlayer.cancelPrimaryAction()
+  
+  eventPlayer.applyImpulse(eventPlayer.getVelocity(), eventPlayer.getSpeed() * -1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
 
+  eventPlayer.applyImpulse(eventPlayer.getFacingDirection() * vect(1, 0, 1), 4.5, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+
+  #Start forcing the player forwards
+  eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0.01 if AvalancheTurnable else 0)
   #Set timer and chase it down
   eventPlayer.AvalancheTimer = AvalancheDuration
+  eventPlayer.AvalancheFacingDirection = eventPlayer.getFacingDirection()
+  eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, AvalancheTurnSpeed * 1.25, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
   chase(eventPlayer.AvalancheTimer, 0, duration=AvalancheDuration, ChaseReeval.DESTINATION_AND_DURATION)
-  #Communicate, for fun
-  eventPlayer.communicate(Comms.INCOMING)
   waitUntil(eventPlayer.hero != evalOnce(eventPlayer.hero), AvalancheDuration + 0.5)
   eventPlayer.setUltCharge(0)
   eventPlayer.AvalancheTimer = 0
-
-
-rule "Player presses Ultimate":
-  @Event eachPlayer
-  @Hero mei
-  @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
-
-  async(DeployAvalanche, AsyncBehavior.RESTART)
 
 rule "Player is using Avalanche":
   @Event eachPlayer
   @Condition eventPlayer.AvalancheTimer == true
   
   #Set initial facing direction
-  eventPlayer.AvalancheFacingDirection = eventPlayer.getFacingDirection()
   eventPlayer.PlayersInAvalanche = []
   #Set player to "Phased Out" so they don't collide with others and can't be hit, as well as clearing all debuffs
   eventPlayer.setStatusEffect(null, Status.PHASED_OUT, AvalancheDuration)
@@ -104,8 +90,6 @@ rule "Player is using Avalanche":
   async(ChaseAvalancheSpeed, AsyncBehavior.NOOP)
   async(ChaseAvalancheRadius, AsyncBehavior.NOOP)
   SetAvalancheCamera()
-  #Start forcing the player forwards
-  eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0.01 if AvalancheTurnable else 0)
   #Create a bunch of effects that make up the ability
   eventPlayer.AvalancheEffects = []
   #Spheres
@@ -125,6 +109,7 @@ rule "Player is using Avalanche":
   eventPlayer.AvalancheEffects = eventPlayer.AvalancheEffects.concat(getLastCreatedEntity())
   #Wait before clearing avalanche
   waitUntil(eventPlayer.AvalancheTimer == false, AvalancheDuration)
+  eventPlayer.stopFacing()
   ClearAvalanche()
 
 
@@ -132,7 +117,7 @@ def SetAvalancheCamera():
   @Name "Subroutine - Set Avalanche camera"
   
   #Force the player to third person
-  eventPlayer.startCamera(raycast(eventPlayer.getEyePosition() + Vector.UP * 0.5, eventPlayer.getEyePosition() + Vector.UP * 0.5 + eventPlayer.getFacingDirection() * -5, getAllPlayers(), eventPlayer, true).getHitPosition(), raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20, null, eventPlayer, false).getHitPosition(), 60)
+  eventPlayer.startCamera(updateEveryTick(raycast(eventPlayer.getEyePosition() + Vector.UP * 0.5, eventPlayer.getEyePosition() + Vector.UP * 0.5 + eventPlayer.getFacingDirection() * -5, getAllPlayers(), eventPlayer, true).getHitPosition()), updateEveryTick(raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20, null, eventPlayer, false).getHitPosition()), 60)
 
 
 def ChaseAvalancheSpeed():
@@ -230,29 +215,17 @@ def ExplodePlayersInAvalanche():
   #Clear array, just in case
   eventPlayer.PlayersInAvalanche = []
 
-
-rule "Avalanche is active, start facing direction":
-  @Event eachPlayer
-  @Condition eventPlayer.AvalancheTimer == true
-  
-  #Force facing direction of Mei in direction Avalanche was used
-  eventPlayer.startFacing(eventPlayer.AvalancheFacingDirection, AvalancheTurnSpeed * 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-  waitUntil(eventPlayer.AvalancheTimer != true, AvalancheDuration)
-  eventPlayer.stopFacing()
-
-
 rule "Avalanche is active and turnable, throttling":
   @Event eachPlayer
   @Condition AvalancheTurnable == true
   @Condition eventPlayer.AvalancheTimer == true
   @Condition eventPlayer.getThrottle().x != 0
 
+  wait(0.016, Wait.ABORT_WHEN_FALSE)
   eventPlayer.AvalancheFacingDirection = angleToDirection(
     horizontalAngleOfDirection(eventPlayer.AvalancheFacingDirection) + (eventPlayer.getThrottle().x * AvalancheTurnSpeed),
     eventPlayer.getVerticalFacingAngle()
   )
-
-  wait(0.016, Wait.ABORT_WHEN_FALSE)
   if RULE_CONDITION:
     goto RULE_START
 
@@ -271,12 +244,11 @@ rule "Avalanche is active, play sound":
 
 rule "Avalanche hit a wall":
   @Event eachPlayer
-  @Condition eventPlayer.AvalancheTimer == true
+  @Condition eventPlayer.AvalancheTimer < AvalancheDuration - 0.5
   @Condition eventPlayer.getSpeed() < 5 * (eventPlayer.AvalancheSpeed / 100)
   
   wait(0.1, Wait.ABORT_WHEN_FALSE)
   ClearAvalanche()
-  eventPlayer.setFacing(eventPlayer.AvalancheFacingDirection * -1, Relativity.TO_WORLD)
 
 
 rule "Player died while using Avalanche":
@@ -293,10 +265,9 @@ rule "Enemy is inside Avalanche":
   #If event player is near anyone using avalanche
   @Condition any([distance(eventPlayer.getPosition(), i.getPosition()) < i.AvalancheCurrentRadius * 1.25 for i in [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.AvalancheTimer]]) == true
   
-  getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())).PlayersInAvalanche = getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())).PlayersInAvalanche.concat(eventPlayer)
-  eventPlayer.attachTo(getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())), localVector(eventPlayer.getPosition(), getClosestPlayer(eventPlayer.getPosition(), getOppositeTeam(eventPlayer.getTeam())), Transform.ROTATION_AND_TRANSLATION))
+  (sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0].PlayersInAvalanche = (sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0].PlayersInAvalanche.concat(eventPlayer)
+  eventPlayer.attachTo((sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0], localVector(eventPlayer.getPosition(), (sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0], Transform.ROTATION_AND_TRANSLATION))
   eventPlayer.setStatusEffect(null, Status.FROZEN, 5)
-
 
 rule "Damage players inside of Avalanche":
   @Event eachPlayer
