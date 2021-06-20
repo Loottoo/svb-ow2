@@ -36,7 +36,9 @@
 
 #!include "heroes/ana/genjiNano.opy"
 
-#!include "heroes/hanzo/primary.opy"
+#!include "heroes/hanzo/hanzo.opy"
+
+#!include "heroes/sigma/sigma.opy"
 
 #!include "heroes/reaper/wraith-form.opy"
 

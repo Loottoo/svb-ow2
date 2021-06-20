@@ -86,7 +86,8 @@ def CleanSlate():
         eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
 
         eventPlayer.setMaxHealth(8/9 * 100 if eventPlayer.getCurrentHero() == Hero.MCCREE else 92.857 if eventPlayer.getCurrentHero() == Hero.WINSTON else 100)
-
+        eventPlayer.removeAllHealthPools()
+        
         eventPlayer.allowButton(Button.PRIMARY_FIRE)
         eventPlayer.allowButton(Button.SECONDARY_FIRE)
         eventPlayer.allowButton(Button.ABILITY_1)
