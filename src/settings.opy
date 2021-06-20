@@ -49,8 +49,9 @@ settings {
                 "secondaryFireMaximumTime%": 200
             },
             "hanzo": {
-                "projectileSpeed%": 115,
-                "ability2Quantity%": 4
+                "ability3Distance%": 135,
+                "ability2Cooldown%": 0,
+                "ability2Quantity%": 12
             },
             "junkrat": {
                 "ability2Cooldown%": 70
@@ -60,6 +61,9 @@ settings {
             },
             "reinhardt": {
                 "ability1Cooldown%": 80
+            },
+            "sigma": {
+                "ability1Cooldown%": 75
             }
         }
     },
