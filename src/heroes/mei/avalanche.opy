@@ -245,6 +245,7 @@ rule "Avalanche is active, play sound":
 rule "Avalanche hit a wall":
   @Event eachPlayer
   @Condition eventPlayer.AvalancheTimer < AvalancheDuration - 0.5
+  @Condition eventPlayer.AvalancheTimer != 0
   @Condition eventPlayer.getSpeed() < 5 * (eventPlayer.AvalancheSpeed / 100)
   
   wait(0.1, Wait.ABORT_WHEN_FALSE)
