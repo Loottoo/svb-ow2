@@ -13,6 +13,7 @@ def CleanupSombra():
     stopChasingVariable(eventPlayer.HackMelee)
     eventPlayer.HackMelee = 0
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
+    eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
 
 
 def InitialSombra():
