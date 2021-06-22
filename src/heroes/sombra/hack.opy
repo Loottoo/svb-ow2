@@ -22,6 +22,7 @@ rule "Hack Melee, but not if healthpack is only valid target":
         eventPlayer.allowButton(Button.SECONDARY_FIRE)
         eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
         waitUntil(eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) != 0 or ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive() and not player.hasStatusEffect(Status.INVINCIBLE) and not player.hasStatusEffect(Status.PHASED_OUT) and player in getPlayersInRadius(eventPlayer.getEyePosition(), 18, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) and player in eventPlayer.getPlayersInViewAngle(getOppositeTeam(eventPlayer.getTeam()), 50)]) != [], 99999)
+        eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
         eventPlayer.disallowButton(Button.SECONDARY_FIRE)
     else:
         eventPlayer.HackMelee = 0.001
