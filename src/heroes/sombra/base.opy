@@ -1,27 +1,21 @@
 #!mainFile "../../main.opy"
 
+playervar HackMelee
+playervar HackHit
+
+rule "Sombra hack melee effect":
+    createEffect([i for i in localPlayer if localPlayer.HackMelee != 0], Effect.GOOD_AURA, Color.PURPLE, updateEveryTick(localPlayer.getEyePosition() + localPlayer.getFacingDirection() * 0.5 + ((normalize(crossProduct(localPlayer.getFacingDirection(), Vector.UP)) * (0.3 - (((0.25 * (max(localPlayer.HackMelee - 0.075, 0))) * 1) / 0.075)) + (normalize(crossProduct(crossProduct(localPlayer.getFacingDirection(), Vector.UP), localPlayer.getFacingDirection())) * (-0.25 + 0.35 * (min(localPlayer.HackMelee * 1 / 0.075, 1)))) if localPlayer.HackMelee < 0.15 else normalize(crossProduct(localPlayer.getFacingDirection(), Vector.UP)) * 0.05 + normalize(crossProduct(crossProduct(localPlayer.getFacingDirection(), Vector.UP), localPlayer.getFacingDirection())) * 0.1 if localPlayer.HackMelee < 0.6 else normalize(crossProduct(localPlayer.getFacingDirection(), Vector.UP)) * (0.05 + (0.25 * (min(((localPlayer.HackMelee - 0.6) * 1) / 0.25, 1)))) + (normalize(crossProduct(crossProduct(localPlayer.getFacingDirection(), Vector.UP), localPlayer.getFacingDirection())) * (0.1 - (0.35 * (((max(localPlayer.HackMelee - 0.85, 0)) * 1) / 0.15))))) * 1)), 0.17, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+
 
 def CleanupSombra():
     @Name "[sombra.del] Subroutine: Cleanup"
     
-    CleanupEffects()
+    stopChasingVariable(eventPlayer.HackMelee)
+    eventPlayer.HackMelee = 0
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
-    eventPlayer.setSecondaryFireEnabled(true)
-    eventPlayer.SombraProjectilePosition = null
-    eventPlayer.SombraSelectedTarget = null
-    stopChasingVariable(eventPlayer.SombraProjectilePosition)
 
 
 def InitialSombra():
     @Name "[sombra.del] Subroutine: Initial"
-    
-    #Team Effects
-    createEffect(getPlayers(eventPlayer.getTeam()) if eventPlayer.SombraProjectilePosition != null else null, Effect.BAD_AURA, Color.PURPLE, updateEveryTick(eventPlayer.SombraProjectilePosition), 0, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    createEffect(getPlayers(eventPlayer.getTeam()) if eventPlayer.SombraProjectilePosition != null else null, Effect.ORB, Color.PURPLE, updateEveryTick(eventPlayer.SombraProjectilePosition), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    #Enemy Effects
-    createEffect(getPlayers(getOppositeTeam(eventPlayer.getTeam())) if eventPlayer.SombraProjectilePosition != null else null, Effect.BAD_AURA, Color.RED, updateEveryTick(eventPlayer.SombraProjectilePosition), 0, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
-    createEffect(getPlayers(getOppositeTeam(eventPlayer.getTeam())) if eventPlayer.SombraProjectilePosition != null else null, Effect.ORB, Color.RED, updateEveryTick(eventPlayer.SombraProjectilePosition), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    eventPlayer.HeroEffects.append(getLastCreatedEntity())
+
+    eventPlayer.disallowButton(Button.SECONDARY_FIRE)
