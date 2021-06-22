@@ -1,50 +1,53 @@
 #!mainFile "../../main.opy"
 
 
-globalvar sombraHackDuration = createWorkshopSetting(float[0:10], "Sombra", "Hack Duration", 2, 0)
-globalvar sombraHackCooldown = createWorkshopSetting(float[0:30], "Sombra", "Hack Cooldown", 10, 1)
-
-#!define AveragePosition(player) ((player.getEyePosition() + player.getPosition()) / 2)
-
-#!define ProjectileInLOS(sens) (isInLoS(eventPlayer.getEyePosition(), eventPlayer.SombraSelectedTarget.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) or isInLoS(eventPlayer.getEyePosition() + worldVector(vect(sens, 0, 0), eventPlayer, Transform.ROTATION), eventPlayer.SombraSelectedTarget.getEyePosition() + worldVector(vect(-sens, 0, 0), eventPlayer, Transform.ROTATION), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) or isInLoS(eventPlayer.getEyePosition() + worldVector(vect(-sens, 0, 0), eventPlayer, Transform.ROTATION), eventPlayer.SombraSelectedTarget.getEyePosition() + worldVector(vect(sens, 0, 0), eventPlayer, Transform.ROTATION), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
+globalvar sombraHackDuration = createWorkshopSetting(float[0:10], "Sombra", "Hack Duration", 5, 0)
+globalvar sombraHackCooldown = createWorkshopSetting(float[0:30], "Sombra", "Hack Cooldown", 8, 1)
 
 
-rule "[sombra.del] Projectile Hit":
+rule "Hack Melee, but not if healthpack is only valid target":
     @Event eachPlayer
     @Hero sombra
-    @Condition eventPlayer.SombraProjectilePosition != null
-    @Condition (distance(eventPlayer.SombraSelectedTarget.getEyePosition(), eventPlayer.SombraProjectilePosition) < 1 or isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.PASS_THROUGH_BARRIERS) and not isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()) < 5) == true
-    
-    eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, sombraHackCooldown)
-    eventPlayer.allowButton(Button.SECONDARY_FIRE)
-    eventPlayer.setSecondaryFireEnabled(true)
-    stopChasingVariable(eventPlayer.SombraProjectilePosition)
-    #If the projectile isn't blocked by a barrier or the target is not phased out, we can apply the hack status
-    if not eventPlayer.SombraSelectedTarget.hasStatusEffect(Status.PHASED_OUT) and not eventPlayer.SombraSelectedTarget.hasStatusEffect(Status.INVINCIBLE) and (not (isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.PASS_THROUGH_BARRIERS) and not isInLoS(eventPlayer.SombraProjectilePosition, eventPlayer.SombraProjectilePosition + directionTowards(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition()), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))):
-        eventPlayer.SombraSelectedTarget.setStatusEffect(eventPlayer, Status.HACKED, sombraHackDuration)
-    #Team Effects
-    playEffect(getPlayers(eventPlayer.getTeam()), DynamicEffect.BAD_EXPLOSION, Color.PURPLE, eventPlayer.SombraProjectilePosition, 1)
-    #Enemy Effects
-    playEffect(getPlayers(getOppositeTeam(eventPlayer.getTeam())), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.SombraProjectilePosition, 1)
-    #Effects
-    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.WHITE, eventPlayer.SombraProjectilePosition, 100)
-    eventPlayer.SombraProjectilePosition = null
-    eventPlayer.SombraSelectedTarget = null
-
-
-rule "[sombra.del] Launch Projectile":
-    @Event eachPlayer
-    @Hero sombra
-    @Condition eventPlayer.isFiringSecondaryFire() == true
+    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == true
     @Condition eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0
-    @Condition ((sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 32.5) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]) == true
+    @Condition (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED)) == false
     
-    eventPlayer.SombraSelectedTarget = (sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 32.5) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]
-    #Check if we can target the enemy
-    waitUntil(not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) <= 16 and ProjectileInLOS(0.25), 9999)
-    if not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) > 16 or not entityExists(eventPlayer.SombraSelectedTarget) or not ProjectileInLOS(0.25):
+    if eventPlayer.isMeleeing():
         return
-    eventPlayer.disallowButton(Button.SECONDARY_FIRE)
-    eventPlayer.setSecondaryFireEnabled(false)
-    eventPlayer.SombraProjectilePosition = eventPlayer.getEyePosition()
-    chase(eventPlayer.SombraProjectilePosition, eventPlayer.SombraSelectedTarget.getEyePosition(), rate=50, ChaseReeval.DESTINATION_AND_RATE)
+    if eventPlayer.isUsingAbility1():
+        wait(0.464)
+    if eventPlayer.isDead() or not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED):
+        return
+    if ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive() and not player.hasStatusEffect(Status.INVINCIBLE) and not player.hasStatusEffect(Status.PHASED_OUT) and player in getPlayersInRadius(eventPlayer.getEyePosition(), 18, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) and player in eventPlayer.getPlayersInViewAngle(getOppositeTeam(eventPlayer.getTeam()), 50)]) == []:
+        eventPlayer.allowButton(Button.SECONDARY_FIRE)
+        eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
+        waitUntil(eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) != 0 or ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive() and not player.hasStatusEffect(Status.INVINCIBLE) and not player.hasStatusEffect(Status.PHASED_OUT) and player in getPlayersInRadius(eventPlayer.getEyePosition(), 18, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) and player in eventPlayer.getPlayersInViewAngle(getOppositeTeam(eventPlayer.getTeam()), 50)]) != [], 99999)
+        eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
+        eventPlayer.disallowButton(Button.SECONDARY_FIRE)
+    else:
+        eventPlayer.HackMelee = 0.001
+        chase(eventPlayer.HackMelee, 1, rate=1.667, ChaseReeval.NONE)
+        eventPlayer.setAbilityCooldown(Button.MELEE, 0)
+        eventPlayer.forceButtonPress(Button.MELEE)
+        wait()
+        waitUntil(eventPlayer.HackMelee == 1, 0.6)
+        stopChasingVariable(eventPlayer.HackMelee)
+        eventPlayer.HackMelee = 0
+    eventPlayer.HackHit = false
+
+
+rule "Sombra damage checks (hack melee and increase primary)":
+    @Event playerDealtDamage
+    @Hero sombra
+    
+    if eventAbility == Button.MELEE and eventPlayer.HackMelee != 0:
+        if eventPlayer.HackHit:
+            goto lbl_0
+        victim.setStatusEffect(eventPlayer, Status.HACKED, sombraHackDuration)
+        playEffect(getAllPlayers(), DynamicEffect.SOMBRA_LOGO_SOUND, eventPlayer.getTeam(), victim.getPosition(), 160)
+        eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, sombraHackCooldown)
+        eventPlayer.HackHit = true
+    if eventAbility == Button.PRIMARY_FIRE:
+        lbl_0:
+        damage(victim, eventPlayer, (4 if victim.getHealthOfType(Health.ARMOR) else 2) if eventWasCriticalHit else 1)
+

@@ -68,6 +68,7 @@
 
 #!include "heroes/sombra/base.opy"
 #!include "heroes/sombra/hack.opy"
+#!include "heroes/sombra/stealth.opy"
 
 #!include "heroes/lucio/base.opy"
 #!include "heroes/lucio/speedboost.opy"
