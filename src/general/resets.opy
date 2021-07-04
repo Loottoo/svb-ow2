@@ -95,6 +95,8 @@ def CleanSlate():
         eventPlayer.allowButton(Button.ULTIMATE)
         eventPlayer.allowButton(Button.INTERACT)
 
+        eventPlayer.HeroAbsoluteSpeedMod = 100
+
         eventPlayer.setDamageDealt(100)
         eventPlayer.setGravity(100)
         eventPlayer.setJumpVerticalSpeed(100)
@@ -110,7 +112,12 @@ rule "Player changed hero":
     @Condition (eventPlayer.hero != eventPlayer.getCurrentHero())
     do:
         #Here a cleanup subroutine will be called, this should be defined by each developer for their specific hero, called CleanupHERO (all hero names are spelled with one Capital then all lowercase)
-
+        if eventPlayer.hero in getDamageHeroes(): 
+            if eventPlayer.hero not in [Hero.TRACER, Hero.GENJI]:
+                eventPlayer.MultSpeedMod /= (1 + rolePassivesDamageMovementSpeed/100)
+            else:
+                eventPlayer.MultSpeedMod /= 5.5*(1 + rolePassivesDamageMovementSpeed/100)/6
+        
         switch eventPlayer.hero:
             case Hero.REAPER:
                 CleanupReaper()
@@ -217,6 +224,12 @@ rule "Player changed hero":
 
         #Here an initializer subroutine will be called, this should be defined by each developer for their specific hero, called InitialHERO (all hero names are spelled with one Capital then all lowercase)
         eventPlayer.hero = eventPlayer.getCurrentHero()
+        
+        if eventPlayer.hero in getDamageHeroes(): 
+            if eventPlayer.hero not in [Hero.TRACER, Hero.GENJI]:
+                eventPlayer.MultSpeedMod *= (1 + rolePassivesDamageMovementSpeed/100)
+            else:
+                eventPlayer.MultSpeedMod *= 5.5*(1 + rolePassivesDamageMovementSpeed/100)/6
         
         switch eventPlayer.hero:
             case Hero.REAPER:
