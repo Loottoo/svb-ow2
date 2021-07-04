@@ -5,6 +5,7 @@ rule "[orisa.del] Decrease Primary Fire Movement Speed Penalty":
     @Hero orisa
     @Condition eventPlayer.isFiringPrimaryFire() == true
 
-    _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 120
+    eventPlayer.HeroAbsoluteSpeedMod = 495/3.85
     waitUntil(not eventPlayer.isFiringPrimaryFire(), 9999)
-    _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 100
+    if eventPlayer.HeroAbsoluteSpeedMod == 495/3.85:
+        eventPlayer.HeroAbsoluteSpeedMod = 100
