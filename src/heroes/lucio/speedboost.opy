@@ -9,21 +9,22 @@ rule "[lucio.del] Speedboost":
     @Event eachPlayer
     @Hero lucio
     @Condition eventPlayer.isUsingAbility2() == true
+    @Condition eventPlayer.isInAlternateForm() == true
     
-    if not eventPlayer.isInAlternateForm():
-        return
     eventPlayer.SpeedboostBonus = speedboostMinGain * (1 - eventPlayer.MusicMeter / 100) + speedboostMaxGain * (eventPlayer.MusicMeter / 100) if eventPlayer.MusicMeter >= musicMeterGain else 0
-    while eventPlayer.isUsingAbility2():
-        eventPlayer._extendedPlayerCollection[20] = 0
-        while eventPlayer._extendedPlayerCollection[20] < len(eventPlayer.HeroMoveSpeedModifications):
-            #Boost speed based on the music meter charge
-            if distance(_objectVariable_1[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.HeroMoveSpeedModifications[eventPlayer._extendedPlayerCollection[20]]])[0]], eventPlayer.getPosition()) < 12 and not eventPlayer.isInAlternateForm():
-                _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.HeroMoveSpeedModifications[eventPlayer._extendedPlayerCollection[20]]])[0]] = 100 + eventPlayer.SpeedboostBonus
-            else:
-                _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.HeroMoveSpeedModifications[eventPlayer._extendedPlayerCollection[20]]])[0]] = 100
-            eventPlayer._extendedPlayerCollection[20] += 1
-        wait(0.25)
-    eventPlayer._extendedPlayerCollection[21] = 0
-    while eventPlayer._extendedPlayerCollection[21] < len(eventPlayer.HeroMoveSpeedModifications):
-        _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.HeroMoveSpeedModifications[eventPlayer._extendedPlayerCollection[21]]])[0]] = 100
-        eventPlayer._extendedPlayerCollection[21] += 1
+    waitUntil(not eventPlayer.isUsingAbility2(), 99999)
+
+rule "[lucio.del] Player affected by Speedboost":
+    @Event eachPlayer
+    @Condition (any([player.isUsingAbility2() and player.isInAlternateForm() and distance(player, eventPlayer) <= 12 for player in getPlayersOnHero(Hero.LUCIO, eventPlayer.getTeam())])) == true
+    
+    wait()
+    eventPlayer.LucioBoost = ([player for player in getPlayersOnHero(Hero.LUCIO, eventPlayer.getTeam()) if player.isUsingAbility2() and distance(player, eventPlayer) <= 12])[0]
+    eventPlayer.AddSpeedMod += eventPlayer.LucioBoost.SpeedboostBonus
+    waitUntil(not (any([player.isUsingAbility2() and player.isInAlternateForm() and distance(player, eventPlayer) <= 12 for player in getPlayersOnHero(Hero.LUCIO, eventPlayer.getTeam())])), 99999)
+    if (eventPlayer.LucioBoost.isUsingAbility2() and eventPlayer.isInAlternateForm()):
+        waitUntil(any([player.isUsingAbility2() and player.isInAlternateForm() and distance(player, eventPlayer) <= 12 for player in getPlayersOnHero(Hero.LUCIO, eventPlayer.getTeam())]), 1)
+    eventPlayer.AddSpeedMod -= eventPlayer.LucioBoost.SpeedboostBonus
+    eventPlayer.LucioBoost = false
+    if RULE_CONDITION:
+        goto RULE_START
