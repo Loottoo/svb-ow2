@@ -12,7 +12,6 @@ def CleanupLucio():
     CleanupHealingMods()
     CleanupEffects()
     CleanupHealthPools()
-    CleanupMoveSpeedMods()
     stopChasingVariable(eventPlayer.MusicMeter)
     stopChasingVariable(eventPlayer.WallrideTimer)
     eventPlayer.WallrideTimer = 0
@@ -36,19 +35,3 @@ def InitialLucio():
     eventPlayer.HeroTexts.append(getLastCreatedText())
     chase(eventPlayer.WallrideTimer, 1 if eventPlayer.isOnWall() else 0, rate=100 if eventPlayer.isOnWall() else 1, ChaseReeval.DESTINATION_AND_RATE)
     chase(eventPlayer.MusicMeter, 100 if eventPlayer.isOnWall() or (eventPlayer.isOnWall() and (eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility2())) else 0, rate=0 if eventPlayer.WallrideTimer > 0 and not eventPlayer.isOnWall() else musicMeterGain if eventPlayer.isOnWall() or (eventPlayer.isOnWall() and (eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility2())) else musicMeterDrain, ChaseReeval.DESTINATION_AND_RATE)
-    eventPlayer.Index = 0
-    while eventPlayer.Index < 5:
-        eventPlayer._extendedPlayerCollection[17] = 0
-        while eventPlayer._extendedPlayerCollection[17] < len([].concat(getPlayersInSlot(evalOnce(eventPlayer.Index), eventPlayer.getTeam()))):
-            LastMoveSpeedModificationID += 1
-            eventPlayer._extendedPlayerCollection[18] = _classIndexes.index(0)
-            _classIndexes[eventPlayer._extendedPlayerCollection[18]] = 8
-            _objectVariable_3[eventPlayer._extendedPlayerCollection[18]] = []
-            _objectVariable_4[eventPlayer._extendedPlayerCollection[18]] = 0
-            _objectVariable_1[eventPlayer._extendedPlayerCollection[18]] = [].concat(getPlayersInSlot(evalOnce(eventPlayer.Index), eventPlayer.getTeam()))[eventPlayer._extendedPlayerCollection[17]]
-            _objectVariable_0[eventPlayer._extendedPlayerCollection[18]] = LastMoveSpeedModificationID
-            _objectVariable_2[eventPlayer._extendedPlayerCollection[18]] = 100
-            ActiveModifications.append(eventPlayer._extendedPlayerCollection[18])
-            eventPlayer._extendedPlayerCollection[17] += 1
-        eventPlayer.HeroMoveSpeedModifications.append(LastMoveSpeedModificationID)
-        eventPlayer.Index += 1

@@ -4,7 +4,6 @@
 globalvar roadhogBreatherCloudSize = createWorkshopSetting(float[1:50], "Roadhog", "Take a breather cloud size", 7.5, 0)
 
 
-playervar roadhogCloudEntity = []
 playervar roadhogMovementSpeed
 playervar roadhogCloudPos
 playervar roadhogCloudPlayersAffected
@@ -41,13 +40,12 @@ def RoadhogTakeABreather():
     eventPlayer.roadhogMovementSpeed = 100
     chase(eventPlayer.roadhogMovementSpeed, 0, duration=1.5, ChaseReeval.DESTINATION_AND_DURATION)
     while eventPlayer.roadhogMovementSpeed != 0:
-        eventPlayer.setMoveSpeed(eventPlayer.roadhogMovementSpeed)
+        eventPlayer.AddSpeedMod -= 100/47
         wait(0.032)
     chase(eventPlayer.roadhogMovementSpeed, 100, duration=1, ChaseReeval.DESTINATION_AND_DURATION)
     while eventPlayer.roadhogMovementSpeed != 100:
-        eventPlayer.setMoveSpeed(eventPlayer.roadhogMovementSpeed)
+        eventPlayer.AddSpeedMod += 100/32
         wait(0.032)
-    eventPlayer.setMoveSpeed(100)
     wait(createWorkshopSetting(float[2.5:9], "Roadhog", "Cloud duration", 5, 1) - 2.5)
     for eventPlayer.Index in range(len(eventPlayer.roadhogCloudEntity)):
         destroyEffect(eventPlayer.roadhogCloudEntity[eventPlayer.Index])

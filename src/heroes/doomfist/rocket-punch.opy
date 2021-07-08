@@ -14,7 +14,7 @@ rule "Doomfist Vertical Rocket Punch":
     #Player cancels Rocket Punch, gets CC'd or hacked; Stop execution
     if eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.ROOTED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
         return
-    eventPlayer.setMoveSpeed(0)
+    eventPlayer.HeroAbsoluteSpeedMod = 0
     if not eventPlayer.DFDidHitPlayer:
         #If Doomfist is punching upwards, impulse in the direction until he gets off the ground
         if eventPlayer.getFacingDirection().y > 0.05:
@@ -23,7 +23,7 @@ rule "Doomfist Vertical Rocket Punch":
                 wait(0.05)
         eventPlayer.applyImpulse(eventPlayer.getFacingDirection(), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait(0.08)
-    setRolePassiveMovementSpeed()
+    eventPlayer.HeroAbsoluteSpeedMod = 100
     eventPlayer.DFDidHitPlayer = false
 
 rule "Rocket Punch":

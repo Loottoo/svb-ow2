@@ -125,7 +125,7 @@ def ChaseAvalancheSpeed():
   
   #Gradually increase the player speed
   for eventPlayer.AvalancheSpeed in range(100, AvalancheMaxSpeed, (AvalancheMaxSpeed - 100) / (30 * AvalancheDuration)):
-      eventPlayer.setMoveSpeed(eventPlayer.AvalancheSpeed)
+      eventPlayer.HeroAbsoluteSpeedMod = eventPlayer.AvalancheSpeed / (1 + rolePassivesDamageMovementSpeed/100)
       wait()
 
 
@@ -147,7 +147,7 @@ def ClearAvalanche():
   eventPlayer.AvalancheTimer = 0
   eventPlayer.AvalancheFinalPosition = eventPlayer.getPosition()
   eventPlayer.stopForcingThrottle()
-  eventPlayer.setMoveSpeed(100)
+  eventPlayer.HeroAbsoluteSpeedMod = 100
   ExplodeAvalanche()
   #Destroy Effects
   destroyEffect(eventPlayer.AvalancheEffects)

@@ -2,14 +2,16 @@
 
 #!include "settings.opy"
 
-#!include "general/resets.opy"
 #!include "dev.opy"
 
+#!include "heroes/damage.opy"
+
 #!include "general/4M6QT.opy"
+#!include "general/resets.opy"
 
 #!include "heroes/tanks.opy"
 #!include "heroes/healers.opy"
-#!include "heroes/damage.opy"
+
 
 #!include "heroes/mercy/base.opy"
 #!include "heroes/mercy/primary-secondary.opy"

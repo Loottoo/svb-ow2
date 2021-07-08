@@ -4,32 +4,22 @@
 def SlowdownBaptiste():
   @Name "[baptiste.del] Subroutine: Slowdown"
   
-  _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = 100
   eventPlayer.frac = 1
   chase(eventPlayer.frac, 0.25, duration=1, ChaseReeval.DESTINATION_AND_DURATION)
   while eventPlayer.frac > 0.25:
-      if not (eventPlayer.getCurrentHero() == Hero.BAPTISTE):
-          break
-      _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = (4 * eventPlayer.frac * eventPlayer.frac * eventPlayer.frac if eventPlayer.frac < 0.5 else 1 - ((((-2 * eventPlayer.frac + 2) * (-2 * eventPlayer.frac + 2)) * (-2 * eventPlayer.frac + 2)) / 2)) * 100
-      eventPlayer.setMoveSpeed((4 * eventPlayer.frac * eventPlayer.frac * eventPlayer.frac if eventPlayer.frac < 0.5 else 1 - ((((-2 * eventPlayer.frac + 2) * (-2 * eventPlayer.frac + 2)) * (-2 * eventPlayer.frac + 2)) / 2)) * 100)
+      eventPlayer.AddSpeedMod -= 100/62.5
       wait()
-  _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = 100
   stopChasingVariable(eventPlayer.frac)
 
 
 def ReturnBaptisteToNormalSpeed():
   @Name "[baptiste.del] Subroutine: Transition to Normal Speed"
   
-  _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = 0
   eventPlayer.frac_0 = 0.25
   chase(eventPlayer.frac_0, 1, duration=1, ChaseReeval.DESTINATION_AND_DURATION)
   while eventPlayer.frac_0 < 1:
-      if not (eventPlayer.getCurrentHero() == Hero.BAPTISTE):
-          break
-      _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = (4 * eventPlayer.frac_0 * eventPlayer.frac_0 * eventPlayer.frac_0 if eventPlayer.frac_0 < 0.5 else 1 - ((((-2 * eventPlayer.frac_0 + 2) * (-2 * eventPlayer.frac_0 + 2)) * (-2 * eventPlayer.frac_0 + 2)) / 2)) * 100
-      eventPlayer.setMoveSpeed((4 * eventPlayer.frac_0 * eventPlayer.frac_0 * eventPlayer.frac_0 if eventPlayer.frac_0 < 0.5 else 1 - ((((-2 * eventPlayer.frac_0 + 2) * (-2 * eventPlayer.frac_0 + 2)) * (-2 * eventPlayer.frac_0 + 2)) / 2)) * 100)
+      eventPlayer.AddSpeedMod += 100/62.5
       wait()
-  _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.BaptisteMoveSpeedID])[0]] = 100
   stopChasingVariable(eventPlayer.frac_0)
 
 

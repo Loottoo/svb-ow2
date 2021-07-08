@@ -43,15 +43,13 @@ rule "[orisa.del] Gallop":
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, eventPlayer.getTeam(), eventPlayer.getEyePosition(), 500)
     playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, eventPlayer.getTeam(), eventPlayer.getEyePosition(), 500)
     #Casting
-    _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 0
-    eventPlayer.setMoveSpeed(0)
+    eventPlayer.HeroAbsoluteSpeedMod = 0
     eventPlayer.startFacing(vect(0, 0, 1), 500, Relativity.TO_PLAYER, FacingReeval.DIRECTION_AND_TURN_RATE)
     waitUntil(any([i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]), orisaGallopDelay)
     eventPlayer.setDamageDealt(100)
     #Gallop
     eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0)
-    _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 500
-    eventPlayer.setMoveSpeed(500)
+    eventPlayer.HeroAbsoluteSpeedMod = 500
     eventPlayer.disablePlayerCollision()
     eventPlayer.forceButtonPress(Button.MELEE)
     eventPlayer.Galloping = true
@@ -71,8 +69,7 @@ rule "[orisa.del] Gallop":
     CleanupEffects()
     #Stop movement
     eventPlayer.stopForcingThrottle()
-    _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 0
-    eventPlayer.setMoveSpeed(0)
+    eventPlayer.HeroAbsoluteSpeedMod = 0
     eventPlayer.enablePlayerCollision()
     eventPlayer.setAbilityCooldown(Button.MELEE, 0)
     eventPlayer.Galloping = false
@@ -83,8 +80,7 @@ rule "[orisa.del] Gallop":
     eventPlayer.stopCamera()
     #Set cooldown / restore movement
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, 10)
-    _objectVariable_2[([player for player in ActiveModifications if _objectVariable_0[player] == eventPlayer.OrisaMoveSpeedID])[0]] = 100
-    eventPlayer.setMoveSpeed(100)
+    eventPlayer.HeroAbsoluteSpeedMod = 100
     eventPlayer.stopFacing()
     #Re-enable
     eventPlayer.setPrimaryFireEnabled(true)

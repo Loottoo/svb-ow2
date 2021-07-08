@@ -188,22 +188,15 @@ rule "Player is on Icing and Icing Type is set to slide":
     eventPlayer.startAcceleration(directionTowards(vect(0, 0, 0), evalOnce(eventPlayer.getThrottle() if eventPlayer.getThrottle() != vect(0, 0, 0) else vect(0, 0, 1))), 400, 200, Relativity.TO_PLAYER, AccelReeval.NONE)
     eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 0)
 
-    ChaseIcingSpeed()
-
-
-rule "Player is not on icing and Icing Type is set to slide":
-    @Event eachPlayer
-    @Condition IcingType == 0
-    @Condition eventPlayer.AvalancheTimer != true
-    @Condition eventPlayer.InIcingOfPlayer != null
-    @Condition any([distance(eventPlayer, player) < IcingRadius * 1.2 for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())[0].IcingStepPositions]) == false
-    
-    wait(0.064)
+    async(ChaseIcingSpeed, AsyncBehavior.NOOP)
+    waitUntil(not (IcingType == 0 and eventPlayer.isOnGround() and not eventPlayer.AvalancheTimer and any([len(player.IcingStepPositions) > 0 for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())]) and any([distance(eventPlayer, player) < IcingRadius for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())[0].IcingStepPositions])), 99999)
+    wait(0.032)
     eventPlayer.stopAcceleration()
     eventPlayer.InIcingOfPlayer = null
+    eventPlayer.AddSpeedMod -= eventPlayer.IcingCurrentSpeed
+    eventPlayer.IcingCurrentSpeed = 0
     #Don't reset speed is using Avalanche
     if eventPlayer.AvalancheTimer != true:
-        setRolePassiveMovementSpeed()
         eventPlayer.stopForcingThrottle()
 
 
@@ -212,13 +205,12 @@ rule "Speed up teammates walking on icing (if enabled)":
     @Condition IcingType == 1
     @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
     
-    eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 + IcingSpeedIncrease)
-    wait(0.032)
+    eventPlayer.AddSpeedMod += IcingSpeedIncrease
+    waitUntil(not ((any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(eventPlayer.getTeam()) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) and IcingType == 1), 99999)
+    eventPlayer.AddSpeedMod -= IcingSpeedIncrease
     if RULE_CONDITION:
         goto RULE_START
-    #Don't reset speed is using Avalanche
-    if eventPlayer.AvalancheTimer != true:
-        setRolePassiveMovementSpeed()
+    
 
 
 rule "Slow down enemies walking on icing (if enabled)":
@@ -226,11 +218,12 @@ rule "Slow down enemies walking on icing (if enabled)":
     @Condition IcingSlow > 0
     @Condition (any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) == true
     
-    eventPlayer.setMoveSpeed(rolePassivesDamageMovementSpeed if eventPlayer.getCurrentHero() in getDamageHeroes() else 100 - IcingSlow)
-    wait(0.032)
+    eventPlayer.AddSpeedMod -= IcingSlow
+    waitUntil(not ((any([player != 0 and distance(player, eventPlayer.getPosition()) < IcingRadius for player in ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.hero == Hero.MEI and len(player.IcingStepPositions) > 0]).IcingStepPositions])) and IcingSlow > 0), 99999)
+    eventPlayer.AddSpeedMod += IcingSlow
     if RULE_CONDITION:
         goto RULE_START
-    setRolePassiveMovementSpeed()
+    
 
 
 def ClearIcing():
@@ -254,9 +247,14 @@ def ChaseIcingSpeed():
     @Name "Subroutine - Chase Icing Speed"
 
     #Slowly accelerate player between a range
-    for eventPlayer.IcingCurrentSpeed in range(IcingMinSpeed, IcingMaxSpeed, (IcingMaxSpeed - IcingMinSpeed) / 60):
-        eventPlayer.setMoveSpeed(eventPlayer.IcingCurrentSpeed)
-        wait(0.016, Wait.ABORT_WHEN_FALSE)
+    eventPlayer.AddSpeedMod += IcingMinSpeed - 100
+    eventPlayer.AddSpeedMod -= (IcingMaxSpeed-IcingMinSpeed) / 60
+    for eventPlayer.IcingCurrentSpeed in range(IcingMinSpeed - 100, IcingMaxSpeed - 100, (IcingMaxSpeed - IcingMinSpeed) / 60):
+        eventPlayer.AddSpeedMod += (IcingMaxSpeed-IcingMinSpeed) / 60
+        wait(0.016)
+        if not (IcingType == 0 and eventPlayer.isOnGround() and not eventPlayer.AvalancheTimer and any([len(player.IcingStepPositions) > 0 for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())]) and any([distance(eventPlayer, player) < IcingRadius for player in getPlayersOnHero(Hero.MEI, eventPlayer.getTeam())[0].IcingStepPositions])):
+            return
+    eventPlayer.AddSpeedMod += (IcingMaxSpeed-IcingMinSpeed) / 60
 
 
 def IcingFreezeAndDamageOnImpact():
