@@ -22,13 +22,13 @@ rule "Global Sigma Config Init":
 
 
 def InitialSigma():
-    
+
     eventPlayer.disallowButton(Button.SECONDARY_FIRE)
     eventPlayer.addHealthPool(Health.SHIELDS, 50, true, false)
 
 
 def CleanupSigma():
-    
+
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
     eventPlayer.setPrimaryFireEnabled(true)
     eventPlayer.setMeleeEnabled(true)
@@ -52,7 +52,7 @@ rule "Sigma Secondary":
     @Condition eventPlayer.isUsingAbility1() == false
     @Condition eventPlayer.isUsingAbility2() == false
     @Condition eventPlayer.isUsingUltimate() == false
-    
+
     stopChasingVariable(eventPlayer.SigmaSecondaryTimer)
     eventPlayer.setPrimaryFireEnabled(false)
     eventPlayer.setMeleeEnabled(false)
@@ -119,7 +119,7 @@ rule "Sigma Secondary":
 rule "Each Player, Check for Affected By Sigma Secondary":
     @Event eachPlayer
     @Condition [player for player in getPlayersOnHero(Hero.SIGMA, eventPlayer.getTeam()) if player.SigmaSecondaryTimer == true] != []
-    
+
     waitUntil([player for player in getPlayersOnHero(Hero.SIGMA, eventPlayer.getTeam()) if player.SigmaSecondaryTimer == true] == [] or ([player for player in getPlayersOnHero(Hero.SIGMA, eventPlayer.getTeam()) if player.SigmaSecondaryTimer == true and distance(eventPlayer.getPosition() * vect(1, 0, 1), player.SigmaSecondary[0] * vect(1, 0, 1)) <= SigmaSecondaryOptions[2] and distance(eventPlayer.getPosition() * vect(0, 1, 0), player.SigmaSecondary[0] * vect(0, 1, 0)) <= SigmaSecondaryOptions[3]]) != [], 99999)
     eventPlayer.Flight = true
     waitUntil([player for player in getPlayersOnHero(Hero.SIGMA, eventPlayer.getTeam()) if player.SigmaSecondaryTimer == true] == [] or ([player for player in getPlayersOnHero(Hero.SIGMA, eventPlayer.getTeam()) if player.SigmaSecondaryTimer == true and distance(eventPlayer.getPosition() * vect(1, 0, 1), player.SigmaSecondary[0] * vect(1, 0, 1)) <= SigmaSecondaryOptions[2] and distance(eventPlayer.getPosition() * vect(0, 1, 0), player.SigmaSecondary[0] * vect(0, 1, 0)) <= SigmaSecondaryOptions[3]]) == [], 99999)
@@ -133,11 +133,12 @@ rule "Flight Mechanic":
     @Condition eventPlayer.Flight == true
     #@Condition eventPlayer.hasStatusEffect(Status.ROOTED) == false
     @Condition eventPlayer.isAlive() == true
-    
+    @Condition not (eventPlayer.hero == Hero.DOOMFIST and eventPlayer.isUsingAbility2())
+
     eventPlayer.setGravity(0)
     createEffect(getAllPlayers(), Effect.SIGMA_GRAVITIC_FLUX_TARGET_SOUND, eventPlayer.getTeam(), eventPlayer, 60, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.FlightSound = getLastCreatedEntity()
-    while eventPlayer.Flight and eventPlayer.isAlive() and true:
+    while eventPlayer.Flight and eventPlayer.isAlive() and not (eventPlayer.hero == Hero.DOOMFIST and eventPlayer.isUsingAbility2()):
         if (eventPlayer.isHoldingButton(Button.CROUCH) or eventPlayer.isHoldingButton(Button.JUMP)) and (not (eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.JUMP))):
             if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.ROOTED) or eventPlayer.hasStatusEffect(Status.STUNNED):
                 goto lbl_0
@@ -161,7 +162,7 @@ rule "Flight Mechanic":
 rule "Sigma Damage Adjustments":
     @Event playerDealtDamage
     @Hero sigma
-    
+
     if victim == eventPlayer:
         return
     if eventAbility == Button.PRIMARY_FIRE:
@@ -176,14 +177,14 @@ rule "Detect Sigma Lift via Knockback Event":
     @Event playerDealtKnockback
     @Hero sigma
     @Condition eventAbility == Button.ULTIMATE
-    
+
     victim.SigmaLifted = eventPlayer
 
 
 rule "Lifted By Sigma (Used to disable cancelling)":
     @Event eachPlayer
     @Condition eventPlayer.SigmaLifted == true
-    
+
     waitUntil(not getPlayersOnHero(Hero.SIGMA, getOppositeTeam(eventPlayer.getTeam())).isUsingUltimate() or eventPlayer.hasStatusEffect(Status.PHASED_OUT), 2.016)
     if eventPlayer.SigmaLifted.isUsingUltimate():
         waitUntil(not eventPlayer.SigmaLifted, 1.5)
