@@ -8,14 +8,20 @@ rule "[orisa.del] Ultimate":
     
     eventPlayer.TemporaryCooldown = eventPlayer.getAbilityCooldown(Button.ABILITY_2)
     eventPlayer.CastingUltimate = true
+    wait(0.16)
     #Deploy shield
     eventPlayer.setProjectileSpeed(50)
     eventPlayer.setProjectileGravity(abs(1000))
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, 0)
     eventPlayer.allowButton(Button.ABILITY_2)
+    wait(0.032)
+    eventPlayer.forceButtonPress(Button.ABILITY_2)
+    wait(0.032)
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     #Wait until shield is deployed
-    waitUntil(not eventPlayer.isUsingAbility2(), 9999)
+    waitUntil(eventPlayer.isUsingAbility2(), 2)
+    waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2) >= 2, 2)
+    wait(0.032)
     #Reset
     eventPlayer.disallowButton(Button.ABILITY_2)
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.TemporaryCooldown)
