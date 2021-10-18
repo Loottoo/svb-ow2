@@ -5,4 +5,4 @@ rule "[Mei] Deal extra damage on primary fire":
     @Hero mei
     @Condition eventAbility == Button.PRIMARY_FIRE
 
-    damage(victim, attacker, createWorkshopSetting(float[0:100], "Mei", "Weapon Freeze Damage Boost", 20) * eventDamage)
+    damage(victim, attacker, createWorkshopSetting(float[0:100], "Mei", "Weapon Freeze Damage Boost", 20) / 100 * eventDamage)
