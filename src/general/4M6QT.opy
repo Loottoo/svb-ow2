@@ -122,14 +122,14 @@ rule "Initial Global":
     ForbiddenAbility2Heroes = [Hero.TRACER]
     UltChargeReqArray = [2100, 1260, 1820, 1680, 2142, 1540, 2100, 1540, 1540, 2310, 1680, 2310, 1932, 1800, 1680, 1925, 2100, 2310, 2940, 1540, 1610, 1400, 1680, 2100, 1680, 2800, 2380, 1540, 2240, 1960, 2310, 1960]
     progressBarHud(localPlayer if localPlayer.DuplicateTimer and localPlayer.isAlive() else null, localPlayer.DuplicateTimer * (100 / 15), "Duplicating: {0}".format(15 if localPlayer.DuplicateTimer > 15 else ceil(localPlayer.DuplicateTimer)), HudPosition.TOP, 3, Color.ORANGE, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-    
+
     if devMode:
         hudSubheader(localPlayer, "HeroSpeedMod: {0}".format(localPlayer.HeroAbsoluteSpeedMod), HudPosition.TOP, 5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
- 
+
 
 rule "Initial Player":
     @Event eachPlayer
-    
+
     eventPlayer.NextUltCharge = 5
     eventPlayer.HeroEffects = []
     eventPlayer.HeroTexts = []
@@ -151,12 +151,12 @@ rule "Initial Player":
     eventPlayer.MultSpeedMod = 1
     eventPlayer.HeroAbsoluteSpeedMod = 100
     eventPlayer.AddSpeedMod = 0
- 
+
 
 rule "Speed Modifications Setter":
     @Event eachPlayer
     @Condition eventPlayer._ActiveSpeedMod != (eventPlayer.MultSpeedMod * 100 + eventPlayer.AddSpeedMod) * (eventPlayer.HeroAbsoluteSpeedMod / 100)
-    
+
     eventPlayer._ActiveSpeedMod = (eventPlayer.MultSpeedMod * 100 + eventPlayer.AddSpeedMod) * (eventPlayer.HeroAbsoluteSpeedMod / 100)
     eventPlayer.setMoveSpeed(eventPlayer._ActiveSpeedMod)
     if RULE_CONDITION:
@@ -165,18 +165,18 @@ rule "Speed Modifications Setter":
     if RULE_CONDITION:
         goto RULE_START
 
-    
-    
+
+
 def CleanupEffects():
     @Name "[all.del] Subroutine: Cleanup Effects"
-    
+
     destroyEffect(eventPlayer.HeroEffects)
     eventPlayer.HeroEffects = []
 
 
 def CleanupHealingMods():
     @Name "[all.del] Subroutine: Cleanup Healing Modifications"
-    
+
     eventPlayer._extendedPlayerCollection[4] = 0
     while eventPlayer._extendedPlayerCollection[4] < len(eventPlayer.HeroHealingModifications):
         stopHealingModification(eventPlayer.HeroHealingModifications[eventPlayer._extendedPlayerCollection[4]])
@@ -186,7 +186,7 @@ def CleanupHealingMods():
 
 def CleanupHealthPools():
     @Name "[all.del] Subroutine: Cleanup Health Pool"
-    
+
     eventPlayer._extendedPlayerCollection[7] = 0
     while eventPlayer._extendedPlayerCollection[7] < len(eventPlayer.HeroHealthPools):
         removeHealthPool(eventPlayer.HeroHealthPools[eventPlayer._extendedPlayerCollection[7]])
@@ -196,7 +196,7 @@ def CleanupHealthPools():
 
 def CleanupTexts():
     @Name "[all.del] Subroutine: Cleanup Texts"
-    
+
     eventPlayer._extendedPlayerCollection[8] = 0
     while eventPlayer._extendedPlayerCollection[8] < len(eventPlayer.HeroTexts):
         destroyHudText(eventPlayer.HeroTexts[eventPlayer._extendedPlayerCollection[8]])
@@ -208,7 +208,7 @@ def CleanupTexts():
 
 def CleanupDamageMods():
     @Name "[all.del] Subroutine: Cleanup Damage Modifications"
-    
+
     eventPlayer._extendedPlayerCollection[9] = 0
     while eventPlayer._extendedPlayerCollection[9] < len(eventPlayer.HeroDamageModifications):
         stopDamageModification(eventPlayer.HeroDamageModifications[eventPlayer._extendedPlayerCollection[9]])
