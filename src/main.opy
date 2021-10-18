@@ -19,7 +19,8 @@
 
 #!include "heroes/mei/avalanche.opy"
 #!include "heroes/mei/seperate-ammo.opy"
-#!include "heroes/mei/icing.opy"
+# !include "heroes/mei/icing.opy"
+#!include "heroes/mei/freeze-extra-damage.opy"
 
 #!include "heroes/echo/base.opy"
 #!include "heroes/echo/sticky-bombs.opy"
