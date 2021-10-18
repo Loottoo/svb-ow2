@@ -30,7 +30,7 @@ def ZapHitDetection():
         #)
 
         if eventPlayer.ZapHitPlayer:
-            damage(eventPlayer.ZapHitPlayer, eventPlayer, ZapDamage)
+            damage(eventPlayer.ZapHitPlayer, eventPlayer, eventPlayer.ZapChargeMeter / 100 * ZapDamage)
             break
 
 
@@ -74,7 +74,6 @@ rule "Fire Zap":
         eventPlayer.ZapHudProgress = getLastCreatedText()
         chase(eventPlayer.ZapChargeMeter, 100, duration=ZapChargeTime, ChaseReeval.DESTINATION_AND_DURATION)
         waitUntil(eventPlayer.ZapChargeMeter >= 100 or not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE), 99999)
-        if eventPlayer.ZapChargeMeter >= 100:
             waitUntil(not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE), createWorkshopSetting(float[0:5], "Winston", "Zap Max Hold Time", 1, 0))
             destroyEffect(eventPlayer.ZapEffects)
             destroyHudText(eventPlayer.ZapHUDSpacer)
@@ -125,18 +124,12 @@ rule "Fire Zap":
                 destroyEffect(eventPlayer.ZapEffects[eventPlayer.Index])
                 destroyHudText(eventPlayer.ZapEffects[eventPlayer.Index])
                 destroyProgressBarHud(eventPlayer.ZapEffects[eventPlayer.Index])
-        else:
-            stopChasingVariable(eventPlayer.ZapChargeMeter)
-            eventPlayer.ZapChargeMeter = 0
-            destroyEffect(eventPlayer.ZapEffects)
-            destroyHudText(eventPlayer.ZapHUDSpacer)
-            destroyProgressBarHud(eventPlayer.ZapHudProgress)
 
 
 rule "Zap regen":
     @Event eachPlayer
     @Condition eventPlayer.p_ZapCharges < ZapCharges
-    
+
     eventPlayer.ZapChargeMeter = 0
     chase(eventPlayer.ZapChargeMeter, ZapCooldown, rate=1, ChaseReeval.DESTINATION_AND_RATE)
     waitUntil(eventPlayer.ZapChargeMeter >= ZapCooldown, 99999)
