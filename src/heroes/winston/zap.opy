@@ -47,6 +47,7 @@ rule "Create Zap Radius Array":
         Vector.RIGHT * ZapRadius * 0.702 + Vector.DOWN * ZapRadius * 0.702
     ]
 
+#!define notEligibleToZap (eventPlayer.hero != Hero.WINSTON or eventPlayer.isDead() or eventPlayer.isUsingUltimate() or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.FROZEN))
 
 rule "Fire Zap":
     @Event eachPlayer
@@ -73,8 +74,22 @@ rule "Fire Zap":
         progressBarHud(eventPlayer, eventPlayer.ZapChargeMeter, " " if eventPlayer.ZapChargeMeter < 100 else "READY", HudPosition.TOP, 21, Color.WHITE if eventPlayer.ZapChargeMeter < 100 else Color.BLUE, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
         eventPlayer.ZapHudProgress = getLastCreatedText()
         chase(eventPlayer.ZapChargeMeter, 100, duration=ZapChargeTime, ChaseReeval.DESTINATION_AND_DURATION)
-        waitUntil(eventPlayer.ZapChargeMeter >= 100 or not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE), 99999)
-            waitUntil(not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE), createWorkshopSetting(float[0:5], "Winston", "Zap Max Hold Time", 1, 0))
+        waitUntil(eventPlayer.ZapChargeMeter >= 100 or not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or notEligibleToZap, 99999)
+        if notEligibleToZap:
+            stopChasingVariable(eventPlayer.ZapChargeMeter)
+            eventPlayer.ZapChargeMeter = 0
+            destroyEffect(eventPlayer.ZapEffects)
+            destroyHudText(eventPlayer.ZapHUDSpacer)
+            destroyProgressBarHud(eventPlayer.ZapHudProgress)
+        else:
+            waitUntil(not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or notEligibleToZap, createWorkshopSetting(float[0:5], "Winston", "Zap Max Hold Time", 1, 0))
+            if notEligibleToZap:
+                stopChasingVariable(eventPlayer.ZapChargeMeter)
+                eventPlayer.ZapChargeMeter = 0
+                destroyEffect(eventPlayer.ZapEffects)
+                destroyHudText(eventPlayer.ZapHUDSpacer)
+                destroyProgressBarHud(eventPlayer.ZapHudProgress)
+                return
             destroyEffect(eventPlayer.ZapEffects)
             destroyHudText(eventPlayer.ZapHUDSpacer)
             destroyProgressBarHud(eventPlayer.ZapHudProgress)
