@@ -17,6 +17,7 @@ playervar AvalancheFacingDirection
 playervar AvalancheFinalPosition
 playervar PlayersInAvalanche
 playervar AvalancheTimer
+playervar AvalancheImpulseDirection
 
 
 subroutine SetAvalancheCamera
@@ -44,7 +45,7 @@ rule "Avalanche Progress Bar HUD element":
   @Event eachPlayer
   @Hero mei
   @Condition AvalancheEnabled == true
-  
+
   progressBarHud([i for i in eventPlayer if eventPlayer.AvalancheTimer], 100 / AvalancheDuration * eventPlayer.AvalancheTimer, "", HudPosition.TOP, 10, Color.ORANGE, Color.ORANGE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
   #New lines to push the progress bar down
   hudSubheader([i for i in eventPlayer if eventPlayer.AvalancheTimer], " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -62,7 +63,7 @@ rule "Player uses Ultimate":
   eventPlayer.disallowButton(Button.CROUCH)
 
   eventPlayer.cancelPrimaryAction()
-  
+
   eventPlayer.applyImpulse(eventPlayer.getVelocity(), eventPlayer.getSpeed() * -1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
 
   eventPlayer.applyImpulse(eventPlayer.getFacingDirection() * vect(1, 0, 1), 4.5, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -81,7 +82,7 @@ rule "Player uses Ultimate":
 rule "Player is using Avalanche":
   @Event eachPlayer
   @Condition eventPlayer.AvalancheTimer == true
-  
+
   #Set initial facing direction
   eventPlayer.PlayersInAvalanche = []
   #Set player to "Phased Out" so they don't collide with others and can't be hit, as well as clearing all debuffs
@@ -115,14 +116,14 @@ rule "Player is using Avalanche":
 
 def SetAvalancheCamera():
   @Name "Subroutine - Set Avalanche camera"
-  
+
   #Force the player to third person
   eventPlayer.startCamera(updateEveryTick(raycast(eventPlayer.getEyePosition() + Vector.UP * 0.5, eventPlayer.getEyePosition() + Vector.UP * 0.5 + eventPlayer.getFacingDirection() * -5, getAllPlayers(), eventPlayer, true).getHitPosition()), updateEveryTick(raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20, null, eventPlayer, false).getHitPosition()), 60)
 
 
 def ChaseAvalancheSpeed():
   @Name "Subroutine - Chase Avalanche Speed"
-  
+
   #Gradually increase the player speed
   for eventPlayer.AvalancheSpeed in range(100, AvalancheMaxSpeed, (AvalancheMaxSpeed - 100) / (30 * AvalancheDuration)):
       eventPlayer.HeroAbsoluteSpeedMod = eventPlayer.AvalancheSpeed / (1 + rolePassivesDamageMovementSpeed/100)
@@ -131,7 +132,7 @@ def ChaseAvalancheSpeed():
 
 def ChaseAvalancheRadius():
   @Name "Subroutine - Chase Avalanche Radius"
-  
+
   eventPlayer.AvalancheCurrentRadius = 0.75
   #Gradually increase the size of the snowball
   chase(eventPlayer.AvalancheCurrentRadius, AvalancheRadius, duration=AvalancheDuration / 2, ChaseReeval.DESTINATION_AND_DURATION)
@@ -139,7 +140,7 @@ def ChaseAvalancheRadius():
 
 def ClearAvalanche():
   @Name "Subroutine - Clear Avalanche"
-  
+
   #Root the player while the effect is clearing
   eventPlayer.setStatusEffect(null, Status.ROOTED, 1)
   chase(eventPlayer.AvalancheCurrentRadius, 0, duration=0.75, ChaseReeval.DESTINATION_AND_DURATION)
@@ -166,7 +167,7 @@ def ClearAvalanche():
 
 def ExplodeAvalanche():
   @Name "Subroutine - Explode Avalanche"
-  
+
   async(ExplodePlayersInAvalanche, AsyncBehavior.NOOP)
   #Play a bunch of effects when the ability has come to a stop
   playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.WHITE, eventPlayer, 100)
@@ -188,7 +189,7 @@ def ExplodeAvalanche():
 
 def ExplodePlayersInAvalanche():
   @Name "Subroutine - Explode Players in Avalanche"
-  
+
   wait(0.25)
   #Play explosion sound at position of player
   playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.WHITE, eventPlayer, 100)
@@ -198,14 +199,15 @@ def ExplodePlayersInAvalanche():
   while len(eventPlayer.PlayersInAvalanche) > 0:
       #Detach victom from snowball
       eventPlayer.PlayersInAvalanche[0].detach()
-      #Teleport the player just in case they ended up in a wall
-      eventPlayer.PlayersInAvalanche[0].teleport(nearestWalkablePosition(eventPlayer.PlayersInAvalanche[0].getPosition()))
+      # Set direction to be launch and teleport player to Event Player to prevent players from passing through walls.
+      eventPlayer.PlayersInAvalanche[0].AvalancheImpulseDirection = directionTowards(eventPlayer.getPosition(), eventPlayer.PlayersInAvalanche[0].getPosition())
+      eventPlayer.PlayersInAvalanche[0].teleport(eventPlayer)
       wait()
       #Damage affected players
       damage(eventPlayer.PlayersInAvalanche[0], eventPlayer, AvalancheDamageExplosion)
       #Throw players in avalanche away from Mei
       eventPlayer.PlayersInAvalanche[0].applyImpulse(Vector.UP, 5, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-      eventPlayer.PlayersInAvalanche[0].applyImpulse(directionTowards(eventPlayer.getPosition(), eventPlayer.PlayersInAvalanche[0].getPosition()), 15, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+      eventPlayer.PlayersInAvalanche[0].applyImpulse(eventPlayer.PlayersInAvalanche[0].AvalancheImpulseDirection, 15, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
       #Clear frozen status
       eventPlayer.PlayersInAvalanche[0].clearStatusEffect(Status.FROZEN)
       wait()
@@ -233,7 +235,7 @@ rule "Avalanche is active and turnable, throttling":
 rule "Avalanche is active, play sound":
   @Event eachPlayer
   @Condition eventPlayer.AvalancheTimer == true
-  
+
   #Play a constant sound while snowball is rolling
   playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 50)
   playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.WHITE, eventPlayer.getPosition(), eventPlayer.AvalancheCurrentRadius * 2)
@@ -247,7 +249,7 @@ rule "Avalanche hit a wall":
   @Condition eventPlayer.AvalancheTimer < AvalancheDuration - 0.5
   @Condition eventPlayer.AvalancheTimer != 0
   @Condition eventPlayer.getSpeed() < 5 * (eventPlayer.AvalancheSpeed / 100)
-  
+
   wait(0.1, Wait.ABORT_WHEN_FALSE)
   ClearAvalanche()
 
@@ -265,7 +267,7 @@ rule "Enemy is inside Avalanche":
   @Condition len([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.AvalancheTimer == true]) > 0
   #If event player is near anyone using avalanche
   @Condition any([distance(eventPlayer.getPosition(), i.getPosition()) < i.AvalancheCurrentRadius * 1.25 for i in [player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.AvalancheTimer]]) == true
-  
+
   (sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0].PlayersInAvalanche = (sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0].PlayersInAvalanche.concat(eventPlayer)
   eventPlayer.attachTo((sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0], localVector(eventPlayer.getPosition(), (sorted(getPlayers(getOppositeTeam(eventPlayer.getTeam())), lambda player: 500 if not player.AvalancheTimer else distance(eventPlayer, player)))[0], Transform.ROTATION_AND_TRANSLATION))
   eventPlayer.setStatusEffect(null, Status.FROZEN, 5)
@@ -273,7 +275,7 @@ rule "Enemy is inside Avalanche":
 rule "Damage players inside of Avalanche":
   @Event eachPlayer
   @Condition eventPlayer.AvalancheTimer == true
-  
+
   damage(eventPlayer.PlayersInAvalanche, eventPlayer, AvalancheDamagePerTick)
   wait(0.05)
   if RULE_CONDITION:
