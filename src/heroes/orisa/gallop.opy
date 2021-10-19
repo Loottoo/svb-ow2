@@ -9,8 +9,12 @@ globalvar orisaGallopDamage = createWorkshopSetting(int[0:200], "Orisa", "Time g
 rule "[orisa.del] Gallop":
     @Event eachPlayer
     @Hero orisa
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
+    @Condition (eventPlayer.isHoldingButton(Button.ULTIMATE) or eventPlayer.isHoldingButton(Button.ABILITY_2)) == true
     
+    if eventPlayer.isHoldingButton(Button.ULTIMATE):
+        wait(0.4)
+        waitUntil(not eventPlayer.isUsingUltimate(), 0.3)
+        return
     if eventPlayer.CastingUltimate:
         return
     if eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0:
@@ -25,7 +29,6 @@ rule "[orisa.del] Gallop":
     #Disable
     eventPlayer.setPrimaryFireEnabled(false)
     eventPlayer.setSecondaryFireEnabled(false)
-    eventPlayer.setAbility2Enabled(false)
     eventPlayer.disallowButton(Button.ULTIMATE)
     #Start transition to third person camera
     eventPlayer.startCamera(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 30)
@@ -85,7 +88,6 @@ rule "[orisa.del] Gallop":
     #Re-enable
     eventPlayer.setPrimaryFireEnabled(true)
     eventPlayer.setSecondaryFireEnabled(true)
-    eventPlayer.setAbility2Enabled(true)
     eventPlayer.allowButton(Button.ULTIMATE)
 
 
