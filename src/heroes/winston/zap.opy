@@ -1,5 +1,6 @@
 #!mainFile "../../main.opy"
 
+globalvar winstonZapHoldTime = createWorkshopSetting(float[0:5], "Winston", "Zap Max Hold Time", 1, 0)
 
 subroutine ZapHitDetection
 
@@ -82,7 +83,7 @@ rule "Fire Zap":
             destroyHudText(eventPlayer.ZapHUDSpacer)
             destroyProgressBarHud(eventPlayer.ZapHudProgress)
         else:
-            waitUntil(not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or notEligibleToZap, createWorkshopSetting(float[0:5], "Winston", "Zap Max Hold Time", 1, 0))
+            waitUntil(not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or notEligibleToZap, winstonZapHoldTime)
             if notEligibleToZap:
                 stopChasingVariable(eventPlayer.ZapChargeMeter)
                 eventPlayer.ZapChargeMeter = 0

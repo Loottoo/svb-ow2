@@ -1,6 +1,8 @@
 #!mainFile "../../main.opy"
 
-globalvar ZenShieldHealth
+globalvar ZenShieldHealth = createWorkshopSetting(int[0:100], "Zenyatta", "Secondary Fire Shield Health (Setting to less than 10 disables shield)", 50, 1)
+globalvar ZenShieldCooldown = createWorkshopSetting(float[2:20], "Zenyatta", "Secondary Fire Shield Cooldown on Break", 4, 0)
+globalvar ZenShieldRechargeRate = createWorkshopSetting(int[0:100], "Zenyatta", "Shield Recharge Rate", 25, 2)
 
 playervar ZenShield
 playervar ZenShieldCurrentHealth
@@ -14,13 +16,12 @@ playervar ZenShieldCurrentHealth
 
 
 rule "Global Zenyatta Create Workshop Variable and GUI":
-    ZenShieldHealth = createWorkshopSetting(int[0:100], "Zenyatta", "Secondary Fire Shield Health (Setting to less than 10 disables shield)", 50, 1)
     createProgressBarInWorldText([i for i in localPlayer if localPlayer.hero == Hero.ZENYATTA and (not (localPlayer.isDead() or localPlayer.isUsingUltimate() or localPlayer.isCommunicatingEmote()))], localPlayer.ZenShieldCurrentHealth / ZenShieldHealth * 100, "Shield HP: {0}".format(ceil(localPlayer.ZenShieldCurrentHealth)), updateEveryTick(localPlayer.getEyePosition() + localPlayer.getFacingDirection() * 30 + crossProduct(crossProduct(localPlayer.getFacingDirection(), Vector.UP), localPlayer.getFacingDirection()) * -8), 0.7, Clip.NONE, Color.SKY_BLUE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
 
 
 rule "Zenyatta hero picked (no complications with swapping, don't worry)":
     @Event eachPlayer
-    
+
     eventPlayer.ZenShieldCurrentHealth = ZenShieldHealth
 
 
@@ -28,7 +29,7 @@ rule "Zenyatta Shield Damage":
     @Event playerTookDamage
     @Hero zenyatta
     @Condition eventPlayer.zenShieldHealthPool == true
-    
+
     if eventPlayer.zenShieldIgnoreDmg:
         eventPlayer.zenShieldIgnoreDmg = false
     else:
@@ -60,7 +61,7 @@ rule "Zenyatta Knockback Blocked By Shield":
     @Hero zenyatta
     @Condition eventPlayer.zenShieldHealthPool == true
     @Condition eventAbility != Button.MELEE
-    
+
     if angleBetweenVectors(eventPlayer.getFacingDirection(), eventDirection) > 110:
         if eventAbility == Button.MELEE or attacker.getCurrentHero() == Hero.REINHARDT or attacker.getCurrentHero() == Hero.DVA and eventAbility == Button.ABILITY_1 or attacker.getCurrentHero() == Hero.HAMMOND and eventAbility == Button.SECONDARY_FIRE or attacker.getCurrentHero() == Hero.DOOMFIST and eventAbility != Button.PRIMARY_FIRE and eventAbility != Button.ULTIMATE or attacker.getCurrentHero() == Hero.SIGMA and eventAbility == Button.ULTIMATE:
             return
@@ -73,7 +74,7 @@ rule "Zenyatta Secondary Creates Shield":
     @Hero zenyatta
     @Condition eventPlayer.ZenShieldCurrentHealth >= 10
     @Condition eventPlayer.isFiringSecondaryFire() == true
-    
+
     stopChasingVariable(eventPlayer.ZenShieldCurrentHealth)
 
     createEffect(getAllPlayers().exclude(eventPlayer), Effect.GOOD_AURA, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 0.5 + crossProduct(crossProduct(eventPlayer.getFacingDirection(), Vector.UP), eventPlayer.getFacingDirection()) * -0.25), 0.38, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -97,9 +98,9 @@ rule "Zenyatta Secondary Creates Shield":
         playEffect(getPlayers(getOppositeTeam(eventPlayer.getTeam())).concat(eventPlayer), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer, 95)
         wait(1.6)
         chase(eventPlayer.ZenShieldCurrentHealth, ZenShieldHealth, rate=25, ChaseReeval.NONE)
-        wait(createWorkshopSetting(float[0:20], "Zenyatta", "Secondary Fire Shield Cooldown on Break", 4, 0) - 1.6)
+        wait(ZenShieldCooldown - 1.6)
     else:
         wait(1.6, Wait.RESTART_WHEN_TRUE)
-        chase(eventPlayer.ZenShieldCurrentHealth, ZenShieldHealth, rate=createWorkshopSetting(int[0:100], "Zenyatta", "Shield Recharge Rate", 25, 2), ChaseReeval.NONE)
+        chase(eventPlayer.ZenShieldCurrentHealth, ZenShieldHealth, rate=ZenShieldRechargeRate, ChaseReeval.NONE)
 
 

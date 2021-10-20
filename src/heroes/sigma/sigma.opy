@@ -1,6 +1,12 @@
 #!mainFile "../../main.opy"
 
-globalvar SigmaSecondaryOptions
+#Indices: 0 = duration, 1 = cooldown, 2 = radius, 3 = height
+globalvar SigmaSecondaryOptions = [
+    createWorkshopSetting(float[3:20], "Sigma", "Gravitic Lift duration", 8, 0),
+    createWorkshopSetting(float[3:30], "Sigma", "Gravitic Lift cooldown (can't place another until the first expires)", 13, 1),
+    createWorkshopSetting(float[1.25:8], "Sigma", "Gravitic Lift radius", 3.5, 2),
+    createWorkshopSetting(float[5:40], "Sigma", "Gravitic Lift height", 25, 3)
+]
 
 
 playervar Flight
@@ -8,17 +14,6 @@ playervar FlightSound
 playervar SigmaSecondary
 playervar SigmaSecondaryTimer
 playervar SigmaLifted
-
-
-
-
-rule "Global Sigma Config Init":
-    #Indices: 0 = duration, 1 = cooldown, 2 = radius, 3 = height
-    SigmaSecondaryOptions = []
-    SigmaSecondaryOptions[0] = createWorkshopSetting(float[3:20], "Sigma", "Gravitic Lift duration", 8, 0)
-    SigmaSecondaryOptions[1] = createWorkshopSetting(float[3:30], "Sigma", "Gravitic Lift cooldown (can't place another until the first expires)", 13, 1)
-    SigmaSecondaryOptions[2] = createWorkshopSetting(float[1.25:8], "Sigma", "Gravitic Lift radius", 3.5, 2)
-    SigmaSecondaryOptions[3] = createWorkshopSetting(float[5:40], "Sigma", "Gravitic Lift height", 25, 3)
 
 
 def InitialSigma():

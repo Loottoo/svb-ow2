@@ -1,8 +1,6 @@
 #!mainFile "../../main.opy"
 
 
-#Is this variable for ana or genji? It seems to be used for both.
-playervar nanoTarget
 
 playervar nanobladeDamageMod
 
@@ -15,7 +13,7 @@ rule "[Genji] Received Nano":
   @Condition healee.hero == Hero.GENJI
   @Condition healer.hero == Hero.ANA
   @Condition eventAbility == Button.ULTIMATE
-  
+
   eventPlayer.nanoTarget = eventPlayer
 
 
@@ -25,7 +23,7 @@ rule "[Genji] Detect Nano (only if no heal event was detected)":
   @Condition eventAbility == null
   @Condition attacker.getTeam() == eventPlayer.getTeam()
   @Condition attacker.getCurrentHero() == Hero.ANA
-  
+
   if eventDamage != 0.001 / 10:
       victim.nanoTarget = eventPlayer
 
@@ -34,12 +32,12 @@ rule "[Genji] Detected Nano+blade":
   @Hero genji
   @Condition eventPlayer.isUsingUltimate() == true
   @Condition eventPlayer.nanoTarget == eventPlayer
-  
+
   async(UsedNanoBlade, AsyncBehavior.NOOP)
 
 def UsedNanoBlade():
   @Name "[Sub][Genji] Detected Nano+blade"
-  
+
   startDamageModification(getAllPlayers(), eventPlayer, 100 / 1.5, DamageReeval.NONE)
   eventPlayer.nanobladeDamageMod = getLastDamageModification()
   waitUntil(eventPlayer.isUsingUltimate() == false or eventPlayer.nanoTarget == null, 9)

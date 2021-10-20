@@ -1,11 +1,12 @@
 #!mainFile "../../main.opy"
 
+globalvar mercyAngelicBlessingCooldown = createWorkshopSetting(float[0:60], "Mercy", "Angelic Blessing Cooldown", 20, 0)
 
 rule "[mercy.del] Angelic Blessing":
     @Event eachPlayer
     @Hero mercy
     @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
-    
+
     if eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0:
         return
     if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.isDead():
@@ -56,7 +57,7 @@ rule "[mercy.del] Angelic Blessing":
     playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.AngelicBlessingPosition, 100)
     #Stop casting
     eventPlayer.AngelicBlessingPosition = null
-    eventPlayer.setAbilityCooldown(Button.ABILITY_2, createWorkshopSetting(float[0:60], "Mercy", "Angelic Blessing Cooldown", 20, 0))
+    eventPlayer.setAbilityCooldown(Button.ABILITY_2, mercyAngelicBlessingCooldown)
     eventPlayer.setAbility2Enabled(true)
     eventPlayer.AngelicBlessingTarget.disallowButton(Button.INTERACT)
     #Wait until target chooses to fly to a target, after 6 seconds have elapsed, or if the target is using an ability that restricts their movement
@@ -126,7 +127,7 @@ rule "[mercy.del] Update Angelic Blessing Player Target Outline":
     @Event eachPlayer
     @Hero mercy
     @Condition (eventPlayer.AngelicBlessingTarget and not eventPlayer.AngelicBlessingFlyTarget) == true
-    
+
     wait(0.032, Wait.ABORT_WHEN_FALSE)
     (getAllPlayers().exclude((sorted([i for i in getPlayersInRadius(eventPlayer.AngelicBlessingTarget.getEyePosition(), 30, eventPlayer.getTeam(), LosCheck.SURFACES).exclude(eventPlayer.AngelicBlessingTarget).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.AngelicBlessingTarget.isInViewAngle(i, 70) and (not (eventPlayer.AngelicBlessingTarget.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.AngelicBlessingTarget.getFacingDirection(), directionTowards(eventPlayer.AngelicBlessingTarget.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.AngelicBlessingTarget.getEyePosition(), i.getEyePosition())))[0])).stopForcingOutlineFor(eventPlayer.AngelicBlessingTarget)
     ((sorted([i for i in getPlayersInRadius(eventPlayer.AngelicBlessingTarget.getEyePosition(), 30, eventPlayer.getTeam(), LosCheck.SURFACES).exclude(eventPlayer.AngelicBlessingTarget).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.AngelicBlessingTarget.isInViewAngle(i, 70) and (not (eventPlayer.AngelicBlessingTarget.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.AngelicBlessingTarget.getFacingDirection(), directionTowards(eventPlayer.AngelicBlessingTarget.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.AngelicBlessingTarget.getEyePosition(), i.getEyePosition())))[0]).startForcingOutlineFor(eventPlayer.AngelicBlessingTarget, true, Color.YELLOW, OutlineVisibility.ALWAYS)
