@@ -63,6 +63,12 @@ settings {
             },
             "sigma": {
                 "ability1Cooldown%": 75
+            },
+            "mei": {
+                "primaryFireFreezeDuration%": 20,
+                "primaryFireFreezeMinimum%": 0,
+                "primaryFireFreezeRate%": 0,
+                "ultFreezeRate%": 0
             }
         }
     },
