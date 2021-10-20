@@ -38,6 +38,9 @@ settings {
     },
     "heroes": {
         "allTeams": {
+            "ana": {
+                "ability1Cooldown%": 125
+            },
             "ashe": {
                 "ability1EnemyKb%": 55
             },
