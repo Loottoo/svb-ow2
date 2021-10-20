@@ -16,7 +16,7 @@ rule "[Sombra] Stealth Exit Quickly":
         return
     eventPlayer.cancelPrimaryAction()
 
-rule "[Sombra] If Sombra took damage while exiting stealth, exit stealth quickly"
+rule "[Sombra] If Sombra took damage while exiting stealth, exit stealth quickly":
         @Event playerTookDamage
         @Hero sombra
         @Condition eventPlayer.isUsingAbility1()
