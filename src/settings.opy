@@ -12,6 +12,7 @@ settings {
     "gamemodes": {
         "general": {
             "enableSkins": false,
+            "enableKillCam": false,
             "respawnTime%": 80
         },
         "assault": {
