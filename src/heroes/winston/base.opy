@@ -5,7 +5,7 @@ globalvar ZapCharges = 1
 globalvar ZapCooldown = createWorkshopSetting(int[0:20], "Winston", "Zap Cooldown time", 2, 0)
 globalvar ZapChargeTime = createWorkshopSetting(float[0:10], "Winston", "Zap Charge time", 1, 0)
 globalvar ZapDamage = createWorkshopSetting(int[0:500], "Winston", "Zap Damage", 50, 0)
-globalvar ZapRange = createWorkshopSetting(float[0:500], "Winston", "Zap Range", 500, 0)
+globalvar ZapRange = createWorkshopSetting(float[0:500], "Winston", "Zap Range", 20, 0)
 globalvar ZapRadius = createWorkshopSetting(float[0:2], "Winston", "Zap Projectile Size", 0.5, 0)
 globalvar ZapHitboxArray
 globalvar ZapLoop
@@ -21,14 +21,14 @@ playervar p_ZapCharges
 
 def CleanupWinston():
     @Name "[winston.del] Subroutine: Cleanup"
-    
+
     CleanupHealthPools()
     CleanupTexts()
 
 
 def InitialWinston():
     @Name "[winston.del] Subroutine: Initial"
-    
+
     #Character setup
     eventPlayer.addHealthPool(Health.NORMAL, 110.714 if eventPlayer.isUsingUltimate() else 75, true, true)
     eventPlayer.HeroHealthPools.append(getLastCreatedHealthPool())
