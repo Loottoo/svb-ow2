@@ -24,7 +24,7 @@ rule "[orisa.del] Ultimate":
     wait(0.032)
     #Reset
     eventPlayer.disallowButton(Button.ABILITY_2)
-    eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.TemporaryCooldown)
+    eventPlayer.setAbilityCooldown(Button.ABILITY_2, eventPlayer.TemporaryCooldown - 0.256)
     eventPlayer.setProjectileGravity(100)
     eventPlayer.setProjectileSpeed(125)
     eventPlayer.CastingUltimate = false
