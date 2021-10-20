@@ -15,11 +15,6 @@ settings {
             "enableKillCam": false,
             "respawnTime%": 80
         },
-        "assault": {
-            "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam",
-            "enableCompetitiveRules": true
-        },
         "control": {
             "enabledMaps": [],
             "roleLimit": "2OfEachRolePerTeam",
