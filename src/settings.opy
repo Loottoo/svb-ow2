@@ -73,11 +73,7 @@ settings {
         }
     },
     "workshop": {
-        "What button should Icing overwrite?": [
-            1
-        ],
         "Snowball time between shots": 0.5,
-        "Enable Snowball instead of regular right click": false,
-        "Steps (Higher = more circles on the ground)": 15
+        "Enable Snowball instead of regular right click": false
     }
 }
