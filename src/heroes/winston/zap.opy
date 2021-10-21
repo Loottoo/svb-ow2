@@ -48,7 +48,7 @@ rule "Create Zap Radius Array":
         Vector.RIGHT * ZapRadius * 0.702 + Vector.DOWN * ZapRadius * 0.702
     ]
 
-#!define notEligibleToZap (eventPlayer.hero != Hero.WINSTON or eventPlayer.isDead() or eventPlayer.isUsingUltimate() or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.FROZEN))
+#!define notEligibleToZap (eventPlayer.hero != Hero.WINSTON or eventPlayer.isUsingUltimate() or hardCCd(eventPlayer))
 
 rule "Fire Zap":
     @Event eachPlayer

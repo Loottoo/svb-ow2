@@ -10,13 +10,13 @@ rule "Hack Melee, but not if healthpack is only valid target":
     @Hero sombra
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == true
     @Condition eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0
-    @Condition (eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED)) == false
-    
+    @Condition not specialAbilitiesDisabled(eventPlayer)
+
     if eventPlayer.isMeleeing():
         return
     if eventPlayer.isUsingAbility1():
         wait(0.464)
-    if eventPlayer.isDead() or not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED):
+    if specialAbilitiesDisabled(eventPlayer):
         return
     if ([player for player in getPlayers(getOppositeTeam(eventPlayer.getTeam())) if player.isAlive() and not player.hasStatusEffect(Status.INVINCIBLE) and not player.hasStatusEffect(Status.PHASED_OUT) and player in getPlayersInRadius(eventPlayer.getEyePosition(), 18, getOppositeTeam(eventPlayer.getTeam()), LosCheck.SURFACES) and player in eventPlayer.getPlayersInViewAngle(getOppositeTeam(eventPlayer.getTeam()), 50)]) == []:
         eventPlayer.allowButton(Button.SECONDARY_FIRE)
@@ -39,7 +39,7 @@ rule "Hack Melee, but not if healthpack is only valid target":
 rule "Sombra damage checks (hack melee and increase primary)":
     @Event playerDealtDamage
     @Hero sombra
-    
+
     if eventAbility == Button.MELEE and eventPlayer.HackMelee != 0:
         if eventPlayer.HackHit:
             goto lbl_0

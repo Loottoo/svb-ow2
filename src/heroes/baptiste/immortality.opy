@@ -29,11 +29,9 @@ rule "[baptiste.del] Cast IF":
   @Event eachPlayer
   @Hero baptiste
   @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
+  @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
+  @Condition not specialAbilitiesDisabled(eventPlayer)
 
-  if eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0:
-      return
-  if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.isDead():
-      return
   for eventPlayer.Index in range(5):
       createEffect(getAllPlayers(), Effect.HEAL_TARGET, eventPlayer.getTeam(), updateEveryTick(eventPlayer.getEyePosition()), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
       eventPlayer.HeroEffects.append(getLastCreatedEntity())
@@ -42,18 +40,12 @@ rule "[baptiste.del] Cast IF":
   async(SlowdownBaptiste, AsyncBehavior.NOOP)
   eventPlayer.communicate(Comms.WITH_YOU)
   waitUntil(
-    any(
-      [i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP),
-      eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN),
-      eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]
-    ),
+    specialAbilitiesDisabled(eventPlayer),
     bapLampCastTime
   )
-  #Stun check
-  if any([i == false for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]):
-      eventPlayer.allowButton(Button.ABILITY_2)
-      eventPlayer.forceButtonPress(Button.ABILITY_2)
-      eventPlayer.disallowButton(Button.ABILITY_2)
+  eventPlayer.allowButton(Button.ABILITY_2)
+  eventPlayer.forceButtonPress(Button.ABILITY_2)
+  eventPlayer.disallowButton(Button.ABILITY_2)
   CleanupEffects()
   async(ReturnBaptisteToNormalSpeed, AsyncBehavior.NOOP)
   waitUntil(not eventPlayer.isUsingAbility2(), 0.5)

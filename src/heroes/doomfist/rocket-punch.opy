@@ -5,14 +5,14 @@ rule "Doomfist Vertical Rocket Punch":
     @Event eachPlayer
     @Hero doomfist
     @Condition eventPlayer.isFiringSecondaryFire() == true
-    
+
     eventPlayer.DFPunchCharge = 3.5
     chase(eventPlayer.DFPunchCharge, 6, duration=1.4, ChaseReeval.DESTINATION_AND_DURATION)
     #Punch starts
     waitUntil(not eventPlayer.isFiringSecondaryFire(), 99999)
     stopChasingVariable(eventPlayer.DFPunchCharge)
     #Player cancels Rocket Punch, gets CC'd or hacked; Stop execution
-    if eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.ROOTED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
+    if specialAbilitiesDisabled(eventPlayer) or eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
         return
     eventPlayer.HeroAbsoluteSpeedMod = 0
     if not eventPlayer.DFDidHitPlayer:
@@ -30,7 +30,7 @@ rule "Rocket Punch":
     @Event eachPlayer
     @Hero doomfist
     @Condition eventPlayer.isFiringSecondaryFire() == true
-    
+
     eventPlayer.setDamageDealt(20)
     eventPlayer.Punching = true
     eventPlayer.setAbility1Enabled(false)

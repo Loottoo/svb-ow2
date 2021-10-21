@@ -7,10 +7,10 @@ rule "Primary Damage":
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == true
     @Condition (not eventPlayer.isMeleeing()) == true
     @Condition (not eventPlayer.isUsingAbility1() and not eventPlayer.isUsingAbility2() and not eventPlayer.isUsingUltimate() and not eventPlayer.isFiringSecondaryFire()) == true
-    @Condition (not (eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED) or false)) == true
+    @Condition not specialAbilitiesDisabled(eventPlayer)
     @Condition eventPlayer.getAmmo(0) > 0
     @Condition (not eventPlayer.Punching) == true
-    
+
     eventPlayer.setPrimaryFireEnabled(true)
     eventPlayer.setDamageDealt(900 / 6.6)
     eventPlayer.startForcingButton(Button.PRIMARY_FIRE)

@@ -10,7 +10,8 @@ rule "[orisa.del] Gallop":
     @Event eachPlayer
     @Hero orisa
     @Condition (eventPlayer.isHoldingButton(Button.ULTIMATE) or eventPlayer.isHoldingButton(Button.ABILITY_2)) == true
-    
+    @Condition not specialAbilitiesDisabled(eventPlayer)
+
     if eventPlayer.isHoldingButton(Button.ULTIMATE):
         wait(0.4)
         waitUntil(not eventPlayer.isUsingUltimate(), 0.3)
@@ -18,8 +19,6 @@ rule "[orisa.del] Gallop":
     if eventPlayer.CastingUltimate:
         return
     if eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0:
-        return
-    if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.STUNNED) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.isDead():
         return
     #Communication
     eventPlayer.setDamageDealt(0)
@@ -48,7 +47,7 @@ rule "[orisa.del] Gallop":
     #Casting
     eventPlayer.HeroAbsoluteSpeedMod = 0
     eventPlayer.startFacing(vect(0, 0, 1), 500, Relativity.TO_PLAYER, FacingReeval.DIRECTION_AND_TURN_RATE)
-    waitUntil(any([i == true for i in [eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]), orisaGallopDelay)
+    waitUntil(specialAbilitiesDisabled(eventPlayer), orisaGallopDelay)
     eventPlayer.setDamageDealt(100)
     #Gallop
     eventPlayer.startForcingThrottle(1, 1, 0, 0, 0, 0)
@@ -60,7 +59,7 @@ rule "[orisa.del] Gallop":
     eventPlayer.TimeRemaining = 0
     chase(eventPlayer.TimeRemaining, 9999, rate=1, ChaseReeval.DESTINATION_AND_RATE)
     while eventPlayer.TimeRemaining < orisaGallopDuration:
-        if any([i == true for i in [not isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + worldVector(Vector.FORWARD * 2, eventPlayer, Transform.ROTATION), BarrierLos.PASS_THROUGH_BARRIERS), eventPlayer.hasStatusEffect(Status.ASLEEP), eventPlayer.hasStatusEffect(Status.HACKED), eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN), eventPlayer.hasStatusEffect(Status.STUNNED), eventPlayer.hasStatusEffect(Status.FROZEN)]]):
+        if (not isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + worldVector(Vector.FORWARD * 2, eventPlayer, Transform.ROTATION), BarrierLos.PASS_THROUGH_BARRIERS)) or specialAbilitiesDisabled(eventPlayer):
             #Stop Gallop
             break
         else:
@@ -99,4 +98,3 @@ rule "[orisa.del] Galloping Knockback":
 
     victim.applyImpulse(eventDirection + Vector.UP / 2, 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     eventPlayer.setEnvironmentalKillCreditor(attacker)
-    
