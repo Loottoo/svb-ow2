@@ -1,13 +1,13 @@
 #!mainFile "../../main.opy"
 
-globalvar AvalancheRadius
-globalvar AvalancheDuration
-globalvar AvalancheMaxSpeed
-globalvar AvalancheEnabled
-globalvar AvalancheDamagePerTick
-globalvar AvalancheDamageExplosion
-globalvar AvalancheTurnable
-globalvar AvalancheTurnSpeed
+globalvar AvalancheRadius = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 3, 4)
+globalvar AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 5)
+globalvar AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 300, 6)
+globalvar AvalancheEnabled = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Enable Avalanche instead of regular Ultimate", true, 0)
+globalvar AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 7)
+globalvar AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 8)
+globalvar AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow steering during Avalanche", true, 2)
+globalvar AvalancheTurnSpeed = createWorkshopSetting(int[10:500], "Mei - Avalanche ability (Ultimate)", "Turn Speed (if enabled)", 200, 3)
 
 
 playervar AvalancheEffects
@@ -28,17 +28,6 @@ subroutine ExplodeAvalanche
 subroutine ExplodePlayersInAvalanche
 
 subroutine DeployAvalanche
-
-
-rule "Initialise Avalanche":
-  AvalancheEnabled = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Enable Avalanche instead of regular Ultimate", true, 0)
-  AvalancheTurnable = createWorkshopSetting(bool, "Mei - Avalanche ability (Ultimate)", "Allow steering during Avalanche", true, 2)
-  AvalancheTurnSpeed = createWorkshopSetting(int[10:500], "Mei - Avalanche ability (Ultimate)", "Turn Speed (if enabled)", 200, 3)
-  AvalancheRadius = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Radius", 3, 4)
-  AvalancheDuration = createWorkshopSetting(float[1:5], "Mei - Avalanche ability (Ultimate)", "Avalanche Duration", 3, 5)
-  AvalancheMaxSpeed = createWorkshopSetting(int[100:400], "Mei - Avalanche ability (Ultimate)", "Avalanche max speed", 300, 6)
-  AvalancheDamagePerTick = createWorkshopSetting(float[0:10], "Mei - Avalanche ability (Ultimate)", "Damage per tick while players are attached", 1.5, 7)
-  AvalancheDamageExplosion = createWorkshopSetting(float[0:500], "Mei - Avalanche ability (Ultimate)", "Damage on explode", 50, 8)
 
 
 rule "Avalanche Progress Bar HUD element":

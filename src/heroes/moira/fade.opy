@@ -1,5 +1,6 @@
 #!mainFile "../../main.opy"
 
+globalvar moiraFadeCleanseRadius = createWorkshopSetting(float[1:3], "Moira Fade Cleanse", "Range - How close should Moira be to the teammate?", 2, 0)
 
 playervar FadePlayerInRange
 playervar FadePlayersCleansed
@@ -9,9 +10,9 @@ rule "Moira using Fade - Clear debuffs from allies":
     @Event eachPlayer
     @Hero moira
     @Condition eventPlayer.isUsingAbility1() == true
-    
+
     #Get player near Moira
-    eventPlayer.FadePlayerInRange = ([player for player in getPlayers(eventPlayer.getTeam()) if player != eventPlayer and not player in eventPlayer.FadePlayersCleansed and distance(eventPlayer, player) <= createWorkshopSetting(float[1:3], "Moira Fade Cleanse", "Range - How close should Moira be to the teammate?", 2, 0)])[0]
+    eventPlayer.FadePlayerInRange = ([player for player in getPlayers(eventPlayer.getTeam()) if player != eventPlayer and not player in eventPlayer.FadePlayersCleansed and distance(eventPlayer, player) <= moiraFadeCleanseRadius])[0]
     if eventPlayer.FadePlayerInRange:
         eventPlayer.FadePlayersCleansed = eventPlayer.FadePlayersCleansed.concat(eventPlayer.FadePlayerInRange)
         #Set Phased Out to clear debuffs not created by the Workshop

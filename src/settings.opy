@@ -12,12 +12,8 @@ settings {
     "gamemodes": {
         "general": {
             "enableSkins": false,
+            "enableKillCam": false,
             "respawnTime%": 80
-        },
-        "assault": {
-            "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam",
-            "enableCompetitiveRules": true
         },
         "control": {
             "enabledMaps": [],
@@ -42,6 +38,9 @@ settings {
     },
     "heroes": {
         "allTeams": {
+            "ana": {
+                "ability1Cooldown%": 125
+            },
             "ashe": {
                 "ability1EnemyKb%": 55
             },
@@ -64,15 +63,17 @@ settings {
             },
             "sigma": {
                 "ability1Cooldown%": 75
+            },
+            "mei": {
+                "primaryFireFreezeDuration%": 20,
+                "primaryFireFreezeMinimum%": 0,
+                "primaryFireFreezeRate%": 0,
+                "ultFreezeRate%": 0
             }
         }
     },
     "workshop": {
-        "What button should Icing overwrite?": [
-            1
-        ],
         "Snowball time between shots": 0.5,
-        "Enable Snowball instead of regular right click": false,
-        "Steps (Higher = more circles on the ground)": 15
+        "Enable Snowball instead of regular right click": false
     }
 }

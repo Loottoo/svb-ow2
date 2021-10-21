@@ -2,6 +2,9 @@
 
 
 globalvar roadhogBreatherCloudSize = createWorkshopSetting(float[1:50], "Roadhog", "Take a breather cloud size", 7.5, 0)
+globalvar roadhogCloudDamageReduction = createWorkshopSetting(int[0:100], "Roadhog", "Cloud damage reduction (%)", 10, 3)
+globalvar roadhogCloudDuration = createWorkshopSetting(float[2.5:9], "Roadhog", "Cloud duration", 5, 1)
+globalvar roadhogCloudHealsPerSecond = createWorkshopSetting(int[0:100], "Roadhog", "Cloud Healing per second", 20, 2)
 
 
 playervar roadhogMovementSpeed
@@ -18,17 +21,17 @@ rule "[Roadhog] Take a breather":
     @Event eachPlayer
     @Hero roadhog
     @Condition eventPlayer.isUsingAbility2() == true
-    
+
     async(RoadhogTakeABreather, AsyncBehavior.NOOP)
 
 
 def RoadhogTakeABreather():
     @Name "[Sub][Roadhog] Take a breather"
-    
+
     eventPlayer.roadhogCloudPlayersAffected = []
     eventPlayer.roadhogCloudEntity = []
     eventPlayer.roadhogCloudPos = eventPlayer.getPosition()
-    startDamageModification(eventPlayer.roadhogCloudPlayersAffected, getAllPlayers(), 100 - createWorkshopSetting(int[0:100], "Roadhog", "Cloud damage reduction (%)", 10, 3), DamageReeval.NONE)
+    startDamageModification(eventPlayer.roadhogCloudPlayersAffected, getAllPlayers(), 100 - roadhogCloudDamageReduction, DamageReeval.NONE)
     eventPlayer.roadhogCloudDamageMod = getLastDamageModification()
     for eventPlayer.Index in range(-0.5, 1):
         createEffect(getPlayers(eventPlayer.getTeam()), Effect.CLOUD, Color.YELLOW, evalOnce(eventPlayer.getPosition() + vect(0.5, 0, 0.5) * eventPlayer.Index), roadhogBreatherCloudSize * 1.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -46,7 +49,7 @@ def RoadhogTakeABreather():
     while eventPlayer.roadhogMovementSpeed != 100:
         eventPlayer.AddSpeedMod += 100/32
         wait(0.032)
-    wait(createWorkshopSetting(float[2.5:9], "Roadhog", "Cloud duration", 5, 1) - 2.5)
+    wait(roadhogCloudDuration - 2.5)
     for eventPlayer.Index in range(len(eventPlayer.roadhogCloudEntity)):
         destroyEffect(eventPlayer.roadhogCloudEntity[eventPlayer.Index])
     stopDamageModification(eventPlayer.roadhogCloudDamageMod)
@@ -57,7 +60,7 @@ rule "[Roadhog] Cloud healing":
     @Event eachPlayer
     @Hero roadhog
     @Condition eventPlayer.roadhogCloudEntity != []
-    
+
     RoadhogCloudHealing()
     wait(1)
     if RULE_CONDITION:
@@ -66,8 +69,8 @@ rule "[Roadhog] Cloud healing":
 
 def RoadhogCloudHealing():
     @Name "[Sub][Roadhog] Cloud healing"
-    
+
     eventPlayer.roadhogCloudPlayersAffected = getPlayersInRadius(eventPlayer.roadhogCloudPos, roadhogBreatherCloudSize, eventPlayer.getTeam(), LosCheck.SURFACES)
-    eventPlayer.roadhogCloudPlayersAffected.startHoT(eventPlayer, 1, createWorkshopSetting(int[0:100], "Roadhog", "Cloud Healing per second", 20, 2))
+    eventPlayer.roadhogCloudPlayersAffected.startHoT(eventPlayer, 1, roadhogCloudHealsPerSecond)
 
 

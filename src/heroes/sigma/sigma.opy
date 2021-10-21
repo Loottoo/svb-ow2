@@ -1,6 +1,12 @@
 #!mainFile "../../main.opy"
 
-globalvar SigmaSecondaryOptions
+#Indices: 0 = duration, 1 = cooldown, 2 = radius, 3 = height
+globalvar SigmaSecondaryOptions = [
+    createWorkshopSetting(float[3:20], "Sigma", "Gravitic Lift duration", 8, 0),
+    createWorkshopSetting(float[3:30], "Sigma", "Gravitic Lift cooldown (can't place another until the first expires)", 13, 1),
+    createWorkshopSetting(float[1.25:8], "Sigma", "Gravitic Lift radius", 3.5, 2),
+    createWorkshopSetting(float[5:40], "Sigma", "Gravitic Lift height", 25, 3)
+]
 
 
 playervar Flight
@@ -8,17 +14,6 @@ playervar FlightSound
 playervar SigmaSecondary
 playervar SigmaSecondaryTimer
 playervar SigmaLifted
-
-
-
-
-rule "Global Sigma Config Init":
-    #Indices: 0 = duration, 1 = cooldown, 2 = radius, 3 = height
-    SigmaSecondaryOptions = []
-    SigmaSecondaryOptions[0] = createWorkshopSetting(float[3:20], "Sigma", "Gravitic Lift duration", 8, 0)
-    SigmaSecondaryOptions[1] = createWorkshopSetting(float[3:30], "Sigma", "Gravitic Lift cooldown (can't place another until the first expires)", 13, 1)
-    SigmaSecondaryOptions[2] = createWorkshopSetting(float[1.25:8], "Sigma", "Gravitic Lift radius", 3.5, 2)
-    SigmaSecondaryOptions[3] = createWorkshopSetting(float[5:40], "Sigma", "Gravitic Lift height", 25, 3)
 
 
 def InitialSigma():
@@ -46,8 +41,7 @@ rule "Sigma Secondary":
     @Event eachPlayer
     @Hero sigma
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == true
-    @Condition (not (eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.HACKED) or eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.STUNNED))) == true
-    @Condition eventPlayer.isAlive() == true
+    @Condition not specialAbilitiesDisabled(eventPlayer)
     @Condition eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0
     @Condition eventPlayer.isUsingAbility1() == false
     @Condition eventPlayer.isUsingAbility2() == false
@@ -140,14 +134,14 @@ rule "Flight Mechanic":
     eventPlayer.FlightSound = getLastCreatedEntity()
     while eventPlayer.Flight and eventPlayer.isAlive() and not (eventPlayer.hero == Hero.DOOMFIST and eventPlayer.isUsingAbility2()):
         if (eventPlayer.isHoldingButton(Button.CROUCH) or eventPlayer.isHoldingButton(Button.JUMP)) and (not (eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.JUMP))):
-            if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.ROOTED) or eventPlayer.hasStatusEffect(Status.STUNNED):
+            if hardCCd(eventPlayer):
                 goto lbl_0
             eventPlayer.applyImpulse(vect(0, (1 if eventPlayer.isHoldingButton(Button.JUMP) else 0) - (1 if eventPlayer.isHoldingButton(Button.CROUCH) else 0), 0), max((min(5.5 - (eventPlayer.getSpeedInDirection(vect(0, (1 if eventPlayer.isHoldingButton(Button.JUMP) else 0) - (1 if eventPlayer.isHoldingButton(Button.CROUCH) else 0), 0))), 11)) * (0.065 if eventPlayer.getThrottle() == vect(0, 0, 0) else 0.024), 0), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
             lbl_0:
             eventPlayer.applyImpulse(eventPlayer.getVelocity() * vect(0, 1, 0), abs(eventPlayer.getVerticalSpeed()) * -0.05 + -0.015, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         if eventPlayer.getThrottle() != vect(0, 0, 0):
-            if eventPlayer.hasStatusEffect(Status.ASLEEP) or eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN) or eventPlayer.hasStatusEffect(Status.FROZEN) or eventPlayer.hasStatusEffect(Status.ROOTED) or eventPlayer.hasStatusEffect(Status.STUNNED):
+            if hardCCd(eventPlayer):
                 goto lbl_1
             eventPlayer.applyImpulse(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION), (min(max(5.5 - eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)), 0), 3)) * 0.225, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
