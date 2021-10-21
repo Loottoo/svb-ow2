@@ -49,7 +49,7 @@ rule "Zenyatta Shield Damage":
                         heal(eventPlayer, null, eventDamage - eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp)
                     eventPlayer.ZenShieldCurrentHealth = 0
                 else:
-                    eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.zenShieldStartingHp - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
+                    eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.ZenShieldCurrentHealth - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
         else:
             if not (attacker.getCurrentHero() == Hero.SOMBRA and eventAbility == null):
                 eventPlayer.zenShieldIgnoreDmg = true
