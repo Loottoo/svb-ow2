@@ -1,7 +1,7 @@
 #!mainFile "../../main.opy"
 
 globalvar brigBashStunDuration = createWorkshopSetting(float[0:0.75], "Brigitte", "Shield Bash Stun Duration", 0.1)
-globalvar brigBashDamage = createWorkshopSetting(int[5:75], "Brigitte", "Shield Bash Damage", 40)
+globalvar brigBashDamage = createWorkshopSetting(int[5:75], "Brigitte", "Shield Bash Damage", 50)
 
 rule "[Brig] Lower shield bash stun duration and increase damage":
     @Event playerDealtDamage
