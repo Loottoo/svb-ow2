@@ -7,7 +7,7 @@ rule "[Brig] Lower shield bash stun duration and increase damage":
     @Event playerDealtDamage
     @Hero brigitte
     @Condition eventAbility == Button.PRIMARY_FIRE
-    @Condition eventPlayer.isFiringPrimaryFire()
+    # @Condition eventPlayer.isFiringPrimaryFire()
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
 
     damage(victim, attacker, brigBashDamage - eventDamage)

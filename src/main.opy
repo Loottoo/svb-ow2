@@ -20,6 +20,8 @@
 #!include "heroes/baptiste/base.opy"
 #!include "heroes/baptiste/immortality.opy"
 
+#!include "heroes/brigitte/bash.opy"
+
 #!include "heroes/dva/baby.opy"
 
 #!include "heroes/doomfist/base.opy"
