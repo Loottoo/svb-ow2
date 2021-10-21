@@ -38,6 +38,8 @@ playervar AngelicBlessingTarget
 playervar AngelicBlessingFlyTarget
 playervar AngelicBlessings
 playervar SymmetraBotPlayer
+playervar SombraProjectilePosition
+playervar SombraSelectedTarget
 playervar MusicMeter
 playervar WallrideTimer
 playervar ZaryaBubbleCharges
