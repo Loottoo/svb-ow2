@@ -17,17 +17,17 @@ settings {
         },
         "control": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam",
+            "roleLimit": "off",
             "enableCompetitiveRules": true
         },
         "escort": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam",
+            "roleLimit": "off",
             "enableCompetitiveRules": true
         },
         "hybrid": {
             "enabledMaps": [],
-            "roleLimit": "2OfEachRolePerTeam",
+            "roleLimit": "off",
             "enableCompetitiveRules": true
         },
         "skirmish": {
