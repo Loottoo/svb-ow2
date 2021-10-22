@@ -2,6 +2,7 @@
 
 #!include "settings.opy"
 
+#!include "general/role_lock.opy"
 #!include "general/utility_macros.opy"
 #!include "dev.opy"
 
