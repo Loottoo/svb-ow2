@@ -71,10 +71,8 @@ rule "Zenyatta Shield Damage":
                 damage(eventPlayer, attacker, (eventDamage * (eventPlayer.zenShieldStartingHp - 1)) * eventPlayer.zenShieldStartingHp)
             else:
                 if attacker.getCurrentHero() == Hero.ROADHOG and eventAbility == Button.ABILITY_1:
-                    if attacker.isUsingUltimate():
-                        goto lbl_0
-                    attacker.cancelPrimaryAction()
-                    lbl_0:
+                    if not attacker.isUsingUltimate():
+                        attacker.cancelPrimaryAction()
                 if eventDamage > eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp:
                     if not (attacker.getCurrentHero() == Hero.SOMBRA and eventAbility == null):
                         heal(eventPlayer, null, eventDamage - eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp)
