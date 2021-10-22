@@ -92,7 +92,7 @@ rule "Zenyatta Knockback Blocked By Shield":
     @Hero zenyatta
     @Condition eventPlayer.zenShieldHealthPool == true
     @Condition eventAbility != Button.MELEE
-    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), eventDirection * -1) < 70
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), eventDirection * -1) < zenShieldAngleOfProtection
     @Condition not zenUnblockableKnockbacks(attacker, eventAbility)
 
     wait()
