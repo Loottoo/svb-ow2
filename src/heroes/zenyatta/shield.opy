@@ -14,6 +14,37 @@ playervar ZenShieldCurrentHealth
 #!defineMember zenShieldEffects ZenShield[2]
 #!defineMember zenShieldIgnoreDmg ZenShield[3]
 
+#!define zenShieldAngleOfProtection 45
+#!define didZenShieldBlock(incomingDir) (angleBetweenVectors(eventPlayer.getFacingDirection(), (incomingDir) * -1) < zenShieldAngleOfProtection)
+
+#!define zenUnblockableNoShieldDamageAttacks(attacker, ability) (\
+ (attacker).getCurrentHero() == Hero.SIGMA and (ability) == Button.ULTIMATE\
+ or (attacker).getCurrentHero() == Hero.TORBJORN and (ability) == Button.ULTIMATE\
+ or (attacker).getCurrentHero() == Hero.WIDOWMAKER and (ability) == Button.ABILITY_2\
+ or (attacker).getCurrentHero() == Hero.HANZO and (ability) == Button.ULTIMATE\
+)
+
+#!define zenUnblockableDoesShieldDamageAttacks(attacker, ability) (\
+ eventAbility == Button.MELEE\
+ or ((attacker).getCurrentHero() == Hero.GENJI and ((ability) == Button.ULTIMATE or (ability) == Button.ABILITY_1))\
+ or (attacker).getCurrentHero() == Hero.REINHARDT\
+ or (attacker).getCurrentHero() == Hero.DVA and (ability) == Button.ABILITY_1\
+ or (attacker).getCurrentHero() == Hero.WINSTON\
+ or (attacker).getCurrentHero() == Hero.HAMMOND and (ability) == Button.SECONDARY_FIRE\
+ or (attacker).getCurrentHero() == Hero.DOOMFIST and (ability) != Button.PRIMARY_FIRE and (ability) != Button.ULTIMATE\
+ or (attacker).getCurrentHero() == Hero.JUNKRAT and (ability) == Button.ABILITY_2\
+ or (attacker).getCurrentHero() == Hero.BRIGITTE and (ability) == Button.PRIMARY_FIRE\
+ or (attacker).getCurrentHero() == Hero.MOIRA and (ability) == Button.ULTIMATE\
+)
+
+#!define zenUnblockableKnockbacks(attacker, ability) (\
+ (ability) == Button.MELEE\
+ or (attacker).getCurrentHero() == Hero.REINHARDT\
+ or (attacker).getCurrentHero() == Hero.DVA and (ability) == Button.ABILITY_1\
+ or (attacker).getCurrentHero() == Hero.HAMMOND and (ability) == Button.SECONDARY_FIRE\
+ or (attacker).getCurrentHero() == Hero.DOOMFIST and (ability) != Button.PRIMARY_FIRE and (ability) != Button.ULTIMATE\
+ or (attacker).getCurrentHero() == Hero.SIGMA and (ability) == Button.ULTIMATE\
+)
 
 rule "Global Zenyatta Create Workshop Variable and GUI":
     createProgressBarInWorldText([i for i in localPlayer if localPlayer.hero == Hero.ZENYATTA and (not (localPlayer.isDead() or localPlayer.isUsingUltimate() or localPlayer.isCommunicatingEmote()))], localPlayer.ZenShieldCurrentHealth / ZenShieldHealth * 100, "Shield HP: {0}".format(ceil(localPlayer.ZenShieldCurrentHealth)), updateEveryTick(localPlayer.getEyePosition() + localPlayer.getFacingDirection() * 30 + crossProduct(crossProduct(localPlayer.getFacingDirection(), Vector.UP), localPlayer.getFacingDirection()) * -8), 0.7, Clip.NONE, Color.SKY_BLUE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
@@ -33,8 +64,8 @@ rule "Zenyatta Shield Damage":
     if eventPlayer.zenShieldIgnoreDmg:
         eventPlayer.zenShieldIgnoreDmg = false
     else:
-        if angleBetweenVectors(eventPlayer.getFacingDirection(), eventDirection) > 110 and (not (attacker.getCurrentHero() == Hero.SIGMA and eventAbility == Button.ULTIMATE or attacker.getCurrentHero() == Hero.TORBJORN and eventAbility == Button.ULTIMATE or attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.ABILITY_2 or attacker.getCurrentHero() == Hero.HANZO and eventAbility == Button.ULTIMATE)):
-            if eventAbility == Button.MELEE or (attacker.getCurrentHero() == Hero.GENJI and (eventAbility == Button.ULTIMATE or eventAbility == Button.ABILITY_1)) or attacker.getCurrentHero() == Hero.REINHARDT or attacker.getCurrentHero() == Hero.DVA and eventAbility == Button.ABILITY_1 or attacker.getCurrentHero() == Hero.WINSTON or attacker.getCurrentHero() == Hero.HAMMOND and eventAbility == Button.SECONDARY_FIRE or attacker.getCurrentHero() == Hero.DOOMFIST and eventAbility != Button.PRIMARY_FIRE and eventAbility != Button.ULTIMATE or attacker.getCurrentHero() == Hero.JUNKRAT and eventAbility == Button.ABILITY_2 or attacker.getCurrentHero() == Hero.BRIGITTE and eventAbility == Button.PRIMARY_FIRE or attacker.getCurrentHero() == Hero.MOIRA and eventAbility == Button.ULTIMATE:
+        if didZenShieldBlock(eventDirection) and not zenUnblockableNoShieldDamageAttacks(attacker, eventAbility):
+            if zenUnblockableDoesShieldDamageAttacks(attacker, eventAbility):
                 eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.zenShieldStartingHp - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
                 eventPlayer.zenShieldIgnoreDmg = true
                 damage(eventPlayer, attacker, (eventDamage * (eventPlayer.zenShieldStartingHp - 1)) * eventPlayer.zenShieldStartingHp)
@@ -61,12 +92,11 @@ rule "Zenyatta Knockback Blocked By Shield":
     @Hero zenyatta
     @Condition eventPlayer.zenShieldHealthPool == true
     @Condition eventAbility != Button.MELEE
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), eventDirection * -1) < 70
+    @Condition not zenUnblockableKnockbacks(attacker, eventAbility)
 
-    if angleBetweenVectors(eventPlayer.getFacingDirection(), eventDirection) > 110:
-        if eventAbility == Button.MELEE or attacker.getCurrentHero() == Hero.REINHARDT or attacker.getCurrentHero() == Hero.DVA and eventAbility == Button.ABILITY_1 or attacker.getCurrentHero() == Hero.HAMMOND and eventAbility == Button.SECONDARY_FIRE or attacker.getCurrentHero() == Hero.DOOMFIST and eventAbility != Button.PRIMARY_FIRE and eventAbility != Button.ULTIMATE or attacker.getCurrentHero() == Hero.SIGMA and eventAbility == Button.ULTIMATE:
-            return
-        wait()
-        eventPlayer.applyImpulse(eventPlayer.getVelocity(), -0.001, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    wait()
+    eventPlayer.applyImpulse(eventPlayer.getVelocity(), -0.001, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 
 
 rule "Zenyatta Secondary Creates Shield":
