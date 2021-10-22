@@ -14,7 +14,7 @@ playervar ZenShieldCurrentHealth
 #!defineMember zenShieldEffects ZenShield[2]
 #!defineMember zenShieldIgnoreDmg ZenShield[3]
 
-#!define zenShieldAngleOfProtection 45
+#!define zenShieldAngleOfProtection 40
 #!define didZenShieldBlock(incomingDir) (angleBetweenVectors(eventPlayer.getFacingDirection(), (incomingDir) * -1) < zenShieldAngleOfProtection)
 
 #!define zenUnblockableNoShieldDamageAttacks(attacker, ability) (\
