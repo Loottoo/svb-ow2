@@ -19,11 +19,10 @@ rule "[Brig] Lower shield bash stun duration and increase damage":
     victim.setStatusEffect(eventPlayer, Status.STUNNED, brigBashStunDuration)
 
 rule "[Brig] Increase Bash range":
-    @Event playerDealtDamage
+    @Event eachPlayer
     @Hero brigitte
     @Condition eventPlayer.isFiringPrimaryFire()
-    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
-    @Condition not specialAbilitiesDisabled
+    @Condition eventPlayer.isFiringSecondaryFire()
 
     eventPlayer.setMoveSpeed(brigBashSpeed)
     waitUntil(not (eventPlayer.isFiringSecondaryFire() and eventPlayer.isFiringPrimaryFire()), 2)
