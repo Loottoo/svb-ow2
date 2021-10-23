@@ -18,7 +18,7 @@ rule "Hanzo Global Effects and Hud":
 
 def InitialHanzo():
     @Name "[Sub] Initial Hanzo"
-    
+
     eventPlayer.disallowButton(Button.SECONDARY_FIRE)
     eventPlayer.setAbility2Enabled(false)
     eventPlayer.LungeCharges = 2
@@ -31,7 +31,7 @@ def InitialHanzo():
 
 def CleanupHanzo():
     @Name "[Sub] Cleanup Hanzo"
-    
+
     eventPlayer.allowButton(Button.SECONDARY_FIRE)
     eventPlayer.setAbility2Enabled(true)
     eventPlayer.allowButton(Button.PRIMARY_FIRE)
@@ -45,7 +45,7 @@ rule "Hanzo Reduce Ammo":
     @Event eachPlayer
     @Hero hanzo
     @Condition eventPlayer.isFiringPrimaryFire() == true
-    
+
     eventPlayer.HanzoVars[0] -= 1
     eventPlayer.HanzoVars[2] = false
     waitUntil(not eventPlayer.isFiringPrimaryFire(), 99999)
@@ -67,7 +67,7 @@ rule "Hanzo Reload":
     @Condition eventPlayer.isMeleeing() == false
     @Condition eventPlayer.isUsingUltimate() == false
     @Condition eventPlayer.isUsingAbility2() == false
-    
+
     if eventPlayer.HanzoVars[0] == 0:
         waitUntil(not eventPlayer.isFiringPrimaryFire(), 99999)
         waitUntil(eventPlayer.isMeleeing() or eventPlayer.isUsingUltimate(), 0.032)
@@ -116,7 +116,7 @@ rule "Hanzo Reload":
 rule "Hanzo Respawn With Full Ammo":
     @Event playerDied
     @Hero hanzo
-    
+
     eventPlayer.HanzoVars[0] = 12
 
 
@@ -126,7 +126,7 @@ rule "Main Secondary Fire":
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == true
     @Condition eventPlayer.HanzoReload == 0
     #@Condition eventPlayer.HanzoVars[0] > 0
-    
+
     wait()
     if eventPlayer.isFiringPrimaryFire():
         eventPlayer.allowButton(Button.SECONDARY_FIRE)
@@ -181,7 +181,7 @@ rule "Secondary Cancel":
     @Hero hanzo
     @Condition eventPlayer.isUsingAbility2() == true
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == false
-    
+
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait()
     if RULE_CONDITION:
@@ -192,7 +192,7 @@ rule "Hanzo's damage":
     @Event playerDealtDamage
     @Hero hanzo
     @Condition eventAbility != null
-    
+
     if eventAbility == Button.MELEE:
         damage(victim, eventPlayer, ((30 - eventDamage) / 0.6) * (2 if eventPlayer.HanzoVars[1] else 1))
     elif eventAbility == Button.ULTIMATE:
@@ -205,6 +205,6 @@ rule "Lunge Charges":
     @Event eachPlayer
     @Hero hanzo
     @Condition eventPlayer.getAbilityCooldown(Button.JUMP) == true
-    
+
     eventPlayer.LungeCharges -= 1
     eventPlayer.setAbilityCooldown(Button.JUMP, 5 - eventPlayer.LungeCharges * 5)
