@@ -175,13 +175,13 @@ rule "Prevent teammates from picking Echo while dupeing":
     #Not an echo at heart
     @Condition (eventPlayer.DuplicateTimer > 0 or eventPlayer.hero == Hero.ECHO) == false
     #And an echo is actively dupeing (away from home)
-    @Condition any([p.DuplicateTimer > 0 for p in getAllPlayers(eventPlayer.getTeam())])
+    @Condition any([p.DuplicateTimer > 0 for p in getPlayers(eventPlayer.getTeam())])
     #And echo can be picked by this player
     @Condition Hero.ECHO in eventPlayer.getAllowedHeroes()
 
     #Disallow Echo pick
     eventPlayer.setAllowedHeroes(eventPlayer.getAllowedHeroes().exclude(Hero.ECHO))
     #Wait until we know no one is dupeing
-    waitUntil(all([p.DuplicateTimer == 0 for p in getAllPlayers(eventPlayer.getTeam())]), 9999)
+    waitUntil(all([p.DuplicateTimer == 0 for p in getPlayers(eventPlayer.getTeam())]), 9999)
     #Reset hero availability
     eventPlayer.setAllowedHeroes(allowedHeroes(eventPlayer))

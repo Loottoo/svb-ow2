@@ -1,7 +1,7 @@
 #!mainFile "../../main.opy"
 
 
-globalvar sombraHackDuration = createWorkshopSetting(float[0:10], "Sombra", "Hack Duration", 2, 0)
+globalvar sombraHackDuration = createWorkshopSetting(float[0:10], "Sombra", "Hack Duration", 1, 0)
 globalvar sombraHackCooldown = createWorkshopSetting(float[0:30], "Sombra", "Hack Cooldown", 10, 1)
 
 #!define AveragePosition(player) ((player.getEyePosition() + player.getPosition()) / 2)

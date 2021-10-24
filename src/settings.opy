@@ -2,7 +2,8 @@
 
 settings {
     "main": {
-        "description": "OW2 Changes - SVB Creator Pugs in collab with Elo Hell Workshops Discord."
+        "description": "Recreation of various revealed Overwatch 2 features and community-suggested changes. Developed by Elo Hell Workshops in partnership with the Paris Eternal and SVB.\n\nFull patch notes at workshop.codes/2TEBR.\n\nInterested in joining the largest Workshop Discord to get help and share your creations? Join workshop.codes/discord.",
+        "modeName": "Overwatch 2"
     },
     "lobby": {
         "spectatorSlots": 6,

@@ -1,6 +1,6 @@
 #!mainFile "../../main.opy"
 
-globalvar bapLampCastTime = createWorkshopSetting(float[0.75:3], "Baptiste", "Immortality Field cast time", 1.5, 0) - 0.5
+globalvar bapLampCastTime = createWorkshopSetting(float[0.75:3], "Baptiste", "Immortality Field cast time", 1.0, 0) - 0.5
 
 def SlowdownBaptiste():
   @Name "[baptiste.del] Subroutine: Slowdown"
