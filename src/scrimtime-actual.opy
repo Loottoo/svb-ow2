@@ -122,7 +122,7 @@ rule "Settings: Debug Options":
 
 
 rule "Initialisation: Match":
-    if not Logs_EnableLogTracker:
+    if not Logs_EnableLogTracker and not devMode:
         disableInspector()
     Colour_TeamOne = rgb(50, 185, 240)
     Colour_TeamTwo = rgb(250, 5, 30)
