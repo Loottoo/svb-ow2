@@ -41,8 +41,8 @@ rule "[sombra.del] Launch Projectile":
 
     eventPlayer.SombraSelectedTarget = (sorted([i for i in getPlayersInRadius(eventPlayer.getEyePosition(), 30, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).exclude(eventPlayer).exclude(getDeadPlayers(Team.ALL)) if eventPlayer.isInViewAngle(i, 32.5) and (not (eventPlayer.getCurrentHero() == Hero.SOMBRA and eventPlayer.isUsingAbility1())) and (not ((i.getCurrentHero() in ForbiddenUltimateHeroes) and i.isUsingUltimate() or ((i.getCurrentHero() in ForbiddenAbility1Heroes) and i.isUsingAbility1()) or ((i.getCurrentHero() in ForbiddenAbility2Heroes) and i.isUsingAbility2())))], lambda i: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), i.getEyePosition())) + distance(eventPlayer.getEyePosition(), i.getEyePosition())))[0]
     #Check if we can target the enemy
-    waitUntil(not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) <= 16 and ProjectileInLOS(0.25), 9999)
-    if not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) > 16 or not entityExists(eventPlayer.SombraSelectedTarget) or not ProjectileInLOS(0.25):
+    waitUntil(eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) > 0 or not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) <= 16 and ProjectileInLOS(0.25), 9999)
+    if eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) > 0 or not eventPlayer.isFiringSecondaryFire() or distance(eventPlayer, eventPlayer.SombraSelectedTarget) > 16 or not entityExists(eventPlayer.SombraSelectedTarget) or not ProjectileInLOS(0.25):
         return
     eventPlayer.disallowButton(Button.SECONDARY_FIRE)
     eventPlayer.setSecondaryFireEnabled(false)
