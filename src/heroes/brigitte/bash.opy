@@ -9,7 +9,7 @@ globalvar brigBashSpeed = createWorkshopSetting(float[0:10], "Brigitte", "Shield
 
 rule "[Brig] Lower shield bash stun duration and increase damage":
     @Event playerDealtDamage
-    @Hero brigitte
+    @Condition eventPlayer.hero == Hero.BRIGITTE
     @Condition eventAbility == Button.PRIMARY_FIRE
     # @Condition eventPlayer.isFiringPrimaryFire()
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
@@ -21,7 +21,7 @@ rule "[Brig] Lower shield bash stun duration and increase damage":
 
 rule "[Brig] Increase Bash range":
     @Event eachPlayer
-    @Hero brigitte
+    @Condition eventPlayer.hero == Hero.BRIGITTE
     @Condition eventPlayer.isFiringPrimaryFire()
     @Condition eventPlayer.isFiringSecondaryFire()
 
