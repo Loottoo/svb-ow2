@@ -168,5 +168,3 @@ rule "Zenyatta Secondary Creates Shield":
     else:
         wait(1.6, Wait.RESTART_WHEN_TRUE)
         chase(eventPlayer.ZenShieldCurrentHealth, ZenShieldHealth, rate=ZenShieldRechargeRate, ChaseReeval.NONE)
-
-
