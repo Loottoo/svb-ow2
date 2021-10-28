@@ -1,9 +1,10 @@
 #!mainFile "../../main.opy"
 
 #!define brigDefaultBashDistance 4.52
+#!define brigDefaultBashDamage 5
 
 globalvar brigBashStunDuration = createWorkshopSetting(float[0:0.75], "Brigitte", "Shield Bash Stun Duration", 0.1)
-globalvar brigBashDamage = createWorkshopSetting(int[5:75], "Brigitte", "Shield Bash Damage", 50)
+globalvar brigBashDamage = createWorkshopSetting(int[brigDefaultBashDamage:75], "Brigitte", "Shield Bash Damage", 50)
 globalvar brigBashSpeed = createWorkshopSetting(float[0:10], "Brigitte", "Shield Bash Range", 9) / brigDefaultBashDistance * 100
 
 rule "[Brig] Lower shield bash stun duration and increase damage":
