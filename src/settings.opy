@@ -60,7 +60,8 @@ settings {
                 "ability1Cooldown%": 116
             },
             "reinhardt": {
-                "ability1Cooldown%": 80
+                "ability1Cooldown%": 80,
+                "damageDealt%": 90
             },
             "sigma": {
                 "ability1Cooldown%": 75
