@@ -13,7 +13,7 @@ rule "[Brig] Lower shield bash stun duration and increase damage":
     @Condition eventAbility == Button.PRIMARY_FIRE
     @Condition eventPlayer.isFiringSecondaryFire()
 
-    damage(victim, attacker, brigBashDamage - eventDamage)
+    damage(victim, attacker, brigBashDamage - brigDefaultBashDamage)
     waitUntil(victim.hasStatusEffect(Status.STUNNED), 0.064)
     victim.clearStatusEffect(Status.STUNNED)
     victim.setStatusEffect(eventPlayer, Status.STUNNED, brigBashStunDuration)
