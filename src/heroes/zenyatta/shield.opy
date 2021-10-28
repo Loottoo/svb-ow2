@@ -8,11 +8,25 @@ playervar ZenShield
 playervar ZenShieldCurrentHealth
 
 
-#ZenShield is one variable. Index 0 is the Health Pool. Index 1 is for the shield health at time of deployment, now moved to new variable for chasing. Index 2 is the shield visuals. Index 3 is a flag for the damage rule to ignore adjustment damage.
+/*
+ZenShield is one variable.
+
+Index 0 is the Health Pool.
+Index 1 is for the shield health at time of deployment
+Index 2 is the shield visuals.
+*/
 #!defineMember zenShieldHealthPool ZenShield[0]
 #!defineMember zenShieldStartingHp ZenShield[1]
 #!defineMember zenShieldEffects ZenShield[2]
-#!defineMember zenShieldIgnoreDmg ZenShield[3]
+
+/*
+Indices indicate slot of enemy player.
+
+zenAttackerRunCounter is a counter that ticks up on real instances of damage and down on the corresponding compensation damage.
+zenAttackerIsCompRun notes whether or not comp damage is currently being processed.
+*/
+playervar zenAttackerRunCounter
+playervar zenAttackerIsCompRun
 
 #!define zenShieldAngleOfProtection 40
 #!define didZenShieldBlock(incomingDir) (angleBetweenVectors(eventPlayer.getFacingDirection(), (incomingDir) * -1) < zenShieldAngleOfProtection)
@@ -55,34 +69,58 @@ rule "Zenyatta hero picked (no complications with swapping, don't worry)":
 
     eventPlayer.ZenShieldCurrentHealth = ZenShieldHealth
 
+rule "Track when people deal damage to Zen while he is shielding":
+    @Event playerDealtDamage
+    @Condition victim.hero == Hero.ZENYATTA
+    # Is Zen shielding?
+    @Condition victim.zenShieldHealthPool == true
+    # If we were mid-adding real damage
+    @Condition victim.zenAttackerRunCounter[attacker.getSlot()] > 0
+    @Condition not victim.zenAttackerIsCompRun[attacker.getSlot()]
+
+    victim.zenAttackerIsCompRun[attacker.getSlot()] = true
+
 
 rule "Zenyatta Shield Damage":
     @Event playerTookDamage
     @Hero zenyatta
     @Condition eventPlayer.zenShieldHealthPool == true
 
-    if eventPlayer.zenShieldIgnoreDmg:
-        eventPlayer.zenShieldIgnoreDmg = false
-    else:
-        if didZenShieldBlock(eventDirection) and not zenUnblockableNoShieldDamageAttacks(attacker, eventAbility):
-            if zenUnblockableDoesShieldDamageAttacks(attacker, eventAbility):
-                eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.zenShieldStartingHp - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
-                eventPlayer.zenShieldIgnoreDmg = true
-                damage(eventPlayer, attacker, (eventDamage * (eventPlayer.zenShieldStartingHp - 1)) * eventPlayer.zenShieldStartingHp)
-            else:
-                if attacker.getCurrentHero() == Hero.ROADHOG and eventAbility == Button.ABILITY_1:
-                    if not attacker.isUsingUltimate():
-                        attacker.cancelPrimaryAction()
-                if eventDamage > eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp:
-                    if not (attacker.getCurrentHero() == Hero.SOMBRA and eventAbility == null):
-                        heal(eventPlayer, null, eventDamage - eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp)
-                    eventPlayer.ZenShieldCurrentHealth = 0
-                else:
-                    eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.ZenShieldCurrentHealth - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
-        else:
+    # This was an EMP damage event. Kill the shield and do nothing else.
+    if attacker.getCurrentHero() == Hero.SOMBRA and eventAbility == null:
+        eventPlayer.ZenShieldCurrentHealth = 0
+    # This is compensation damage
+    if eventPlayer.zenAttackerIsCompRun[attacker.getSlot()]:
+        eventPlayer.zenAttackerRunCounter[attacker.getSlot()] -= 1
+        if eventPlayer.zenAttackerRunCounter[attacker.getSlot()] == 0:
+            eventPlayer.zenAttackerIsCompRun[attacker.getSlot()] = false
+        return
+    # If we got this far, this is a normal damage instance to consider
+    if didZenShieldBlock(eventDirection) and not zenUnblockableNoShieldDamageAttacks(attacker, eventAbility) and not zenUnblockableDoesShieldDamageAttacks(attacker, eventAbility):
+        # Cancel Roadhog hook ( shields block hooks :) )
+        if attacker.getCurrentHero() == Hero.ROADHOG and eventAbility == Button.ABILITY_1:
+            if not attacker.isUsingUltimate():
+                attacker.cancelPrimaryAction()
+
+        # If the damage overwhelmed the shield, break the shield and ensure the shield blocked the remaining damage (ala real OW shields)
+        if eventDamage > eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp:
+            # Don't heal Sombra EMP damage
             if not (attacker.getCurrentHero() == Hero.SOMBRA and eventAbility == null):
-                eventPlayer.zenShieldIgnoreDmg = true
-                damage(eventPlayer, attacker, (eventDamage * (eventPlayer.zenShieldStartingHp - 1)) * eventPlayer.zenShieldStartingHp)
+                heal(eventPlayer, null, eventDamage - eventPlayer.ZenShieldCurrentHealth / eventPlayer.zenShieldStartingHp)
+            eventPlayer.ZenShieldCurrentHealth = 0
+        # Otherwise, deduct the proper amount of damage from Zen's shield
+        else:
+            eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.ZenShieldCurrentHealth - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
+    # The shield didn't block the attack, either because it was unblockable or because the shield wasn't in the way.
+    # We now need to deal damage to Zenyatta to make it appear as if he took normal damage
+    else:
+        # If the attack is supposed to deal damage to the shield as well as the holder (Reinhardt hammer, Winston Tesla cannon, etc.), deal damage to the shield
+        if zenUnblockableDoesShieldDamageAttacks(attacker, eventAbility):
+            eventPlayer.ZenShieldCurrentHealth = max(0, eventPlayer.zenShieldStartingHp - (((eventDamage * 0.4 if attacker.getCurrentHero() == Hero.WIDOWMAKER and eventAbility == Button.PRIMARY_FIRE and attacker.isFiringSecondaryFire() else eventDamage * 0.5) if eventWasCriticalHit else eventDamage) * eventPlayer.zenShieldStartingHp))
+        # Damage the player
+        damage(eventPlayer, attacker, (eventDamage * (eventPlayer.zenShieldStartingHp - 1)) * eventPlayer.zenShieldStartingHp)
+        # Tell system we queued up some compensation damage
+        eventPlayer.zenAttackerRunCounter[attacker.getSlot()] += 1
 
 
 rule "Zenyatta Knockback Blocked By Shield":
@@ -130,5 +168,3 @@ rule "Zenyatta Secondary Creates Shield":
     else:
         wait(1.6, Wait.RESTART_WHEN_TRUE)
         chase(eventPlayer.ZenShieldCurrentHealth, ZenShieldHealth, rate=ZenShieldRechargeRate, ChaseReeval.NONE)
-
-
