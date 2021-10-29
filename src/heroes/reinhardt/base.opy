@@ -23,7 +23,7 @@ def InitialReinhardt():
     eventPlayer.setMaxHealth(75)
     eventPlayer.addHealthPool(Health.NORMAL, 25, true, true)
     eventPlayer.HeroHealthPools.append(getLastCreatedHealthPool())
-    eventPlayer.addHealthPool(Health.ARMOR, 200, true, true)
+    eventPlayer.addHealthPool(Health.ARMOR, 150, true, true)
     eventPlayer.HeroHealthPools.append(getLastCreatedHealthPool())
     hudSubtext(eventPlayer, "{0}({1}) [{2}]".format(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                                                                                                                                                                                                                                                                                                  ", floor(eventPlayer.ReinhardtFirestrikeCharges) if floor(eventPlayer.ReinhardtFirestrikeCharges) > 0 else iconString(Icon.CROSS), iconString(Icon.CHECKMARK) if floor(eventPlayer.ReinhardtFirestrikeCharges) == 2 else ceil(eventPlayer.ReinhardtFirestrikeCooldown)), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.HeroTexts.append(getLastCreatedText())
