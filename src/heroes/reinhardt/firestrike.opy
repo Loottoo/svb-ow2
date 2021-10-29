@@ -1,6 +1,6 @@
 #!mainFile "../../main.opy"
 
-globalvar reinFirestrikeDamage = createWorkshopSetting(int[0:200], "Reinhardt", "Firestrike Damage", 90)
+globalvar reinFirestrikeDamage = createWorkshopSetting(int[0:200], "Reinhardt", "Firestrike Damage", 95)
 
 rule "[reinhardt.del] Refresh Firestrike":
   @Event eachPlayer
