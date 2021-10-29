@@ -7,7 +7,7 @@ rule "[reinhardt.del] Refresh Firestrike":
   @Hero reinhardt
   @Condition eventPlayer.isUsingAbility2() == true
 
-  eventPlayer.setDamageDealt(reinFirestrikeDamage * 100)
+  eventPlayer.setDamageDealt(reinFirestrikeDamage)
   waitUntil(eventPlayer.isUsingAbility2() == false, 9999)
   eventPlayer.setDamageDealt(100)
   eventPlayer.setAbilityCooldown(Button.ABILITY_2, 0)
